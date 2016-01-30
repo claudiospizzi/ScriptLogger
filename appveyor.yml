@@ -1,0 +1,21 @@
+
+# PowerShell 5.0 Image
+os: WMF 5
+
+# Clone Directory
+clone_folder: C:\Projects\ScriptLogger
+
+# Install Pester
+install: 
+    - cinst -y pester --version 3.3.14
+
+# Build Number
+version: '{build}'
+
+# Execute build script
+build_script:
+- ps: .\Scripts\build.ps1
+
+# Execute test script
+test_script:
+- ps: .\Scripts\test.ps1
