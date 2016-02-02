@@ -1,9 +1,12 @@
 <#
 .SYNOPSIS
-    
+    Start the script logger inside the current PowerShell session.
 
 .DESCRIPTION
-    
+    Start the script logger inside the current PowerShell session. By starting
+    the logger, a global log configuration for the current PowerShell session
+    will be set. This configuration is customizable with the available
+    paramters.
 
 .PARAMETER Path
     The path to the log file.
@@ -26,19 +29,27 @@
     3. Warning
     4. Error
 
-.PARAMETER SkipEventLog
+.PARAMETER NoLogFile
+    Do not write the log messages into the log file. By default, all messages
+    are written to the specified or default log file.
+
+.PARAMETER NoEventLog
     Skip the event log output. By default, all log messages will be written
     into the "Windows PowerShell" event log.
 
-.PARAMETER HideConsoleOutput
+.PARAMETER NoConsoleOutput
     Hide the PowerShell console output. By default, all log messages are shown
     on the console.
 
 .EXAMPLE
-    C:\>
+    C:\> Start-ScriptLogger
+    Initialize the logger with default values
 
 .EXAMPLE
-    C:\>
+    C:\>Start-ScriptLogger -Path 'C:\test.log' -Format '{3}: {4}' -Level 'Verbose' -SkipEventLog -HideConsoleOutput
+    Log all message with verbose level or higher to the log file but skip the
+    event log and the consule output. In addition, use a custom format for the
+    log file content.
 #>
 
 function Start-ScriptLogger
@@ -48,8 +59,8 @@ function Start-ScriptLogger
     (
         [Parameter(Position=0,
                    Mandatory=$false)]
-        [ValidateScript({Test-Path -Path (Split-Path -Path $_ -Parent)})]
-        [String] $Path = $Global:MyInvocation.MyCommand.Definition.Trim() + '.log',
+        [ValidateScript({(Test-Path -Path (Split-Path -Path $_ -Parent))})]
+        [String] $Path = (Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath 'PowerShell.log'),
 
         [Parameter(Position=1,
                    Mandatory=$false)]
