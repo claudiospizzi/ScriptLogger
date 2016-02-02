@@ -2,8 +2,14 @@
 # Initialize the logger with default values
 Start-ScriptLogger
 
-# Alternative: Specify all possible parameters for the logger
-Start-ScriptLogger -Path 'C:\Temp\test.log' -Format '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}' -Level 'Verbose' -SkipEventLog -HideConsoleOutput
+# Second options, specify multiple custom settings for the logger
+Start-ScriptLogger -Path 'C:\Temp\test.log' -Format '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}' -Level Warning -SkipEventLog -HideConsoleOutput
+
+# Get the current script logger configuration object
+Get-ScriptLogger
+
+# Update the script logger configuration
+Set-ScriptLogger -Level Verbose
 
 # Log an error message
 Write-ErrorLog -Message 'My Error Message'
