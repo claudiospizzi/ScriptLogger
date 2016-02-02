@@ -19,20 +19,20 @@ Describe 'Start-ScriptLogger' {
     BeforeAll {
 
         $DefaultEnabled  = $true
-        $DefaultPath     = $Global:MyInvocation.MyCommand.Definition.Trim() + '.log'
+        $DefaultPath     = Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath 'PowerShell.log'
         $DefaultFormat   = '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}'
         $DefaultLevel    = 'Verbose'
         $DefaultLogFile  = $true
         $DefaultEventLog = $true
         $DefaultConsole  = $true
 
-        # Convert default path from an relative to an absolute 
-        if (-not (Test-Path -Path $DefaultPath))
-        {
-            New-Item -Path $DefaultPath -ItemType File | Out-Null
-        }
-        $DefaultPath = Resolve-Path -Path $DefaultPath | Select-Object -ExpandProperty Path
-        $DefaultPath | Remove-Item -Force
+        ## Convert default path from an relative to an absolute 
+        #if (-not (Test-Path -Path $DefaultPath))
+        #{
+        #    New-Item -Path $DefaultPath -ItemType File | Out-Null
+        #}
+        #$DefaultPath = Resolve-Path -Path $DefaultPath | Select-Object -ExpandProperty Path
+        #$DefaultPath | Remove-Item -Force
     }
 
     It 'ParameterNone' {
