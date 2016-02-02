@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6cafc0c6-a428-4d30-a9f9-700e829fea51}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MyApplication</RootNamespace>
+    <AssemblyName>MyApplication</AssemblyName>
+    <Name>ScriptLogger</Name>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Examples\LoggerDemo.ps1" />
+    <Compile Include="Examples\LoggerDemo.ps1.log" />
+    <Compile Include="Functions\Get-ScriptLogger.ps1" />
+    <Compile Include="Functions\Stop-ScriptLogger.ps1" />
+    <Compile Include="Functions\Set-ScriptLogger.ps1" />
+    <Compile Include="Functions\Start-ScriptLogger.ps1" />
+    <Compile Include="Functions\Write-Log.ps1" />
+    <Compile Include="Functions\Write-ErrorLog.ps1" />
+    <Compile Include="Functions\Write-InformationLog.ps1" />
+    <Compile Include="Functions\Write-VerboseLog.ps1" />
+    <Compile Include="Functions\Write-WarningLog.ps1" />
+    <Compile Include="ScriptLogger.psd1" />
+    <Compile Include="ScriptLogger.psm1" />
+    <Compile Include="Scripts\build.ps1" />
+    <Compile Include="Scripts\test.ps1" />
+    <Compile Include="Tests\Get-ScriptLogger.Tests.ps1" />
+    <Compile Include="Tests\Set-ScriptLogger.Tests.ps1" />
+    <Compile Include="Tests\Start-ScriptLogger.Tests.ps1" />
+    <Compile Include="Tests\Stop-ScriptLogger.Tests.ps1" />
+    <Compile Include="Tests\Write-VerboseLog.Tests.ps1" />
+    <Compile Include="Tests\Write-ErrorLog.Tests.ps1" />
+    <Compile Include="Tests\Write-InformationLog.Tests.ps1" />
+    <Compile Include="Tests\Write-WarningLog.Tests.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Examples\" />
+    <Folder Include="Functions\" />
+    <Folder Include="Tests\" />
+    <Folder Include="Scripts\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="Build" />
+</Project>

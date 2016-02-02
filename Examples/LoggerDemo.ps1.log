@@ -1,0 +1,4 @@
+2000-12-31   01:02:03   COMPUTERNAME   username   Error         My Error Message
+2000-12-31   02:03:04   COMPUTERNAME   username   Warning       My Warning Message
+2000-12-31   03:04:05   COMPUTERNAME   username   Information   My Information Message
+2000-12-31   04:05:06   COMPUTERNAME   username   Verbose       My Verbose Message
