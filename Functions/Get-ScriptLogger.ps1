@@ -1,15 +1,14 @@
 <#
 .SYNOPSIS
-    
+    Get the current script logger.
 
 .DESCRIPTION
-    
+    Returns an object with the current configuration of the script logger
+    inside this PowerShell session.
 
 .EXAMPLE
-    C:\>
-
-.EXAMPLE
-    C:\>
+    C:\> Get-ScriptLogger
+    Get the current script logger object.
 #>
 
 function Get-ScriptLogger

@@ -1,15 +1,14 @@
 <#
 .SYNOPSIS
-    
+    Stop the script logger inside the current PowerShell session.
 
 .DESCRIPTION
-    
+    Stop the script logger inside the current PowerShell session and clear all
+    log configurations.
 
 .EXAMPLE
-    C:\>
-
-.EXAMPLE
-    C:\>
+    C:\> Stop-ScriptLogger
+    Stop the current logger.
 #>
 
 function Stop-ScriptLogger

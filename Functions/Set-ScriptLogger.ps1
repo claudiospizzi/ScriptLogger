@@ -1,27 +1,35 @@
 <#
 .SYNOPSIS
-    
+    Update the script logger log configuration.
 
 .DESCRIPTION
-    
+    The script logger inside the current PowerShell session can be updated with
+    all parameters inside this cmdlet.
 
 .PARAMETER Path
-    
+    Update the path to the log file.
 
 .PARAMETER Format
-    
+    Update the format for the log file.
 
 .PARAMETER Level
-    
+    Update the logger level.
 
-.PARAMETER Enabled
-    
+.PARAMETER LogFile
+    Enable or disable the log file output.
+
+.PARAMETER EventLog
+    Enable or disable the event log output.
+
+.PARAMETER ConsoleOutput
+    Enable or disable the console output.
 
 .EXAMPLE
-    C:\>
+    C:\> Set-ScriptLogger -Level 'Warning' -EventLog $true
+    Set the script logger level to warning and enable the event log output.
 
-.EXAMPLE
-    C:\>
+.EXAMPLE Set-ScriptLogger -Path 'C:\Temp\test.log' -Format '{3}: {4}'
+    C:\> Update the log file path and its format.
 #>
 
 function Set-ScriptLogger

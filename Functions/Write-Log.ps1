@@ -1,21 +1,21 @@
 <#
 .SYNOPSIS
-    
+    Log a message with the specified log level.
 
 .DESCRIPTION
-    
+    If the specified log level is higher as the configured log level, the
+    message will be logged to the enabled destinations. These are the specified
+    log file, the PowerShell event log and the current PowerShell console.
 
 .PARAMETER Message
-    
+    The message to log.
 
 .PARAMETER Level
-    
+    The log level to use.
 
 .EXAMPLE
-    C:\>
-
-.EXAMPLE
-    C:\>
+    C:\> Write-WarningLog -Message 'My Warning Message' -Level Warning
+    Log the warning message.
 #>
 
 function Write-Log
