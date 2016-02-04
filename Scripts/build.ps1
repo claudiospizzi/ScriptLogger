@@ -10,6 +10,7 @@ New-Item -Path $Target -ItemType Directory | Out-Null
 # Copy all module items
 Copy-Item -Path "$Source\Examples"     -Destination $Target -Recurse
 Copy-Item -Path "$Source\Functions"    -Destination $Target -Recurse
+Copy-Item -Path "$Source\Resources"    -Destination $Target -Recurse
 Copy-Item -Path "$Source\Tests"        -Destination $Target -Recurse
 Copy-Item -Path "$Source\$Module.psd1" -Destination $Target
 Copy-Item -Path "$Source\$Module.psm1" -Destination $Target
