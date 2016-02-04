@@ -41,6 +41,7 @@
     <Compile Include="ScriptLogger.psd1" />
     <Compile Include="ScriptLogger.psm1" />
     <Compile Include="Scripts\build.ps1" />
+    <Compile Include="Scripts\debug.ps1" />
     <Compile Include="Scripts\test.ps1" />
     <Compile Include="Tests\Get-ScriptLogger.Tests.ps1" />
     <Compile Include="Tests\Set-ScriptLogger.Tests.ps1" />
