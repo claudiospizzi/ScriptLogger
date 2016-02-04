@@ -16,12 +16,26 @@
 
 function Write-ErrorLog
 {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='Message')]
     param
     (
-        [Parameter(Mandatory=$true)]
-        [String] $Message
+        [Parameter(Mandatory=$true,
+                   ParameterSetName='Message')]
+        [String] $Message,
+
+        [Parameter(Mandatory=$true,
+                   ParameterSetName='ErrorRecord')]
+        [System.Management.Automation.ErrorRecord] $ErrorRecord
     )
 
-    Write-Log -Message $Message -Level 'Error'
+    switch ($PSCmdlet.ParameterSetName)
+    {
+        'Message' {
+            Write-Log -Message $Message -Level 'Error'
+        }
+
+        'ErrorRecord' {
+            Write-Log -ErrorRecord $ErrorRecord
+        }
+    }
 }

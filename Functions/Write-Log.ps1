@@ -20,15 +20,24 @@
 
 function Write-Log
 {
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='Default')]
     param
     (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Position=0,
+                   Mandatory=$true,
+                   ParameterSetName='Default')]
         [String] $Message,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Position=1,
+                   Mandatory=$true,
+                   ParameterSetName='Default')]
         [ValidateSet('Verbose', 'Information', 'Warning', 'Error')]
-        [String] $Level
+        [String] $Level,
+
+        [Parameter(Position=1,
+                   Mandatory=$true,
+                   ParameterSetName='ErrorRecord')]
+        [System.Management.Automation.ErrorRecord] $ErrorRecord
     )
 
     $ScriptLogger = Get-ScriptLogger
@@ -41,6 +50,17 @@ function Write-Log
             'Information' = 1
             'Warning'     = 2
             'Error'       = 3
+        }
+
+        # Check if the log level an error or an error record was submitted
+        if ($PSCmdlet.ParameterSetName -eq 'Default' -and $Level -eq 'Error')
+        {
+            $ErrorRecord = New-Object -TypeName System.Management.Automation.ErrorRecord -ArgumentList $Message, 'Unknown', 'NotSpecified', $null
+        }
+        elseif ($PSCmdlet.ParameterSetName -eq 'ErrorRecord')
+        {
+            $Message = $ErrorRecord.ToString()
+            $Level   = 'Error'
         }
 
         # Check the logging level
@@ -76,7 +96,7 @@ function Write-Log
                     'Verbose'     { Write-Verbose -Message $Message }
                     'Information' { try { Write-Information -MessageData $Message } catch { Write-Host $Message } }
                     'Warning'     { Write-Warning -Message $Message }
-                    'Error'       { Write-Error -Message $Message }
+                    'Error'       { Write-Error -ErrorRecord $ErrorRecord }
                 }
             }
         }
