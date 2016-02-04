@@ -7,8 +7,12 @@
     Description        = 'PowerShell Module to provide logging capabilities for PowerShell Controller Scripts.'
     PowerShellVersion  = '3.0'
     ScriptsToProcess   = @()
-    TypesToProcess     = @()
-    FormatsToProcess   = @()
+    TypesToProcess     = @(
+        'Resources/ScriptLogger.Types.ps1xml'
+    )
+    FormatsToProcess   = @(
+        'Resources/ScriptLogger.Formats.ps1xml'
+    )
     FunctionsToExport  = @(
         'Start-ScriptLogger',
         'Stop-ScriptLogger',
