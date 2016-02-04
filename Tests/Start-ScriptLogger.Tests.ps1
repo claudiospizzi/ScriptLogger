@@ -25,21 +25,11 @@ Describe 'Start-ScriptLogger' {
         $DefaultLogFile  = $true
         $DefaultEventLog = $true
         $DefaultConsole  = $true
-
-        ## Convert default path from an relative to an absolute 
-        #if (-not (Test-Path -Path $DefaultPath))
-        #{
-        #    New-Item -Path $DefaultPath -ItemType File | Out-Null
-        #}
-        #$DefaultPath = Resolve-Path -Path $DefaultPath | Select-Object -ExpandProperty Path
-        #$DefaultPath | Remove-Item -Force
     }
 
     It 'ParameterNone' {
 
-        Start-ScriptLogger
-
-        $ScriptLogger = Get-ScriptLogger
+        $ScriptLogger = Start-ScriptLogger
 
         $ScriptLogger | Should Not Be $null
 
@@ -56,7 +46,7 @@ Describe 'Start-ScriptLogger' {
 
         $ExpectedPath = 'TestDrive:\test.log'
 
-        Start-ScriptLogger -Path $ExpectedPath
+        $ScriptLogger = Start-ScriptLogger -Path $ExpectedPath
 
         $ScriptLogger | Should Not Be $null
 
@@ -73,7 +63,7 @@ Describe 'Start-ScriptLogger' {
 
         $ExpectedFormat = '{4} {3} {2} {1} {0}'
 
-        Start-ScriptLogger -Format $ExpectedFormat
+        $ScriptLogger = Start-ScriptLogger -Format $ExpectedFormat
 
         $ScriptLogger | Should Not Be $null
 
@@ -90,7 +80,7 @@ Describe 'Start-ScriptLogger' {
 
         $ExpectedLevel = 'Error'
 
-        Start-ScriptLogger -Level $ExpectedLevel
+        $ScriptLogger = Start-ScriptLogger -Level $ExpectedLevel
 
         $ScriptLogger | Should Not Be $null
 
@@ -105,7 +95,7 @@ Describe 'Start-ScriptLogger' {
 
     It 'ParameterNoLogFile' {
 
-        Start-ScriptLogger -NoLogFile
+        $ScriptLogger = Start-ScriptLogger -NoLogFile
 
         $ScriptLogger | Should Not Be $null
 
@@ -120,7 +110,7 @@ Describe 'Start-ScriptLogger' {
 
     It 'ParameterNoEventLog' {
 
-        Start-ScriptLogger -NoEventLog
+        $ScriptLogger = Start-ScriptLogger -NoEventLog
 
         $ScriptLogger | Should Not Be $null
 
@@ -135,7 +125,7 @@ Describe 'Start-ScriptLogger' {
 
     It 'ParameterNoConsoleOutput' {
 
-        Start-ScriptLogger -NoConsoleOutput
+        $ScriptLogger = Start-ScriptLogger -NoConsoleOutput
 
         $ScriptLogger | Should Not Be $null
 
