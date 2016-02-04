@@ -107,4 +107,7 @@ function Start-ScriptLogger
         ConsoleOutput = -not $NoConsoleOutput.IsPresent
     }
     $Global:ScriptLogger.PSTypeNames.Insert(0, 'ScriptLogger.Configuration')
+
+    # Return logger object
+    return $Global:ScriptLogger
 }
