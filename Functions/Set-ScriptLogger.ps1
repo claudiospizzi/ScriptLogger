@@ -30,6 +30,13 @@
 
 .EXAMPLE Set-ScriptLogger -Path 'C:\Temp\test.log' -Format '{3}: {4}'
     C:\> Update the log file path and its format.
+
+.NOTES
+    Author     : Claudio Spizzi
+    License    : MIT License
+
+.LINK
+    https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Set-ScriptLogger

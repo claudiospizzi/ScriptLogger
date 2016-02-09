@@ -9,6 +9,13 @@
 .EXAMPLE
     C:\> Get-ScriptLogger
     Get the current script logger object.
+
+.NOTES
+    Author     : Claudio Spizzi
+    License    : MIT License
+
+.LINK
+    https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Get-ScriptLogger

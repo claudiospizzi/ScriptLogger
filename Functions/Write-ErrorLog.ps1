@@ -12,6 +12,13 @@
 .EXAMPLE
     C:\> Write-ErrorLog -Message 'My Error Message'
     Log the error message.
+
+.NOTES
+    Author     : Claudio Spizzi
+    License    : MIT License
+
+.LINK
+    https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Write-ErrorLog

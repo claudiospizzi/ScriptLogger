@@ -50,6 +50,13 @@
     Log all message with verbose level or higher to the log file but skip the
     event log and the consule output. In addition, use a custom format for the
     log file content.
+
+.NOTES
+    Author     : Claudio Spizzi
+    License    : MIT License
+
+.LINK
+    https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Start-ScriptLogger

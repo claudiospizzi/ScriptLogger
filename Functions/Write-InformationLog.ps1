@@ -13,6 +13,13 @@
 .EXAMPLE
     C:\> Write-InformationLog -Message 'My Information Message'
     Log the information message.
+
+.NOTES
+    Author     : Claudio Spizzi
+    License    : MIT License
+
+.LINK
+    https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Write-InformationLog

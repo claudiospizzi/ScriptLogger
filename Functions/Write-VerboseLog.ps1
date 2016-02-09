@@ -13,6 +13,13 @@
 .EXAMPLE
     C:\> Write-VerboseLog -Message 'My Verbose Message'
     Log the verbose message.
+
+.NOTES
+    Author     : Claudio Spizzi
+    License    : MIT License
+
+.LINK
+    https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Write-VerboseLog
