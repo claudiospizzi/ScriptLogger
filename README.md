@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/syyabalhc1ivgei7/branch/master?svg=true)](https://ci.appveyor.com/project/claudiospizzi/scriptlogger/branch/master) [![Build status](https://ci.appveyor.com/api/projects/status/syyabalhc1ivgei7/branch/dev?svg=true)](https://ci.appveyor.com/project/claudiospizzi/scriptlogger/branch/dev)
+[![AppVeyor - master](https://ci.appveyor.com/api/projects/status/syyabalhc1ivgei7/branch/master?svg=true)](https://ci.appveyor.com/project/claudiospizzi/scriptlogger/branch/master) [![AppVeyor - dev](https://ci.appveyor.com/api/projects/status/syyabalhc1ivgei7/branch/dev?svg=true)](https://ci.appveyor.com/project/claudiospizzi/scriptlogger/branch/dev) [![PowerShell Gallery - ScriptLogger](https://img.shields.io/badge/PowerShell%20Gallery-ScriptLogger-0072C6.svg)](https://www.powershellgallery.com/packages/ScriptLogger)
 
 # ScriptLogger PowerShell Module
 PowerShell Module to provide logging capabilities for PowerShell Controller Scripts.
