@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+  <ViewDefinitions>
+
+    <View>
+      <Name>ScriptLogger.Configuration</Name>
+      <ViewSelectedBy>
+        <TypeName>ScriptLogger.Configuration</TypeName>
+      </ViewSelectedBy>
+      <TableControl>
+        <TableHeaders>
+          <TableColumnHeader>
+            <Width>10</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>12</Width>
+          </TableColumnHeader>
+          <TableColumnHeader />
+          <TableColumnHeader>
+            <Width>10</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>10</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Width>10</Width>
+          </TableColumnHeader>
+        </TableHeaders>
+        <TableRowEntries>
+          <TableRowEntry>
+            <TableColumnItems>
+              <TableColumnItem>
+                <PropertyName>Enabled</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Level</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Path</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>LogFile</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>EventLog</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Console</PropertyName>
+              </TableColumnItem>
+            </TableColumnItems>
+          </TableRowEntry>
+        </TableRowEntries>
+      </TableControl>
+    </View>
+
+  </ViewDefinitions>
+</Configuration>

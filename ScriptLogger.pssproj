@@ -41,6 +41,7 @@
     <Compile Include="ScriptLogger.psd1" />
     <Compile Include="ScriptLogger.psm1" />
     <Compile Include="Scripts\build.ps1" />
+    <Compile Include="Scripts\debug.ps1" />
     <Compile Include="Scripts\test.ps1" />
     <Compile Include="Tests\Get-ScriptLogger.Tests.ps1" />
     <Compile Include="Tests\Set-ScriptLogger.Tests.ps1" />
@@ -54,8 +55,13 @@
   <ItemGroup>
     <Folder Include="Examples\" />
     <Folder Include="Functions\" />
+    <Folder Include="Resources\" />
     <Folder Include="Tests\" />
     <Folder Include="Scripts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\ScriptLogger.Formats.ps1xml" />
+    <Content Include="Resources\ScriptLogger.Types.ps1xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
