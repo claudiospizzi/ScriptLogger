@@ -1,6 +1,6 @@
 @{
     RootModule         = 'ScriptLogger.psm1'
-    ModuleVersion      = '1.1.0'
+    ModuleVersion      = '1.1.1'
     GUID               = '0E1AF375-67C1-460A-A247-045C5D2B54AA'
     Author             = 'Claudio Spizzi'
     Copyright          = 'Copyright (c) 2016 by Claudio Spizzi. Licensed under MIT license.'
