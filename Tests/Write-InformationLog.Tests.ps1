@@ -34,7 +34,16 @@ InModuleScope ScriptLogger {
 
             Mock Get-Date -ModuleName ScriptLogger { [DateTime] '2000-12-31 01:02:03' }
 
-            Mock Write-Information -ModuleName ScriptLogger -ParameterFilter { $MessageData -eq 'My Information' }
+            if ($PSVersionTable.PSVersion -lt '5.0')
+            {
+                $InformationMockName = 'Write-Host'
+                Mock $InformationMockName -ModuleName ScriptLogger -ParameterFilter { $Object -eq 'My Information' }
+            }
+            else
+            {
+                $InformationMockName = 'Write-Information'
+                Mock $InformationMockName -ModuleName ScriptLogger -ParameterFilter { $MessageData -eq 'My Information' }
+            }
 
             BeforeAll {
 
@@ -78,7 +87,7 @@ InModuleScope ScriptLogger {
 
                 Write-InformationLog -Message 'My Information'
 
-                Assert-MockCalled -CommandName 'Write-Information' -Times 1 -Exactly
+                Assert-MockCalled -CommandName $InformationMockName -Times 1 -Exactly
             }
 
             AfterEach {
