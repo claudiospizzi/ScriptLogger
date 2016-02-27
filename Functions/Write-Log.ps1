@@ -75,9 +75,16 @@ function Write-Log
         {
             if ($ScriptLogger.LogFile)
             {
-                # Output to log file
-                $Line = $ScriptLogger.Format -f (Get-Date), $env:ComputerName, $Env:Username, $Level, $Message
-                $Line | Out-File -FilePath $ScriptLogger.Path -Append
+                try
+                {
+                    # Output to log file
+                    $Line = $ScriptLogger.Format -f (Get-Date), $env:ComputerName, $Env:Username, $Level, $Message
+                    $Line | Out-File -FilePath $ScriptLogger.Path -Append -ErrorAction Stop
+                }
+                catch
+                {
+                    Write-Error "ScriptLogger Module Error during Write Log File: $_"
+                }
             }
 
             if ($ScriptLogger.EventLog)
@@ -91,8 +98,15 @@ function Write-Log
                     $EntryType = $Level
                 }
 
-                # Output to event log
-                Write-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -EventId 0 -Category 0 -EntryType $EntryType -Message $Message
+                try
+                {
+                    # Output to event log
+                    Write-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -EventId 0 -Category 0 -EntryType $EntryType -Message $Message -ErrorAction Stop
+                }
+                catch
+                {
+                    Write-Error "ScriptLogger Module Error during Write EVent Log: $_"
+                }
             }
 
             # Output to console
