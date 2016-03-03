@@ -2,7 +2,7 @@
 # Load module
 if ($Env:APPVEYOR -eq 'True')
 {
-    $Global:TestRoot = (Get-Module ScriptLogger -ListAvailable).ModuleBase
+    $Global:TestRoot = (Get-Module ScriptLogger -ListAvailable | Select-Object -First 1).ModuleBase
 
     Import-Module ScriptLogger -Force
 }
