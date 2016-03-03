@@ -29,6 +29,10 @@
     3. Warning
     4. Error
 
+.PARAMETER Encoding
+    Define the encoding which is used to write the log file. The possible
+    options are the same as on the used Out-File cmdlet. Default is UTF8.
+
 .PARAMETER NoLogFile
     Do not write the log messages into the log file. By default, all messages
     are written to the specified or default log file.
@@ -78,16 +82,21 @@ function Start-ScriptLogger
                    Mandatory=$false)]
         [ValidateSet('Verbose', 'Information', 'Warning', 'Error')]
         [String] $Level = 'Verbose',
-        
+
         [Parameter(Position=3,
                    Mandatory=$false)]
-        [Switch] $NoLogFile,
+        [ValidateSet('Unicode', 'UTF7', 'UTF8', 'UTF32', 'ASCII', 'BigEndianUnicode', 'Default', 'OEM')]
+        [String] $Encoding = 'UTF8',
 
         [Parameter(Position=4,
                    Mandatory=$false)]
-        [Switch] $NoEventLog,
+        [Switch] $NoLogFile,
 
         [Parameter(Position=5,
+                   Mandatory=$false)]
+        [Switch] $NoEventLog,
+
+        [Parameter(Position=6,
                    Mandatory=$false)]
         [Switch] $NoConsoleOutput
     )
@@ -109,6 +118,7 @@ function Start-ScriptLogger
         Path          = $Path
         Format        = $Format
         Level         = $Level
+        Encoding      = $Encoding
         LogFile       = -not $NoLogFile.IsPresent
         EventLog      = -not $NoEventLog.IsPresent
         ConsoleOutput = -not $NoConsoleOutput.IsPresent

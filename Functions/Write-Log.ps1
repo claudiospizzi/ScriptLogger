@@ -79,7 +79,7 @@ function Write-Log
                 {
                     # Output to log file
                     $Line = $ScriptLogger.Format -f (Get-Date), $env:ComputerName, $Env:Username, $Level, $Message
-                    $Line | Out-File -FilePath $ScriptLogger.Path -Append -ErrorAction Stop
+                    $Line | Out-File -FilePath $ScriptLogger.Path -Encoding $ScriptLogger.Encoding -Append -ErrorAction Stop
                 }
                 catch
                 {
