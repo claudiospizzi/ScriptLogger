@@ -6,7 +6,7 @@ PowerShell Module to provide logging capabilities for PowerShell Controller Scri
 
 ## Introduction
 
-With the ScriptLogger module, you are able to log error, warning, informational and verbose log messages into log files, the event log and the console host.
+With the ScriptLogger module, you are able to log error, warning, informational and verbose messages into log files, the Windows event log and the current console host. You can start and stop the logger as required. Works great in cooperation with the [ScriptConfig](https://github.com/claudiospizzi/ScriptConfig) module to improve controller scripts.
 
 
 ## Requirenments
