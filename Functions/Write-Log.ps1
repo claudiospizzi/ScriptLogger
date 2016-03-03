@@ -59,7 +59,7 @@ function Write-Log
             'Error'       = 3
         }
 
-        # Check if the log level an error or an error record was submitted
+        # On level error: Create a custom error record object or use the given error record object
         if ($PSCmdlet.ParameterSetName -eq 'Default' -and $Level -eq 'Error')
         {
             $ErrorRecord = New-Object -TypeName System.Management.Automation.ErrorRecord -ArgumentList $Message, 'Unknown', 'NotSpecified', $null
@@ -70,9 +70,10 @@ function Write-Log
             $Level   = 'Error'
         }
 
-        # Check the logging level
+        # Check the logging level: The requested level needs to be equals or higher than the configured level
         if ($LevelMap[$Level] -ge $LevelMap[$ScriptLogger.Level])
         {
+
             if ($ScriptLogger.LogFile)
             {
                 try
@@ -83,7 +84,7 @@ function Write-Log
                 }
                 catch
                 {
-                    Write-Error "ScriptLogger Module Error during Write Log File: $_"
+                    Write-Error "ScriptLogger module error during write log file: $_"
                 }
             }
 
@@ -105,11 +106,10 @@ function Write-Log
                 }
                 catch
                 {
-                    Write-Error "ScriptLogger Module Error during Write EVent Log: $_"
+                    Write-Error "ScriptLogger module error during write event log: $_"
                 }
             }
 
-            # Output to console
             if ($ScriptLogger.ConsoleOutput)
             {
                 switch ($Level)
