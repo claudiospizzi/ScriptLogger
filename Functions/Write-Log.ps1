@@ -114,10 +114,10 @@ function Write-Log
             {
                 switch ($Level)
                 {
-                    'Verbose'     { Write-Verbose -Message $Message }
-                    'Information' { try { Write-Information -MessageData $Message } catch { Write-Host $Message } }
-                    'Warning'     { Write-Warning -Message $Message }
-                    'Error'       { Write-Error -ErrorRecord $ErrorRecord }
+                    'Verbose'     { Write-Verbose -Message $Message -Verbose }
+                    'Information' { try { Write-Information -MessageData $Message -InformationAction Continue } catch { Write-Host $Message } }
+                    'Warning'     { Write-Warning -Message $Message -WarningAction Continue }
+                    'Error'       { Write-Error -ErrorRecord $ErrorRecord -ErrorAction Continue }
                 }
             }
         }
