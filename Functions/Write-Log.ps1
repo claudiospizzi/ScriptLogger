@@ -59,14 +59,10 @@ function Write-Log
             'Error'       = 3
         }
 
-        # On level error: Create a custom error record object or use the given error record object
-        if ($PSCmdlet.ParameterSetName -eq 'Default' -and $Level -eq 'Error')
+        # On level error: Extract error message and invocation info from error record object
+        if ($PSCmdlet.ParameterSetName -eq 'ErrorRecord')
         {
-            $ErrorRecord = New-Object -TypeName System.Management.Automation.ErrorRecord -ArgumentList $Message, 'Unknown', 'NotSpecified', $null
-        }
-        elseif ($PSCmdlet.ParameterSetName -eq 'ErrorRecord')
-        {
-            $Message = $ErrorRecord.ToString()
+            $Message = '{0} ({1}:{2} char:{3})' -f $ErrorRecord, $ErrorRecord.InvocationInfo.ScriptName, $ErrorRecord.InvocationInfo.ScriptLineNumber, $ErrorRecord.InvocationInfo.OffsetInLine
             $Level   = 'Error'
         }
 
@@ -117,7 +113,7 @@ function Write-Log
                     'Verbose'     { Write-Verbose -Message $Message -Verbose }
                     'Information' { try { Write-Information -MessageData $Message -InformationAction Continue } catch { Write-Host $Message } }
                     'Warning'     { Write-Warning -Message $Message -WarningAction Continue }
-                    'Error'       { Write-Error -ErrorRecord $ErrorRecord -ErrorAction Continue }
+                    'Error'       { $Host.UI.WriteErrorLine("ERROR: $Message") }
                 }
             }
         }
