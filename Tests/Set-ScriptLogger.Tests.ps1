@@ -22,7 +22,7 @@ Describe 'Set-ScriptLogger' {
         $DefaultPath     = 'TestDrive:\test.log'
         $DefaultFormat   = '{0:yyyy-MM-dd HH:mm:ss}   {1}   {2}   {3}   {4}'
         $DefaultLevel    = 'Information'
-        $DefaultEncoding = 'UTF8'
+        $DefaultEncoding = 'Default'
         $DefaultLogFile  = $true
         $DefaultEventLog = $true
         $DefaultConsole  = $true
@@ -95,7 +95,7 @@ Describe 'Set-ScriptLogger' {
 
     It 'ParameterEncoding' {
 
-        $ExpectedEncoding = 'UTF7'
+        $ExpectedEncoding = 'UTF8'
 
         Set-ScriptLogger -Encoding $ExpectedEncoding
 

@@ -22,7 +22,7 @@ Describe 'Start-ScriptLogger' {
         $DefaultPath     = Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath 'PowerShell.log'
         $DefaultFormat   = '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}'
         $DefaultLevel    = 'Verbose'
-        $DefaultEncoding = 'UTF8'
+        $DefaultEncoding = 'Default'
         $DefaultLogFile  = $true
         $DefaultEventLog = $true
         $DefaultConsole  = $true
@@ -100,7 +100,7 @@ Describe 'Start-ScriptLogger' {
 
     It 'ParameterEncoding' {
 
-        $ExpectedEncoding = 'UTF7'
+        $ExpectedEncoding = 'UTF8'
 
         $ScriptLogger = Start-ScriptLogger -Encoding $ExpectedEncoding
 
