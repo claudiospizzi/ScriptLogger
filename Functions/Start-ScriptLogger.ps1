@@ -31,7 +31,7 @@
 
 .PARAMETER Encoding
     Define the encoding which is used to write the log file. The possible
-    options are the same as on the used Out-File cmdlet. Default is UTF8.
+    options are the same as on the used Out-File cmdlet.
 
 .PARAMETER NoLogFile
     Do not write the log messages into the log file. By default, all messages
@@ -86,7 +86,7 @@ function Start-ScriptLogger
         [Parameter(Position=3,
                    Mandatory=$false)]
         [ValidateSet('Unicode', 'UTF7', 'UTF8', 'UTF32', 'ASCII', 'BigEndianUnicode', 'Default', 'OEM')]
-        [String] $Encoding = 'UTF8',
+        [String] $Encoding = 'Default',
 
         [Parameter(Position=4,
                    Mandatory=$false)]
