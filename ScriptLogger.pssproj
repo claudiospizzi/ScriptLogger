@@ -47,6 +47,7 @@
     <Compile Include="Tests\Set-ScriptLogger.Tests.ps1" />
     <Compile Include="Tests\Start-ScriptLogger.Tests.ps1" />
     <Compile Include="Tests\Stop-ScriptLogger.Tests.ps1" />
+    <Compile Include="Functions\Write-ErrorMessageInternal.ps1" />
     <Compile Include="Tests\Write-VerboseLog.Tests.ps1" />
     <Compile Include="Tests\Write-ErrorLog.Tests.ps1" />
     <Compile Include="Tests\Write-InformationLog.Tests.ps1" />

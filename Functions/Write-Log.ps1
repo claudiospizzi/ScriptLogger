@@ -108,12 +108,13 @@ function Write-Log
 
             if ($ScriptLogger.ConsoleOutput)
             {
+
                 switch ($Level)
                 {
                     'Verbose'     { Write-Verbose -Message $Message -Verbose }
                     'Information' { try { Write-Information -MessageData $Message -InformationAction Continue } catch { Write-Host $Message } }
                     'Warning'     { Write-Warning -Message $Message -WarningAction Continue }
-                    'Error'       { $Host.UI.WriteErrorLine("ERROR: $Message") }
+                    'Error'       { Write-HostErrorLine -Message $Message }
                 }
             }
         }
