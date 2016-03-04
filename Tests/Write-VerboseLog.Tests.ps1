@@ -34,7 +34,7 @@ InModuleScope ScriptLogger {
 
             Mock Get-Date -ModuleName ScriptLogger { [DateTime] '2000-12-31 01:02:03' }
 
-            Mock Write-Verbose -ModuleName ScriptLogger -ParameterFilter { $Message -eq 'My Verbose' }
+            Mock Show-VerboseMessage -ModuleName ScriptLogger -ParameterFilter { $Message -eq 'My Verbose' }
 
             BeforeAll {
 
@@ -78,7 +78,7 @@ InModuleScope ScriptLogger {
 
                 Write-VerboseLog -Message 'My Verbose'
 
-                Assert-MockCalled -CommandName 'Write-Verbose' -Times 1 -Exactly
+                Assert-MockCalled -CommandName 'Show-VerboseMessage' -Times 1 -Exactly
             }
 
             AfterEach {

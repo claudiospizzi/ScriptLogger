@@ -30,6 +30,10 @@
     <Compile Include="Examples\LoggerDemo.ps1" />
     <Compile Include="Examples\LoggerDemo.ps1.log" />
     <Compile Include="Functions\Get-ScriptLogger.ps1" />
+    <Compile Include="Functions\Show-InformationMessage.ps1" />
+    <Compile Include="Functions\Show-VerboseMessage.ps1" />
+    <Compile Include="Functions\Show-WarningMessage.ps1" />
+    <Compile Include="Functions\Show-ErrorMessage.ps1" />
     <Compile Include="Functions\Stop-ScriptLogger.ps1" />
     <Compile Include="Functions\Set-ScriptLogger.ps1" />
     <Compile Include="Functions\Start-ScriptLogger.ps1" />
@@ -47,7 +51,6 @@
     <Compile Include="Tests\Set-ScriptLogger.Tests.ps1" />
     <Compile Include="Tests\Start-ScriptLogger.Tests.ps1" />
     <Compile Include="Tests\Stop-ScriptLogger.Tests.ps1" />
-    <Compile Include="Functions\Write-ErrorMessageInternal.ps1" />
     <Compile Include="Tests\Write-VerboseLog.Tests.ps1" />
     <Compile Include="Tests\Write-ErrorLog.Tests.ps1" />
     <Compile Include="Tests\Write-InformationLog.Tests.ps1" />

@@ -27,24 +27,17 @@
 
 function Write-Log
 {
-    [CmdletBinding(DefaultParameterSetName='Default')]
+    [CmdletBinding()]
     param
     (
         [Parameter(Position=0,
-                   Mandatory=$true,
-                   ParameterSetName='Default')]
+                   Mandatory=$true)]
         [String] $Message,
 
         [Parameter(Position=1,
-                   Mandatory=$true,
-                   ParameterSetName='Default')]
+                   Mandatory=$true)]
         [ValidateSet('Verbose', 'Information', 'Warning', 'Error')]
-        [String] $Level,
-
-        [Parameter(Position=1,
-                   Mandatory=$true,
-                   ParameterSetName='ErrorRecord')]
-        [System.Management.Automation.ErrorRecord] $ErrorRecord
+        [String] $Level
     )
 
     $ScriptLogger = Get-ScriptLogger
@@ -59,17 +52,9 @@ function Write-Log
             'Error'       = 3
         }
 
-        # On level error: Extract error message and invocation info from error record object
-        if ($PSCmdlet.ParameterSetName -eq 'ErrorRecord')
-        {
-            $Message = '{0} ({1}:{2} char:{3})' -f $ErrorRecord, $ErrorRecord.InvocationInfo.ScriptName, $ErrorRecord.InvocationInfo.ScriptLineNumber, $ErrorRecord.InvocationInfo.OffsetInLine
-            $Level   = 'Error'
-        }
-
         # Check the logging level: The requested level needs to be equals or higher than the configured level
         if ($LevelMap[$Level] -ge $LevelMap[$ScriptLogger.Level])
         {
-
             if ($ScriptLogger.LogFile)
             {
                 try
@@ -86,14 +71,7 @@ function Write-Log
 
             if ($ScriptLogger.EventLog)
             {
-                if ($Level -eq 'Verbose')
-                {
-                    $EntryType = 'Information'
-                }
-                else
-                {
-                    $EntryType = $Level
-                }
+                $EntryType = $Level.Replace('Verbose', 'Information')
 
                 try
                 {
@@ -108,13 +86,12 @@ function Write-Log
 
             if ($ScriptLogger.ConsoleOutput)
             {
-
                 switch ($Level)
                 {
-                    'Verbose'     { Write-Verbose -Message $Message -Verbose }
-                    'Information' { try { Write-Information -MessageData $Message -InformationAction Continue } catch { Write-Host $Message } }
-                    'Warning'     { Write-Warning -Message $Message -WarningAction Continue }
-                    'Error'       { Write-HostErrorLine -Message $Message }
+                    'Verbose'     { Show-VerboseMessage -Message $Message }
+                    'Information' { Show-InformationMessage -Message $Message }
+                    'Warning'     { Show-WarningMessage -Message $Message }
+                    'Error'       { Show-ErrorMessage -Message $Message }
                 }
             }
         }
