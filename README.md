@@ -96,12 +96,12 @@ Stop-ScriptLogger
 - Add formats and types resources
 - Fix tests for PowerShell 3.0 & 4.0
 
-## 1.1.0
+### 1.1.0
 
 - Add an ErrorRecord parameter to Write-ErrorLog
 - Return logger object inside Start-ScriptLogger
 
-## 1.0.0
+### 1.0.0
 
 - Initial public release
 
