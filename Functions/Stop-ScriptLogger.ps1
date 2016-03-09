@@ -9,6 +9,13 @@
 .EXAMPLE
     C:\> Stop-ScriptLogger
     Stop the current logger.
+
+.NOTES
+    Author     : Claudio Spizzi
+    License    : MIT License
+
+.LINK
+    https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Stop-ScriptLogger

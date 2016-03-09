@@ -2,7 +2,7 @@
 # Load module
 if ($Env:APPVEYOR -eq 'True')
 {
-    $Global:TestRoot = (Get-Module ScriptLogger -ListAvailable).ModuleBase
+    $Global:TestRoot = (Get-Module ScriptLogger -ListAvailable | Select-Object -First 1).ModuleBase
 
     Import-Module ScriptLogger -Force
 }
@@ -22,6 +22,7 @@ Describe 'Start-ScriptLogger' {
         $DefaultPath     = Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath 'PowerShell.log'
         $DefaultFormat   = '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}'
         $DefaultLevel    = 'Verbose'
+        $DefaultEncoding = 'Default'
         $DefaultLogFile  = $true
         $DefaultEventLog = $true
         $DefaultConsole  = $true
@@ -37,6 +38,7 @@ Describe 'Start-ScriptLogger' {
         $ScriptLogger.Path          | Should Be $DefaultPath
         $ScriptLogger.Format        | Should Be $DefaultFormat
         $ScriptLogger.Level         | Should Be $DefaultLevel
+        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
         $ScriptLogger.LogFile       | Should Be $DefaultLogFile
         $ScriptLogger.EventLog      | Should Be $DefaultEventLog
         $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
@@ -54,6 +56,7 @@ Describe 'Start-ScriptLogger' {
         $ScriptLogger.Path          | Should Be $ExpectedPath
         $ScriptLogger.Format        | Should Be $DefaultFormat
         $ScriptLogger.Level         | Should Be $DefaultLevel
+        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
         $ScriptLogger.LogFile       | Should Be $DefaultLogFile
         $ScriptLogger.EventLog      | Should Be $DefaultEventLog
         $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
@@ -71,6 +74,7 @@ Describe 'Start-ScriptLogger' {
         $ScriptLogger.Path          | Should Be $DefaultPath
         $ScriptLogger.Format        | Should Be $ExpectedFormat
         $ScriptLogger.Level         | Should Be $DefaultLevel
+        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
         $ScriptLogger.LogFile       | Should Be $DefaultLogFile
         $ScriptLogger.EventLog      | Should Be $DefaultEventLog
         $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
@@ -88,6 +92,25 @@ Describe 'Start-ScriptLogger' {
         $ScriptLogger.Path          | Should Be $DefaultPath
         $ScriptLogger.Format        | Should Be $DefaultFormat
         $ScriptLogger.Level         | Should Be $ExpectedLevel
+        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
+        $ScriptLogger.LogFile       | Should Be $DefaultLogFile
+        $ScriptLogger.EventLog      | Should Be $DefaultEventLog
+        $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
+    }
+
+    It 'ParameterEncoding' {
+
+        $ExpectedEncoding = 'UTF8'
+
+        $ScriptLogger = Start-ScriptLogger -Encoding $ExpectedEncoding
+
+        $ScriptLogger | Should Not Be $null
+
+        $ScriptLogger.Enabled       | Should Be $DefaultEnabled
+        $ScriptLogger.Path          | Should Be $DefaultPath
+        $ScriptLogger.Format        | Should Be $DefaultFormat
+        $ScriptLogger.Level         | Should Be $DefaultLevel
+        $ScriptLogger.Encoding      | Should Be $ExpectedEncoding
         $ScriptLogger.LogFile       | Should Be $DefaultLogFile
         $ScriptLogger.EventLog      | Should Be $DefaultEventLog
         $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
@@ -103,6 +126,7 @@ Describe 'Start-ScriptLogger' {
         $ScriptLogger.Path          | Should Be $DefaultPath
         $ScriptLogger.Format        | Should Be $DefaultFormat
         $ScriptLogger.Level         | Should Be $DefaultLevel
+        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
         $ScriptLogger.LogFile       | Should Be $false
         $ScriptLogger.EventLog      | Should Be $DefaultEventLog
         $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
@@ -118,6 +142,7 @@ Describe 'Start-ScriptLogger' {
         $ScriptLogger.Path          | Should Be $DefaultPath
         $ScriptLogger.Format        | Should Be $DefaultFormat
         $ScriptLogger.Level         | Should Be $DefaultLevel
+        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
         $ScriptLogger.LogFile       | Should Be $DefaultLogFile
         $ScriptLogger.EventLog      | Should Be $false
         $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
@@ -133,6 +158,7 @@ Describe 'Start-ScriptLogger' {
         $ScriptLogger.Path          | Should Be $DefaultPath
         $ScriptLogger.Format        | Should Be $DefaultFormat
         $ScriptLogger.Level         | Should Be $DefaultLevel
+        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
         $ScriptLogger.LogFile       | Should Be $DefaultLogFile
         $ScriptLogger.EventLog      | Should Be $DefaultEventLog
         $ScriptLogger.ConsoleOutput | Should Be $false

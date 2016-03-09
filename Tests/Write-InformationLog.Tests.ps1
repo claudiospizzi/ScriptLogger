@@ -2,7 +2,7 @@
 # Load module
 if ($Env:APPVEYOR -eq 'True')
 {
-    $Global:TestRoot = (Get-Module ScriptLogger -ListAvailable).ModuleBase
+    $Global:TestRoot = (Get-Module ScriptLogger -ListAvailable | Select-Object -First 1).ModuleBase
 
     Import-Module ScriptLogger -Force
 }
@@ -34,16 +34,7 @@ InModuleScope ScriptLogger {
 
             Mock Get-Date -ModuleName ScriptLogger { [DateTime] '2000-12-31 01:02:03' }
 
-            if ($PSVersionTable.PSVersion -lt '5.0')
-            {
-                $InformationMockName = 'Write-Host'
-                Mock $InformationMockName -ModuleName ScriptLogger -ParameterFilter { $Object -eq 'My Information' }
-            }
-            else
-            {
-                $InformationMockName = 'Write-Information'
-                Mock $InformationMockName -ModuleName ScriptLogger -ParameterFilter { $MessageData -eq 'My Information' }
-            }
+            Mock Show-InformationMessage -ModuleName ScriptLogger -ParameterFilter { $Message -eq 'My Information' }
 
             BeforeAll {
 
@@ -87,7 +78,7 @@ InModuleScope ScriptLogger {
 
                 Write-InformationLog -Message 'My Information'
 
-                Assert-MockCalled -CommandName $InformationMockName -Times 1 -Exactly
+                Assert-MockCalled -CommandName Show-InformationMessage -Times 1 -Exactly
             }
 
             AfterEach {

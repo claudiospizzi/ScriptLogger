@@ -20,9 +20,15 @@
             <Width>10</Width>
           </TableColumnHeader>
           <TableColumnHeader>
+            <Label>Log File</Label>
             <Width>10</Width>
           </TableColumnHeader>
           <TableColumnHeader>
+            <Label>Event Log</Label>
+            <Width>10</Width>
+          </TableColumnHeader>
+          <TableColumnHeader>
+            <Label>Console</Label>
             <Width>10</Width>
           </TableColumnHeader>
         </TableHeaders>
@@ -39,13 +45,16 @@
                 <PropertyName>Path</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
+                <PropertyName>Encoding</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
                 <PropertyName>LogFile</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>EventLog</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
-                <PropertyName>Console</PropertyName>
+                <PropertyName>ConsoleOutput</PropertyName>
               </TableColumnItem>
             </TableColumnItems>
           </TableRowEntry>

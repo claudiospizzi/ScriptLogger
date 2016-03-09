@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/syyabalhc1ivgei7/branch/master?svg=true)](https://ci.appveyor.com/project/claudiospizzi/scriptlogger/branch/master) [![Build status](https://ci.appveyor.com/api/projects/status/syyabalhc1ivgei7/branch/dev?svg=true)](https://ci.appveyor.com/project/claudiospizzi/scriptlogger/branch/dev)
+[![AppVeyor - master](https://ci.appveyor.com/api/projects/status/syyabalhc1ivgei7/branch/master?svg=true)](https://ci.appveyor.com/project/claudiospizzi/scriptlogger/branch/master) [![AppVeyor - dev](https://ci.appveyor.com/api/projects/status/syyabalhc1ivgei7/branch/dev?svg=true)](https://ci.appveyor.com/project/claudiospizzi/scriptlogger/branch/dev) [![PowerShell Gallery - ScriptLogger](https://img.shields.io/badge/PowerShell%20Gallery-ScriptLogger-0072C6.svg)](https://www.powershellgallery.com/packages/ScriptLogger)
 
 # ScriptLogger PowerShell Module
 PowerShell Module to provide logging capabilities for PowerShell Controller Scripts.
@@ -6,7 +6,7 @@ PowerShell Module to provide logging capabilities for PowerShell Controller Scri
 
 ## Introduction
 
-With the ScriptLogger module, you are able to log error, warning, informational and verbose log messages into log files, the event log and the console host.
+With the ScriptLogger module, you are able to log error, warning, informational and verbose messages into log files, the Windows event log and the current console host. You can start and stop the logger as required. Works great in cooperation with the [ScriptConfig](https://github.com/claudiospizzi/ScriptConfig) module to improve controller scripts.
 
 
 ## Requirenments
@@ -80,6 +80,30 @@ Write-VerboseLog -Message 'My Verbose Message'
 # Disable the logger
 Stop-ScriptLogger
 ```
+
+
+## Versions
+
+### 1.2.0
+
+- Add encoding option for the log file output
+- Add error handling for log file and event log output
+- Change console output from cmdlets to $Host.UI methods
+- Fix error record handling to log correct invocation information
+
+### 1.1.1
+
+- Add formats and types resources
+- Fix tests for PowerShell 3.0 & 4.0
+
+## 1.1.0
+
+- Add an ErrorRecord parameter to Write-ErrorLog
+- Return logger object inside Start-ScriptLogger
+
+## 1.0.0
+
+- Initial public release
 
 
 ## Contribute

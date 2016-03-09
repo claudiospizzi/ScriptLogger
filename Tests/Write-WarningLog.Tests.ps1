@@ -2,7 +2,7 @@
 # Load module
 if ($Env:APPVEYOR -eq 'True')
 {
-    $Global:TestRoot = (Get-Module ScriptLogger -ListAvailable).ModuleBase
+    $Global:TestRoot = (Get-Module ScriptLogger -ListAvailable | Select-Object -First 1).ModuleBase
 
     Import-Module ScriptLogger -Force
 }
@@ -34,7 +34,7 @@ InModuleScope ScriptLogger {
 
             Mock Get-Date -ModuleName ScriptLogger { [DateTime] '2000-12-31 01:02:03' }
 
-            Mock Write-Warning -ModuleName ScriptLogger -ParameterFilter { $Message -eq 'My Warning' }
+            Mock Show-WarningMessage -ModuleName ScriptLogger -ParameterFilter { $Message -eq 'My Warning' }
 
             BeforeAll {
 
@@ -78,7 +78,7 @@ InModuleScope ScriptLogger {
 
                 Write-WarningLog -Message 'My Warning'
 
-                Assert-MockCalled -CommandName 'Write-Warning' -Times 1 -Exactly
+                Assert-MockCalled -CommandName 'Show-WarningMessage' -Times 1 -Exactly
             }
 
             AfterEach {

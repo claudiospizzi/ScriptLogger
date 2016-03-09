@@ -2,7 +2,7 @@
 # Load module
 if ($Env:APPVEYOR -eq 'True')
 {
-    $Global:TestRoot = (Get-Module ScriptLogger -ListAvailable).ModuleBase
+    $Global:TestRoot = (Get-Module ScriptLogger -ListAvailable | Select-Object -First 1).ModuleBase
 
     Import-Module ScriptLogger -Force
 }
@@ -46,7 +46,7 @@ InModuleScope ScriptLogger {
 
             Mock Get-Date -ModuleName ScriptLogger { [DateTime] '2000-12-31 01:02:03' }
 
-            Mock Write-Error -ModuleName ScriptLogger -ParameterFilter { $ErrorRecord.CategoryInfo.Reason -eq 'Exception' }
+            Mock Show-ErrorMessage -ModuleName ScriptLogger -ParameterFilter { $Message -eq 'My Error' }
 
             BeforeAll {
 
@@ -90,7 +90,7 @@ InModuleScope ScriptLogger {
 
                 Write-ErrorLog -Message 'My Error'
 
-                Assert-MockCalled -CommandName 'Write-Error' -Times 1 -Exactly
+                Assert-MockCalled -CommandName 'Show-ErrorMessage' -Times 1 -Exactly
             }
 
             AfterEach {
@@ -103,8 +103,8 @@ InModuleScope ScriptLogger {
         Context 'OutputErrorRecord' {
 
             Mock Get-Date -ModuleName ScriptLogger { [DateTime] '2000-12-31 01:02:03' }
-
-            Mock Write-Error -ModuleName ScriptLogger -ParameterFilter { $ErrorRecord.CategoryInfo.Reason -eq 'RuntimeException' }
+            
+            Mock Show-ErrorMessage -ModuleName ScriptLogger -ParameterFilter { $Message -like 'Attempted to divide by zero.*' }
 
             BeforeAll {
 
@@ -118,7 +118,7 @@ InModuleScope ScriptLogger {
                 Write-ErrorLog -ErrorRecord $(try { 0 / 0 } catch { $_ })
 
                 $Content = Get-Content -Path $Path
-                $Content | Should Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         Attempted to divide by zero."
+                $Content | Should Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         Attempted to divide by zero. (RuntimeException: $Global:TestRoot\Tests\Write-ErrorLog.Tests.ps1:118 char:53)"
             }
 
             It 'EventLog' {
@@ -135,7 +135,7 @@ InModuleScope ScriptLogger {
                 $Event.EventID        | Should Be 0
                 $Event.CategoryNumber | Should Be 0
                 $Event.EntryType      | Should Be 'Error'
-                $Event.Message        | Should Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'Attempted to divide by zero.'"
+                $Event.Message        | Should Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'Attempted to divide by zero. (RuntimeException: $Global:TestRoot\Tests\Write-ErrorLog.Tests.ps1:130 char:53)'"
                 $Event.Source         | Should Be 'PowerShell'
                 $Event.InstanceId     | Should Be 0
             }
@@ -146,9 +146,16 @@ InModuleScope ScriptLogger {
 
                 $Before = Get-Date
 
-                Write-ErrorLog -ErrorRecord $(try { 0 / 0 } catch { $_ })
+                try
+                {
+                    0 / 0
+                }
+                catch
+                {
+                    Write-ErrorLog -ErrorRecord $_
+                }
 
-                Assert-MockCalled -CommandName 'Write-Error' -Times 1 -Exactly
+                Assert-MockCalled -CommandName 'Show-ErrorMessage' -Times 1 -Exactly
             }
 
             AfterEach {

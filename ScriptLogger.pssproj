@@ -30,6 +30,10 @@
     <Compile Include="Examples\LoggerDemo.ps1" />
     <Compile Include="Examples\LoggerDemo.ps1.log" />
     <Compile Include="Functions\Get-ScriptLogger.ps1" />
+    <Compile Include="Functions\Show-InformationMessage.ps1" />
+    <Compile Include="Functions\Show-VerboseMessage.ps1" />
+    <Compile Include="Functions\Show-WarningMessage.ps1" />
+    <Compile Include="Functions\Show-ErrorMessage.ps1" />
     <Compile Include="Functions\Stop-ScriptLogger.ps1" />
     <Compile Include="Functions\Set-ScriptLogger.ps1" />
     <Compile Include="Functions\Start-ScriptLogger.ps1" />

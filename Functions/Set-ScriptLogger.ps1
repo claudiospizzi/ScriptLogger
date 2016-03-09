@@ -15,6 +15,9 @@
 .PARAMETER Level
     Update the logger level.
 
+.PARAMETER Encoding
+    Update the used log file encoding.
+
 .PARAMETER LogFile
     Enable or disable the log file output.
 
@@ -30,6 +33,13 @@
 
 .EXAMPLE Set-ScriptLogger -Path 'C:\Temp\test.log' -Format '{3}: {4}'
     C:\> Update the log file path and its format.
+
+.NOTES
+    Author     : Claudio Spizzi
+    License    : MIT License
+
+.LINK
+    https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Set-ScriptLogger
@@ -51,16 +61,21 @@ function Set-ScriptLogger
                    Mandatory=$false)]
         [ValidateSet('Verbose', 'Information', 'Warning', 'Error')]
         [String] $Level,
-        
+
         [Parameter(Position=3,
                    Mandatory=$false)]
-        [Boolean] $LogFile,
+        [ValidateSet('Unicode', 'UTF7', 'UTF8', 'UTF32', 'ASCII', 'BigEndianUnicode', 'Default', 'OEM')]
+        [String] $Encoding,
 
         [Parameter(Position=4,
                    Mandatory=$false)]
-        [Boolean] $EventLog,
+        [Boolean] $LogFile,
 
         [Parameter(Position=5,
+                   Mandatory=$false)]
+        [Boolean] $EventLog,
+
+        [Parameter(Position=6,
                    Mandatory=$false)]
         [Boolean] $ConsoleOutput
     )
@@ -89,6 +104,11 @@ function Set-ScriptLogger
         if ($PSBoundParameters.ContainsKey('Level'))
         {
             $Global:ScriptLogger.Level = $Level
+        }
+
+        if ($PSBoundParameters.ContainsKey('Encoding'))
+        {
+            $Global:ScriptLogger.Encoding = $Encoding
         }
 
         if ($PSBoundParameters.ContainsKey('LogFile'))

@@ -13,6 +13,13 @@
 .EXAMPLE
     C:\> Write-WarningLog -Message 'My Warning Message'
     Log the warning message.
+
+.NOTES
+    Author     : Claudio Spizzi
+    License    : MIT License
+
+.LINK
+    https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Write-WarningLog
