@@ -84,6 +84,13 @@ Stop-ScriptLogger
 
 ## Versions
 
+### 1.2.0
+
+- Add encoding option for the log file output
+- Add error handling for log file and event log output
+- Change console output from cmdlets to $Host.UI methods
+- Fix error record handling to log correct invocation information
+
 ### 1.1.1
 
 - Add formats and types resources
