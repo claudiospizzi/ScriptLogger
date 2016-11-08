@@ -57,7 +57,7 @@ The following example show two options how to start the script logger, the logge
 Start-ScriptLogger
 
 # Second options, specify multiple custom settings for the logger
-Start-ScriptLogger -Path 'C:\Temp\test.log' -Format '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}' -Level Warning -SkipEventLog -HideConsoleOutput
+Start-ScriptLogger -Path 'C:\Temp\test.log' -Format '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}' -Level Warning  -NoEventLog -NoConsoleOutput
 
 # Get the current script logger configuration object
 Get-ScriptLogger
