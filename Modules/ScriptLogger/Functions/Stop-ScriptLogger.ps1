@@ -32,7 +32,7 @@ function Stop-ScriptLogger
     (
     )
 
-    if ($Global:ScriptLogger -ne $null)
+    if ($null -ne $Global:ScriptLogger)
     {
         Remove-Variable -Scope Global -Name ScriptLogger -Force
     }
