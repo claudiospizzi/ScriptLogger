@@ -42,7 +42,7 @@
 
 function Start-ScriptLogger
 {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '')]
     param
     (
@@ -101,21 +101,24 @@ function Start-ScriptLogger
     # Only work with absolute path, makes error handling easier
     $Path = (Resolve-Path -Path $Path).Path
 
-    Write-Verbose "Enable script logger with log file '$Path'"
+    if ($PSCmdlet.ShouldProcess('ScriptLogger', 'Start'))
+    {
+        Write-Verbose "Enable script logger with log file '$Path'"
 
-    # Define global variable for the logging
-    $Global:ScriptLogger = New-Object -TypeName PSObject -Property @{
-        Enabled       = $true
-        Path          = $Path
-        Format        = $Format
-        Level         = $Level
-        Encoding      = $Encoding
-        LogFile       = -not $NoLogFile.IsPresent
-        EventLog      = -not $NoEventLog.IsPresent
-        ConsoleOutput = -not $NoConsoleOutput.IsPresent
+        # Define global variable for the logging
+        $Global:ScriptLogger = New-Object -TypeName PSObject -Property @{
+            Enabled       = $true
+            Path          = $Path
+            Format        = $Format
+            Level         = $Level
+            Encoding      = $Encoding
+            LogFile       = -not $NoLogFile.IsPresent
+            EventLog      = -not $NoEventLog.IsPresent
+            ConsoleOutput = -not $NoConsoleOutput.IsPresent
+        }
+        $Global:ScriptLogger.PSTypeNames.Insert(0, 'ScriptLogger.Configuration')
+
+        # Return logger object
+        return $Global:ScriptLogger
     }
-    $Global:ScriptLogger.PSTypeNames.Insert(0, 'ScriptLogger.Configuration')
-
-    # Return logger object
-    return $Global:ScriptLogger
 }

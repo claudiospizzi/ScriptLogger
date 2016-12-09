@@ -30,7 +30,7 @@
 
 function Set-ScriptLogger
 {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '')]
     param
     (
@@ -87,37 +87,58 @@ function Set-ScriptLogger
             # Only work with absolute path, makes error handling easier
             $Path = (Resolve-Path -Path $Path).Path
 
-            $Global:ScriptLogger.Path = $Path
+            if ($PSCmdlet.ShouldProcess('ScriptLogger.Path', 'Set'))
+            {
+                $Global:ScriptLogger.Path = $Path
+            }
         }
 
         if ($PSBoundParameters.ContainsKey('Format'))
         {
-            $Global:ScriptLogger.Format = $Format
+            if ($PSCmdlet.ShouldProcess('ScriptLogger.Format', 'Set'))
+            {
+                $Global:ScriptLogger.Format = $Format
+            }
         }
 
         if ($PSBoundParameters.ContainsKey('Level'))
         {
-            $Global:ScriptLogger.Level = $Level
+            if ($PSCmdlet.ShouldProcess('ScriptLogger.Level', 'Set'))
+            {
+                $Global:ScriptLogger.Level = $Level
+            }
         }
 
         if ($PSBoundParameters.ContainsKey('Encoding'))
         {
-            $Global:ScriptLogger.Encoding = $Encoding
+            if ($PSCmdlet.ShouldProcess('ScriptLogger.Encoding', 'Set'))
+            {
+                $Global:ScriptLogger.Encoding = $Encoding
+            }
         }
 
         if ($PSBoundParameters.ContainsKey('LogFile'))
         {
-            $Global:ScriptLogger.LogFile = $LogFile
+            if ($PSCmdlet.ShouldProcess('ScriptLogger.LogFile', 'Set'))
+            {
+                $Global:ScriptLogger.LogFile = $LogFile
+            }
         }
 
         if ($PSBoundParameters.ContainsKey('EventLog'))
         {
-            $Global:ScriptLogger.EventLog = $EventLog
+            if ($PSCmdlet.ShouldProcess('ScriptLogger.EventLog', 'Set'))
+            {
+                $Global:ScriptLogger.EventLog = $EventLog
+            }
         }
 
         if ($PSBoundParameters.ContainsKey('ConsoleOutput'))
         {
-            $Global:ScriptLogger.ConsoleOutput = $ConsoleOutput
+            if ($PSCmdlet.ShouldProcess('ScriptLogger.ConsoleOutput', 'Set'))
+            {
+                $Global:ScriptLogger.ConsoleOutput = $ConsoleOutput
+            }
         }
     }
 }

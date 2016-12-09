@@ -26,7 +26,7 @@
 
 function Stop-ScriptLogger
 {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '')]
     param
     (
@@ -34,6 +34,9 @@ function Stop-ScriptLogger
 
     if ($null -ne $Global:ScriptLogger)
     {
-        Remove-Variable -Scope Global -Name ScriptLogger -Force
+        if ($PSCmdlet.ShouldProcess('ScriptLogger', 'Stop'))
+        {
+            Remove-Variable -Scope Global -Name ScriptLogger -Force
+        }
     }
 }

@@ -27,7 +27,7 @@
 
 function Write-Log
 {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess = $true)]
     param
     (
         # The message to log.
@@ -57,7 +57,7 @@ function Write-Log
         # Check the logging level: The requested level needs to be equals or higher than the configured level
         if ($LevelMap[$Level] -ge $LevelMap[$ScriptLogger.Level])
         {
-            if ($ScriptLogger.LogFile)
+            if ($ScriptLogger.LogFile -and $PSCmdlet.ShouldProcess('LogFile', 'Write Log'))
             {
                 try
                 {
@@ -71,7 +71,7 @@ function Write-Log
                 }
             }
 
-            if ($ScriptLogger.EventLog)
+            if ($ScriptLogger.EventLog -and $PSCmdlet.ShouldProcess('EventLog', 'Write Log'))
             {
                 $EntryType = $Level.Replace('Verbose', 'Information')
 
@@ -86,7 +86,7 @@ function Write-Log
                 }
             }
 
-            if ($ScriptLogger.ConsoleOutput)
+            if ($ScriptLogger.ConsoleOutput -and $PSCmdlet.ShouldProcess('ConsoleOutput', 'Write Log'))
             {
                 switch ($Level)
                 {
