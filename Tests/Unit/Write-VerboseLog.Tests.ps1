@@ -1,19 +1,10 @@
 
-# Load module
-if ($Env:APPVEYOR -eq 'True')
-{
-    $Global:TestRoot = (Get-Module ScriptLogger -ListAvailable | Select-Object -First 1).ModuleBase
+$ModulePath = Resolve-Path -Path "$PSScriptRoot\..\..\Modules" | ForEach-Object Path
+$ModuleName = Get-ChildItem -Path $ModulePath | Select-Object -First 1 -ExpandProperty BaseName
 
-    Import-Module ScriptLogger -Force
-}
-else
-{
-    $Global:TestRoot = (Split-Path -Parent $MyInvocation.MyCommand.Path | Join-Path -ChildPath '..' | Resolve-Path).Path
+Remove-Module -Name $ModuleName -Force -ErrorAction SilentlyContinue
+Import-Module -Name "$ModulePath\$ModuleName" -Force
 
-    Import-Module "$Global:TestRoot\ScriptLogger.psd1" -Force
-}
-
-# Execute tests
 InModuleScope ScriptLogger {
 
     Describe 'Write-VerboseLog' {
