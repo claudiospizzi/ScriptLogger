@@ -6,12 +6,14 @@
     Copyright          = 'Copyright (c) 2016 by Claudio Spizzi. Licensed under MIT license.'
     Description        = 'PowerShell Module to provide logging capabilities for PowerShell Controller Scripts.'
     PowerShellVersion  = '3.0'
+    RequiredModules    = @()
+    RequiredAssemblies = @()
     ScriptsToProcess   = @()
     TypesToProcess     = @(
-        'Resources/ScriptLogger.Types.ps1xml'
+        'Resources\ScriptLogger.Types.ps1xml'
     )
     FormatsToProcess   = @(
-        'Resources/ScriptLogger.Formats.ps1xml'
+        'Resources\ScriptLogger.Formats.ps1xml'
     )
     FunctionsToExport  = @(
         'Start-ScriptLogger',
@@ -31,6 +33,7 @@
             Tags               = @('PSModule', 'Log', 'Logger', 'Script', 'Controller')
             LicenseUri         = 'https://raw.githubusercontent.com/claudiospizzi/ScriptLogger/master/LICENSE'
             ProjectUri         = 'https://github.com/claudiospizzi/ScriptLogger'
+            ExternalModuleDependencies = @()
         }
     }
 }
