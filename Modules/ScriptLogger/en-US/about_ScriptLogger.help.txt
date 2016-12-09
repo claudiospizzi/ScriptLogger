@@ -3,8 +3,8 @@ TOPIC
     about_ScriptLogger
 
 SHORT DESCRIPTION
-    PowerShell Module to provide logging capabilities for PowerShell Controller
-    Scripts.
+    PowerShell Module to provide logging capabilities for PowerShell controller
+    scripts.
 
 LONG DESCRIPTION
     To get more information about this module, check the open source GitHub

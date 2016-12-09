@@ -6,8 +6,8 @@
 
 # ScriptLogger PowerShell Module
 
-PowerShell Module to provide logging capabilities for PowerShell Controller
-Scripts.
+PowerShell Module to provide logging capabilities for PowerShell controller
+scripts.
 
 
 ## Introduction

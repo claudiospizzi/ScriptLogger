@@ -4,7 +4,7 @@
     GUID               = '0E1AF375-67C1-460A-A247-045C5D2B54AA'
     Author             = 'Claudio Spizzi'
     Copyright          = 'Copyright (c) 2016 by Claudio Spizzi. Licensed under MIT license.'
-    Description        = 'PowerShell Module to provide logging capabilities for PowerShell Controller Scripts.'
+    Description        = 'PowerShell Module to provide logging capabilities for PowerShell controller scripts.'
     PowerShellVersion  = '3.0'
     RequiredModules    = @()
     RequiredAssemblies = @()
