@@ -71,10 +71,8 @@ manually on your local system:
 * **Write-ErrorLog**  
   Log an error message.
 
-
-## Examples
-
-The following example show two options how to start the script logger, the logger management and how to log the log messages.
+The following example show two options how to start the script logger, the
+logger management and how to log the log messages.
 
 ```powershell
 # Initialize the logger with default values
