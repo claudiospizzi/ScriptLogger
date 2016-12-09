@@ -1,27 +1,27 @@
 <#
-.SYNOPSIS
+    .SYNOPSIS
     Log a message with the specified log level.
 
-.DESCRIPTION
+    .DESCRIPTION
     If the specified log level is higher as the configured log level, the
     message will be logged to the enabled destinations. These are the specified
     log file, the PowerShell event log and the current PowerShell console.
 
-.PARAMETER Message
-    The message to log.
+    .INPUTS
+    None.
 
-.PARAMETER Level
-    The log level to use.
+    .OUTPUTS
+    None.
 
-.EXAMPLE
-    C:\> Write-WarningLog -Message 'My Warning Message' -Level Warning
+    .EXAMPLE
+    PS C:\> Write-WarningLog -Message 'My Warning Message' -Level Warning
     Log the warning message.
 
-.NOTES
+    .NOTES
     Author     : Claudio Spizzi
     License    : MIT License
 
-.LINK
+    .LINK
     https://github.com/claudiospizzi/ScriptLogger
 #>
 
@@ -30,20 +30,22 @@ function Write-Log
     [CmdletBinding()]
     param
     (
-        [Parameter(Position=0,
-                   Mandatory=$true)]
-        [String] $Message,
+        # The message to log.
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Message,
 
-        [Parameter(Position=1,
-                   Mandatory=$true)]
+        # The log level to use.
+        [Parameter(Mandatory = $true)]
         [ValidateSet('Verbose', 'Information', 'Warning', 'Error')]
-        [String] $Level
+        [System.String]
+        $Level
     )
 
     $ScriptLogger = Get-ScriptLogger
 
     # Check if the logging is setup and enabled
-    if (($ScriptLogger -ne $null) -and ($ScriptLogger.Enabled -eq $true))
+    if (($null -ne $ScriptLogger) -and ($ScriptLogger.Enabled -eq $true))
     {
         $LevelMap = @{
             'Verbose'     = 0

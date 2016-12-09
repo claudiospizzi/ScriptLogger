@@ -1,44 +1,30 @@
 <#
-.SYNOPSIS
+    .SYNOPSIS
     Update the script logger log configuration.
 
-.DESCRIPTION
+    .DESCRIPTION
     The script logger inside the current PowerShell session can be updated with
     all parameters inside this cmdlet.
 
-.PARAMETER Path
-    Update the path to the log file.
+    .INPUTS
+    None.
 
-.PARAMETER Format
-    Update the format for the log file.
+    .OUTPUTS
+    None.
 
-.PARAMETER Level
-    Update the logger level.
-
-.PARAMETER Encoding
-    Update the used log file encoding.
-
-.PARAMETER LogFile
-    Enable or disable the log file output.
-
-.PARAMETER EventLog
-    Enable or disable the event log output.
-
-.PARAMETER ConsoleOutput
-    Enable or disable the console output.
-
-.EXAMPLE
-    C:\> Set-ScriptLogger -Level 'Warning' -EventLog $true
+    .EXAMPLE
+    PS C:\> Set-ScriptLogger -Level 'Warning' -EventLog $true
     Set the script logger level to warning and enable the event log output.
 
-.EXAMPLE Set-ScriptLogger -Path 'C:\Temp\test.log' -Format '{3}: {4}'
-    C:\> Update the log file path and its format.
+    .EXAMPLE
+    PS C:\> Set-ScriptLogger -Path 'C:\Temp\test.log' -Format '{3}: {4}'
+    Update the log file path and its format.
 
-.NOTES
+    .NOTES
     Author     : Claudio Spizzi
     License    : MIT License
 
-.LINK
+    .LINK
     https://github.com/claudiospizzi/ScriptLogger
 #>
 
@@ -47,40 +33,47 @@ function Set-ScriptLogger
     [CmdletBinding()]
     param
     (
-        [Parameter(Position=0,
-                   Mandatory=$false)]
+        # Update the path to the log file.
+        [Parameter(Mandatory = $false)]
         [ValidateScript({Test-Path -Path (Split-Path -Path $_ -Parent)})]
-        [String] $Path,
+        [System.String]
+        $Path,
 
-        [Parameter(Position=1,
-                   Mandatory=$false)]
+        # Update the format for the log file.
+        [Parameter(Mandatory = $false)]
         [ValidateScript({$_ -f (Get-Date), $Env:ComputerName, $Env:Username, 'Verbose', 'My Message'})]
-        [String] $Format,
+        [System.String]
+        $Format,
 
-        [Parameter(Position=2,
-                   Mandatory=$false)]
+        # Update the logger level.
+        [Parameter(Mandatory = $false)]
         [ValidateSet('Verbose', 'Information', 'Warning', 'Error')]
-        [String] $Level,
+        [System.String]
+        $Level,
 
-        [Parameter(Position=3,
-                   Mandatory=$false)]
+        # Update the used log file encoding.
+        [Parameter(Mandatory = $false)]
         [ValidateSet('Unicode', 'UTF7', 'UTF8', 'UTF32', 'ASCII', 'BigEndianUnicode', 'Default', 'OEM')]
-        [String] $Encoding,
+        [System.String]
+        $Encoding,
 
-        [Parameter(Position=4,
-                   Mandatory=$false)]
-        [Boolean] $LogFile,
+        # Enable or disable the log file output.
+        [Parameter(Mandatory = $false)]
+        [System.Boolean]
+        $LogFile,
 
-        [Parameter(Position=5,
-                   Mandatory=$false)]
-        [Boolean] $EventLog,
+        # Enable or disable the event log output.
+        [Parameter(Mandatory = $false)]
+        [System.Boolean]
+        $EventLog,
 
-        [Parameter(Position=6,
-                   Mandatory=$false)]
-        [Boolean] $ConsoleOutput
+        # Enable or disable the console output.
+        [Parameter(Mandatory = $false)]
+        [System.Boolean]
+        $ConsoleOutput
     )
 
-    if ($Global:ScriptLogger -ne $null)
+    if ($null -ne $Global:ScriptLogger)
     {
         if ($PSBoundParameters.ContainsKey('Path'))
         {

@@ -1,20 +1,26 @@
 <#
-.SYNOPSIS
+    .SYNOPSIS
     Get the current script logger.
 
-.DESCRIPTION
-    Returns an object with the current configuration of the script logger
-    inside this PowerShell session.
+    .DESCRIPTION
+    Returns an object with the current configuration of the script logger inside
+    this PowerShell session.
 
-.EXAMPLE
-    C:\> Get-ScriptLogger
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    ScriptLogger.Configuration. Configuration of the script logger instance.
+
+    .EXAMPLE
+    PS C:\> Get-ScriptLogger
     Get the current script logger object.
 
-.NOTES
+    .NOTES
     Author     : Claudio Spizzi
     License    : MIT License
 
-.LINK
+    .LINK
     https://github.com/claudiospizzi/ScriptLogger
 #>
 
@@ -25,7 +31,7 @@ function Get-ScriptLogger
     (
     )
 
-    if ($Global:ScriptLogger -ne $null)
+    if ($null -ne $Global:ScriptLogger)
     {
         return $Global:ScriptLogger
     }

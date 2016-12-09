@@ -1,20 +1,26 @@
 <#
-.SYNOPSIS
+    .SYNOPSIS
     Stop the script logger inside the current PowerShell session.
 
-.DESCRIPTION
+    .DESCRIPTION
     Stop the script logger inside the current PowerShell session and clear all
     log configurations.
 
-.EXAMPLE
-    C:\> Stop-ScriptLogger
+    .INPUTS
+    None.
+
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    PS C:\> Stop-ScriptLogger
     Stop the current logger.
 
-.NOTES
+    .NOTES
     Author     : Claudio Spizzi
     License    : MIT License
 
-.LINK
+    .LINK
     https://github.com/claudiospizzi/ScriptLogger
 #>
 

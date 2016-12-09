@@ -1,24 +1,27 @@
 <#
-.SYNOPSIS
+    .SYNOPSIS
     Log a verbose message.
 
-.DESCRIPTION
+    .DESCRIPTION
     Log a verbose message to the log file, the event log and show it on the
-    current console. If the global log level is set to 'information', no
-    verbose message will be logged.
+    current console. If the global log level is set to 'information', no verbose
+    message will be logged.
 
-.PARAMETER Message
-    The verbose message
+    .INPUTS
+    None.
 
-.EXAMPLE
-    C:\> Write-VerboseLog -Message 'My Verbose Message'
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    PS C:\> Write-VerboseLog -Message 'My Verbose Message'
     Log the verbose message.
 
-.NOTES
+    .NOTES
     Author     : Claudio Spizzi
     License    : MIT License
 
-.LINK
+    .LINK
     https://github.com/claudiospizzi/ScriptLogger
 #>
 
@@ -27,8 +30,10 @@ function Write-VerboseLog
     [CmdletBinding()]
     param
     (
+        # The verbose message.
         [Parameter(Mandatory=$true)]
-        [String] $Message
+        [System.String]
+        $Message
     )
 
     Write-Log -Message $Message -Level 'Verbose'

@@ -1,38 +1,44 @@
 <#
-.SYNOPSIS
+    .SYNOPSIS
     Log an error message.
 
-.DESCRIPTION
+    .DESCRIPTION
     Log an error message to the log file, the event log and show it on the
-    current console.
+    current console. It can also use an error record conataining an exception
+    as input. The exception will be converted into a log message.
 
-.PARAMETER Message
-    The error message
+    .INPUTS
+    None.
 
-.EXAMPLE
-    C:\> Write-ErrorLog -Message 'My Error Message'
+    .OUTPUTS
+    None.
+
+    .EXAMPLE
+    PS C:\> Write-ErrorLog -Message 'My Error Message'
     Log the error message.
 
-.NOTES
+    .NOTES
     Author     : Claudio Spizzi
     License    : MIT License
 
-.LINK
+    .LINK
     https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Write-ErrorLog
 {
-    [CmdletBinding(DefaultParameterSetName='Message')]
+    [CmdletBinding(DefaultParameterSetName = 'Message')]
     param
     (
-        [Parameter(Mandatory=$true,
-                   ParameterSetName='Message')]
-        [String] $Message,
+        # The error message.
+        [Parameter(Mandatory = $true, ParameterSetName = 'Message')]
+        [System.String]
+        $Message,
 
-        [Parameter(Mandatory=$true,
-                   ParameterSetName='ErrorRecord')]
-        [System.Management.Automation.ErrorRecord] $ErrorRecord
+        # The error record containing an exception to log.
+        [Parameter(Mandatory = $true, ParameterSetName = 'ErrorRecord')]
+        [System.Management.Automation.ErrorRecord]
+        $ErrorRecord
     )
 
     # Extract error message and invocation info from error record object
