@@ -99,11 +99,11 @@ InModuleScope ScriptLogger {
                 Stop-ScriptLogger
             }
         }
-        
+
         Context 'OutputErrorRecord' {
 
             Mock Get-Date -ModuleName ScriptLogger { [DateTime] '2000-12-31 01:02:03' }
-            
+
             Mock Show-ErrorMessage -ModuleName ScriptLogger -ParameterFilter { $Message -like 'Attempted to divide by zero.*' }
 
             BeforeAll {

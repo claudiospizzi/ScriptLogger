@@ -1,4 +1,4 @@
-﻿
+
 # Load module
 if ($Env:APPVEYOR -eq 'True')
 {
