@@ -109,7 +109,7 @@ InModuleScope ScriptLogger {
                 Write-ErrorLog -ErrorRecord $(try { 0 / 0 } catch { $_ })
 
                 $Content = Get-Content -Path $Path
-                $Content | Should Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         Attempted to divide by zero. (RuntimeException: $Global:TestRoot\Tests\Write-ErrorLog.Tests.ps1:118 char:53)"
+                $Content | Should Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         Attempted to divide by zero. (RuntimeException: $Global:TestRoot\Unit\Write-ErrorLog.Tests.ps1:109 char:53)"
             }
 
             It 'EventLog' {
@@ -126,7 +126,7 @@ InModuleScope ScriptLogger {
                 $Event.EventID        | Should Be 0
                 $Event.CategoryNumber | Should Be 0
                 $Event.EntryType      | Should Be 'Error'
-                $Event.Message        | Should Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'Attempted to divide by zero. (RuntimeException: $Global:TestRoot\Tests\Write-ErrorLog.Tests.ps1:130 char:53)'"
+                $Event.Message        | Should Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'Attempted to divide by zero. (RuntimeException: $Global:TestRoot\Unit\Write-ErrorLog.Tests.ps1:121 char:53)'"
                 $Event.Source         | Should Be 'PowerShell'
                 $Event.InstanceId     | Should Be 0
             }
