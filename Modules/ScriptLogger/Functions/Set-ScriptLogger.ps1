@@ -31,6 +31,7 @@
 function Set-ScriptLogger
 {
     [CmdletBinding()]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '')]
     param
     (
         # Update the path to the log file.

@@ -27,6 +27,7 @@
 function Stop-ScriptLogger
 {
     [CmdletBinding()]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '')]
     param
     (
     )

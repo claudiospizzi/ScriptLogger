@@ -43,6 +43,7 @@
 function Start-ScriptLogger
 {
     [CmdletBinding()]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '')]
     param
     (
         # The path to the log file.
