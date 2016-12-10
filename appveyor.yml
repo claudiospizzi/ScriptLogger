@@ -1,21 +1,31 @@
 
-# PowerShell 5.0 Image
+# PowerShell 5.0 build worker
 os: WMF 5
 
-# Clone Directory
-clone_folder: C:\Projects\ScriptLogger
+# Secret deployment keys
+environment:
+  GitHubToken:
+    secure: g7atusVu/SvLWa4397EhDExCquI2srCWwO2JetLpnQ57V8Pzm27Eq9kj/v8X6wkd
+  PSGalleryKey:
+    secure: +o4/iom8ZO0TkCMSM0gInMHq/ioFlK7LRh2jJULTBejba3nCjp2EOv94DcTS2r20
 
-# Install Pester
-install: 
-    - cinst -y pester --version 3.3.14
+# Install required Pester and PSScriptAnalyzer modules
+install:
+  - ps: Install-PackageProvider NuGet -Force | Out-Null
+  - ps: Install-Module Pester -Force
+  - ps: Install-Module PSScriptAnalyzer -Force
 
-# Build Number
+# Set version to build number
 version: '{build}'
 
-# Execute build script
+# Execute compile and build
 build_script:
-- ps: .\Scripts\build.ps1
+  - ps: .\Scripts\build.ps1 -AppVeyor
 
 # Execute test script
 test_script:
-- ps: .\Scripts\test.ps1
+  - ps: .\Scripts\test.ps1 -AppVeyor
+
+# Execute deploy script
+deploy_script:
+  - ps: .\Scripts\release.ps1 -AppVeyor

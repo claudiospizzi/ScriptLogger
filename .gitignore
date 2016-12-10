@@ -140,7 +140,7 @@ publish/
 # Publish Web Output
 *.[Pp]ublish.xml
 *.azurePubxml
-# TODO: Comment the next line if you want to checkin your web deploy settings 
+# TODO: Comment the next line if you want to checkin your web deploy settings
 # but database connection strings (with potential passwords) will be unencrypted
 *.pubxml
 *.publishproj
@@ -234,3 +234,16 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# Ignore debug script file
+Scripts/debug.ps1
+
+# Ignore meta test files
+Tests/Meta/FileContent.Tests.ps1
+Tests/Meta/FileEncoding.Tests.ps1
+Tests/Meta/FileFormatting.Tests.ps1
+Tests/Meta/ProjectStructure.Tests.ps1
+Tests/Meta/ScriptAnalyzer.Tests.ps1
+
+# Ignore assembly
+Modules/SecurityFever/SecurityFever.dll
