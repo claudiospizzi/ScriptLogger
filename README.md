@@ -71,6 +71,8 @@ manually on your local system:
 * **Write-ErrorLog**  
   Log an error message.
 
+### Example
+
 The following example show two options how to start the script logger, the
 logger management and how to log the log messages.
 
