@@ -112,9 +112,8 @@ Stop-ScriptLogger
 ### Unreleased
 
 - Convert module to new deployment model
-- Refactor code against high quality module guidelines by Microsoft
+- Rework code against high quality module guidelines by Microsoft
 - BREAKING CHANGE: Remove positional parameters
-
 
 ### 1.2.0
 
