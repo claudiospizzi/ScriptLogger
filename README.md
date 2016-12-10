@@ -159,10 +159,10 @@ debug file and start it.
 
 [ScriptConfig]: https://github.com/claudiospizzi/ScriptConfig
 
-[PowerShell Gallery]: https://www.powershellgallery.com/packages/SecurityFever
+[PowerShell Gallery]: https://www.powershellgallery.com/packages/ScriptLogger
 [PowerShellGet]: https://technet.microsoft.com/en-us/library/dn807169.aspx
 
-[GitHub Releases]: https://github.com/claudiospizzi/SecurityFever/releases
+[GitHub Releases]: https://github.com/claudiospizzi/ScriptLogger/releases
 [Installing a PowerShell Module]: https://msdn.microsoft.com/en-us/library/dd878350
 
 [Visual Studio Code]: https://code.visualstudio.com/
