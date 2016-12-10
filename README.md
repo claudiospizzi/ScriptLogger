@@ -109,7 +109,7 @@ Stop-ScriptLogger
 
 ## Versions
 
-### Unreleased
+### 2.0.0
 
 - Convert module to new deployment model
 - Rework code against high quality module guidelines by Microsoft
