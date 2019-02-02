@@ -1,27 +1,27 @@
 <#
     .SYNOPSIS
-    Get the current script logger.
+        Get the current script logger.
 
     .DESCRIPTION
-    Returns an object with the current configuration of the script logger inside
-    this PowerShell session.
+        Returns an object with the current configuration of the script logger
+        inside this PowerShell session.
 
     .INPUTS
-    None.
+        None.
 
     .OUTPUTS
-    ScriptLogger.Configuration. Configuration of the script logger instance.
+        ScriptLogger.Configuration. Configuration of the script logger instance.
 
     .EXAMPLE
-    PS C:\> Get-ScriptLogger
-    Get the current script logger object.
+        PS C:\> Get-ScriptLogger
+        Get the current script logger object.
 
     .NOTES
-    Author     : Claudio Spizzi
-    License    : MIT License
+        Author     : Claudio Spizzi
+        License    : MIT License
 
     .LINK
-    https://github.com/claudiospizzi/ScriptLogger
+        https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Get-ScriptLogger

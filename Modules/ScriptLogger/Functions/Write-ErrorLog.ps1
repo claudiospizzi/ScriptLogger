@@ -1,28 +1,28 @@
 <#
     .SYNOPSIS
-    Log an error message.
+        Log an error message.
 
     .DESCRIPTION
-    Log an error message to the log file, the event log and show it on the
-    current console. It can also use an error record conataining an exception
-    as input. The exception will be converted into a log message.
+        Log an error message to the log file, the event log and show it on the
+        current console. It can also use an error record conataining an
+        exception as input. The exception will be converted into a log message.
 
     .INPUTS
-    None.
+        None.
 
     .OUTPUTS
-    None.
+        None.
 
     .EXAMPLE
-    PS C:\> Write-ErrorLog -Message 'My Error Message'
-    Log the error message.
+        PS C:\> Write-ErrorLog -Message 'My Error Message'
+        Log the error message.
 
     .NOTES
-    Author     : Claudio Spizzi
-    License    : MIT License
+        Author     : Claudio Spizzi
+        License    : MIT License
 
     .LINK
-    https://github.com/claudiospizzi/ScriptLogger
+        https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Write-ErrorLog
