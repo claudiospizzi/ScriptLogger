@@ -1,27 +1,27 @@
 <#
     .SYNOPSIS
-    Shows an information message on the PowerShell host.
+        Shows an information message on the PowerShell host.
 
     .DESCRIPTION
-    Uses the internal .NET method () of the host UI class to show the
-    information message on the console.
+        Uses the internal .NET method () of the host UI class to show the
+        information message on the console.
 
     .INPUTS
-    None.
+        None.
 
     .OUTPUTS
-    None.
+        None.
 
     .EXAMPLE
-    PS C:\> Show-InformationMessage -Message 'My Information Message'
-    Show the information message.
+        PS C:\> Show-InformationMessage -Message 'My Information Message'
+        Show the information message.
 
     .NOTES
-    Author     : Claudio Spizzi
-    License    : MIT License
+        Author     : Claudio Spizzi
+        License    : MIT License
 
     .LINK
-    https://github.com/claudiospizzi/ScriptLogger
+        https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Show-InformationMessage
@@ -34,5 +34,7 @@ function Show-InformationMessage
         $Message
     )
 
+    # A method WriteErrorLine() is not available, so add the prefix INFORMATION:
+    # and use the default method WriteLine().
     $Host.UI.WriteLine("INFORMATION: $Message")
 }

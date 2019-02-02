@@ -17,6 +17,10 @@
         PS C:\> Write-WarningLog -Message 'My Warning Message'
         Log the warning message.
 
+    .EXAMPLE
+        PS C:\> Write-WarningLog -Name 'MyLogger' -Message 'My Warning Message'
+        Log the warning message in a custom logger.
+
     .NOTES
         Author     : Claudio Spizzi
         License    : MIT License
@@ -30,11 +34,16 @@ function Write-WarningLog
     [CmdletBinding()]
     param
     (
+        # The logger name.
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $Name = 'Default',
+
         # The warning message.
         [Parameter(Mandatory=$true)]
         [System.String]
         $Message
     )
 
-    Write-Log -Message $Message -Level 'Warning'
+    Write-Log -Name $Name -Message $Message -Level 'Warning'
 }

@@ -1,27 +1,27 @@
 <#
     .SYNOPSIS
-    Shows a warning message on the PowerShell host.
+        Shows a warning message on the PowerShell host.
 
     .DESCRIPTION
-    Uses the internal .NET method WriteWarningLine() of the host UI class to
-    show the warning message on the console.
+        Uses the internal .NET method WriteWarningLine() of the host UI class to
+        show the warning message on the console.
 
     .INPUTS
-    None.
+        None.
 
     .OUTPUTS
-    None.
+        None.
 
     .EXAMPLE
-    PS C:\> Show-WarningMessage -Message 'My Warning Message'
-    Show the warning message.
+        PS C:\> Show-WarningMessage -Message 'My Warning Message'
+        Show the warning message.
 
     .NOTES
-    Author     : Claudio Spizzi
-    License    : MIT License
+        Author     : Claudio Spizzi
+        License    : MIT License
 
     .LINK
-    https://github.com/claudiospizzi/ScriptLogger
+        https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Show-WarningMessage

@@ -14,7 +14,11 @@
 
     .EXAMPLE
         PS C:\> Stop-ScriptLogger
-        Stop the current logger.
+        Stop the default logger.
+
+    .EXAMPLE
+        PS C:\> Stop-ScriptLogger -Name 'MyLogger'
+        Stop the custom logger.
 
     .NOTES
         Author     : Claudio Spizzi
@@ -27,16 +31,19 @@
 function Stop-ScriptLogger
 {
     [CmdletBinding(SupportsShouldProcess = $true)]
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '')]
     param
     (
+        # The logger name.
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $Name = 'Default'
     )
 
-    if ($null -ne $Global:ScriptLogger)
+    if ($Script:Loggers.ContainsKey($Name))
     {
         if ($PSCmdlet.ShouldProcess('ScriptLogger', 'Stop'))
         {
-            Remove-Variable -Scope Global -Name ScriptLogger -Force
+            $Script:Loggers.Remove($Name)
         }
     }
 }

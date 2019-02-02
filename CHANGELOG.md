@@ -6,6 +6,10 @@ The format is mainly based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## Unreleased
+
+* Changed: Support multiple loggers distinguished by a logger name
+
 ## 2.0.0 - 2016-12-10
 
 * Changed: Remove positional parameters (BREAKING CHANGE)

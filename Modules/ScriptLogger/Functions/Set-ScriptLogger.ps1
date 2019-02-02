@@ -31,9 +31,13 @@
 function Set-ScriptLogger
 {
     [CmdletBinding(SupportsShouldProcess = $true)]
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '')]
     param
     (
+        # The logger name.
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $Name = 'Default',
+
         # Update the path to the log file.
         [Parameter(Mandatory = $false)]
         [ValidateScript({Test-Path -Path (Split-Path -Path $_ -Parent)})]
@@ -74,7 +78,7 @@ function Set-ScriptLogger
         $ConsoleOutput
     )
 
-    if ($null -ne $Global:ScriptLogger)
+    if ($Script:Loggers.ContainsKey($Name))
     {
         if ($PSBoundParameters.ContainsKey('Path'))
         {
@@ -89,7 +93,7 @@ function Set-ScriptLogger
 
             if ($PSCmdlet.ShouldProcess('ScriptLogger.Path', 'Set'))
             {
-                $Global:ScriptLogger.Path = $Path
+                $Script:Loggers[$Name].Path = $Path
             }
         }
 
@@ -97,7 +101,7 @@ function Set-ScriptLogger
         {
             if ($PSCmdlet.ShouldProcess('ScriptLogger.Format', 'Set'))
             {
-                $Global:ScriptLogger.Format = $Format
+                $Script:Loggers[$Name].Format = $Format
             }
         }
 
@@ -105,7 +109,7 @@ function Set-ScriptLogger
         {
             if ($PSCmdlet.ShouldProcess('ScriptLogger.Level', 'Set'))
             {
-                $Global:ScriptLogger.Level = $Level
+                $Script:Loggers[$Name].Level = $Level
             }
         }
 
@@ -113,7 +117,7 @@ function Set-ScriptLogger
         {
             if ($PSCmdlet.ShouldProcess('ScriptLogger.Encoding', 'Set'))
             {
-                $Global:ScriptLogger.Encoding = $Encoding
+                $Script:Loggers[$Name].Encoding = $Encoding
             }
         }
 
@@ -121,7 +125,7 @@ function Set-ScriptLogger
         {
             if ($PSCmdlet.ShouldProcess('ScriptLogger.LogFile', 'Set'))
             {
-                $Global:ScriptLogger.LogFile = $LogFile
+                $Script:Loggers[$Name].LogFile = $LogFile
             }
         }
 
@@ -129,7 +133,7 @@ function Set-ScriptLogger
         {
             if ($PSCmdlet.ShouldProcess('ScriptLogger.EventLog', 'Set'))
             {
-                $Global:ScriptLogger.EventLog = $EventLog
+                $Script:Loggers[$Name].EventLog = $EventLog
             }
         }
 
@@ -137,7 +141,7 @@ function Set-ScriptLogger
         {
             if ($PSCmdlet.ShouldProcess('ScriptLogger.ConsoleOutput', 'Set'))
             {
-                $Global:ScriptLogger.ConsoleOutput = $ConsoleOutput
+                $Script:Loggers[$Name].ConsoleOutput = $ConsoleOutput
             }
         }
     }

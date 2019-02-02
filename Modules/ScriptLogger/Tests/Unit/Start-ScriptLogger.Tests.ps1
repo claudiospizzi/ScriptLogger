@@ -13,7 +13,7 @@ Describe 'Start-ScriptLogger' {
         $DefaultPath     = Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath 'PowerShell.log'
         $DefaultFormat   = '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}'
         $DefaultLevel    = 'Verbose'
-        $DefaultEncoding = 'Default'
+        $DefaultEncoding = 'UTF8'
         $DefaultLogFile  = $true
         $DefaultEventLog = $true
         $DefaultConsole  = $true
@@ -21,7 +21,7 @@ Describe 'Start-ScriptLogger' {
 
     It 'ParameterNone' {
 
-        $ScriptLogger = Start-ScriptLogger
+        $ScriptLogger = Start-ScriptLogger -PassThru
 
         $ScriptLogger | Should Not Be $null
 
@@ -39,7 +39,7 @@ Describe 'Start-ScriptLogger' {
 
         $ExpectedPath = 'TestDrive:\test.log'
 
-        $ScriptLogger = Start-ScriptLogger -Path $ExpectedPath
+        $ScriptLogger = Start-ScriptLogger -Path $ExpectedPath -PassThru
 
         $ScriptLogger | Should Not Be $null
 
@@ -57,7 +57,7 @@ Describe 'Start-ScriptLogger' {
 
         $ExpectedFormat = '{4} {3} {2} {1} {0}'
 
-        $ScriptLogger = Start-ScriptLogger -Format $ExpectedFormat
+        $ScriptLogger = Start-ScriptLogger -Format $ExpectedFormat -PassThru
 
         $ScriptLogger | Should Not Be $null
 
@@ -75,7 +75,7 @@ Describe 'Start-ScriptLogger' {
 
         $ExpectedLevel = 'Error'
 
-        $ScriptLogger = Start-ScriptLogger -Level $ExpectedLevel
+        $ScriptLogger = Start-ScriptLogger -Level $ExpectedLevel -PassThru
 
         $ScriptLogger | Should Not Be $null
 
@@ -93,7 +93,7 @@ Describe 'Start-ScriptLogger' {
 
         $ExpectedEncoding = 'UTF8'
 
-        $ScriptLogger = Start-ScriptLogger -Encoding $ExpectedEncoding
+        $ScriptLogger = Start-ScriptLogger -Encoding $ExpectedEncoding -PassThru
 
         $ScriptLogger | Should Not Be $null
 
@@ -109,7 +109,7 @@ Describe 'Start-ScriptLogger' {
 
     It 'ParameterNoLogFile' {
 
-        $ScriptLogger = Start-ScriptLogger -NoLogFile
+        $ScriptLogger = Start-ScriptLogger -NoLogFile -PassThru
 
         $ScriptLogger | Should Not Be $null
 
@@ -125,7 +125,7 @@ Describe 'Start-ScriptLogger' {
 
     It 'ParameterNoEventLog' {
 
-        $ScriptLogger = Start-ScriptLogger -NoEventLog
+        $ScriptLogger = Start-ScriptLogger -NoEventLog -PassThru
 
         $ScriptLogger | Should Not Be $null
 
@@ -141,7 +141,7 @@ Describe 'Start-ScriptLogger' {
 
     It 'ParameterNoConsoleOutput' {
 
-        $ScriptLogger = Start-ScriptLogger -NoConsoleOutput
+        $ScriptLogger = Start-ScriptLogger -NoConsoleOutput -PassThru
 
         $ScriptLogger | Should Not Be $null
 

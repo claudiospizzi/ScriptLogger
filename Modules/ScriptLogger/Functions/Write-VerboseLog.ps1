@@ -17,6 +17,10 @@
         PS C:\> Write-VerboseLog -Message 'My Verbose Message'
         Log the verbose message.
 
+    .EXAMPLE
+        PS C:\> Write-VerboseLog -Name 'MyLogger' -Message 'My Verbose Message'
+        Log the verbose message in a custom logger.
+
     .NOTES
         Author     : Claudio Spizzi
         License    : MIT License
@@ -30,11 +34,16 @@ function Write-VerboseLog
     [CmdletBinding()]
     param
     (
+        # The logger name.
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $Name = 'Default',
+
         # The verbose message.
         [Parameter(Mandatory=$true)]
         [System.String]
         $Message
     )
 
-    Write-Log -Message $Message -Level 'Verbose'
+    Write-Log -Name $Name -Message $Message -Level 'Verbose'
 }

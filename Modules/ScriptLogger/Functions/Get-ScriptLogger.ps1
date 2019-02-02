@@ -14,7 +14,11 @@
 
     .EXAMPLE
         PS C:\> Get-ScriptLogger
-        Get the current script logger object.
+        Get all script loggers.
+
+    .EXAMPLE
+        PS C:\> Get-ScriptLogger -Name 'MyLogger'
+        Get the custom script logger.
 
     .NOTES
         Author     : Claudio Spizzi
@@ -27,17 +31,20 @@
 function Get-ScriptLogger
 {
     [CmdletBinding()]
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '')]
     param
     (
+        # The logger name filter.
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $Name
     )
 
-    if ($null -ne $Global:ScriptLogger)
+    $selectedLoggers = $Script:Loggers.Values
+
+    if ($PSBoundParameters.ContainsKey('Name'))
     {
-        return $Global:ScriptLogger
+        $selectedLoggers = $selectedLoggers | Where-Object { $_.Name -like $Name }
     }
-    else
-    {
-        throw 'Script logger not found!'
-    }
+
+    Write-Output $selectedLoggers
 }

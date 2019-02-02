@@ -1,28 +1,29 @@
 <#
     .SYNOPSIS
-    Log a message with the specified log level.
+        Log a message with the specified log level.
 
     .DESCRIPTION
-    If the specified log level is higher as the configured log level, the
-    message will be logged to the enabled destinations. These are the specified
-    log file, the PowerShell event log and the current PowerShell console.
+        If the specified log level is higher as the configured log level, the
+        message will be logged to the enabled destinations. These are the
+        specified log file, the PowerShell event log and the current PowerShell
+        console.
 
     .INPUTS
-    None.
+        None.
 
     .OUTPUTS
-    None.
+        None.
 
     .EXAMPLE
-    PS C:\> Write-WarningLog -Message 'My Warning Message' -Level Warning
-    Log the warning message.
+        PS C:\> Write-Log -Name 'Default' -Message 'My Warning Message' -Level Warning
+        Log the warning message.
 
     .NOTES
-    Author     : Claudio Spizzi
-    License    : MIT License
+        Author     : Claudio Spizzi
+        License    : MIT License
 
     .LINK
-    https://github.com/claudiospizzi/ScriptLogger
+        https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Write-Log
@@ -30,6 +31,11 @@ function Write-Log
     [CmdletBinding(SupportsShouldProcess = $true)]
     param
     (
+        # The logger name.
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $Name,
+
         # The message to log.
         [Parameter(Mandatory = $true)]
         [System.String]
@@ -42,60 +48,67 @@ function Write-Log
         $Level
     )
 
-    $ScriptLogger = Get-ScriptLogger
-
-    # Check if the logging is setup and enabled
-    if (($null -ne $ScriptLogger) -and ($ScriptLogger.Enabled -eq $true))
+    if ($Script:Loggers.ContainsKey($Name))
     {
-        $LevelMap = @{
-            'Verbose'     = 0
-            'Information' = 1
-            'Warning'     = 2
-            'Error'       = 3
-        }
+        $logger = $Script:Loggers[$Name]
 
-        # Check the logging level: The requested level needs to be equals or higher than the configured level
-        if ($LevelMap[$Level] -ge $LevelMap[$ScriptLogger.Level])
+        # Check if the logging enabled
+        if ($logger.Enabled)
         {
-            if ($ScriptLogger.LogFile -and $PSCmdlet.ShouldProcess('LogFile', 'Write Log'))
-            {
-                try
-                {
-                    # Output to log file
-                    $Line = $ScriptLogger.Format -f (Get-Date), $env:ComputerName, $Env:Username, $Level, $Message
-                    $Line | Out-File -FilePath $ScriptLogger.Path -Encoding $ScriptLogger.Encoding -Append -ErrorAction Stop
-                }
-                catch
-                {
-                    Write-Error "ScriptLogger module error during write log file: $_"
-                }
+            $levelMap = @{
+                'Verbose'     = 0
+                'Information' = 1
+                'Warning'     = 2
+                'Error'       = 3
             }
 
-            if ($ScriptLogger.EventLog -and $PSCmdlet.ShouldProcess('EventLog', 'Write Log'))
+            # Check the logging level: The requested level needs to be equals or higher than the configured level
+            if ($levelMap[$Level] -ge $levelMap[$logger.Level])
             {
-                $EntryType = $Level.Replace('Verbose', 'Information')
-
-                try
+                if ($logger.LogFile -and $PSCmdlet.ShouldProcess('LogFile', 'Write Log'))
                 {
-                    # Output to event log
-                    Write-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -EventId 0 -Category 0 -EntryType $EntryType -Message $Message -ErrorAction Stop
+                    try
+                    {
+                        # Output to log file
+                        $line = $logger.Format -f (Get-Date), $env:ComputerName, $Env:Username, $Level, $Message
+                        $line | Out-File -FilePath $logger.Path -Encoding $logger.Encoding -Append -ErrorAction Stop
+                    }
+                    catch
+                    {
+                        Write-Warning "ScriptLogger '$Name' module error during write log file: $_"
+                    }
                 }
-                catch
-                {
-                    Write-Error "ScriptLogger module error during write event log: $_"
-                }
-            }
 
-            if ($ScriptLogger.ConsoleOutput -and $PSCmdlet.ShouldProcess('ConsoleOutput', 'Write Log'))
-            {
-                switch ($Level)
+                if ($logger.EventLog -and $PSCmdlet.ShouldProcess('EventLog', 'Write Log'))
                 {
-                    'Verbose'     { Show-VerboseMessage -Message $Message }
-                    'Information' { Show-InformationMessage -Message $Message }
-                    'Warning'     { Show-WarningMessage -Message $Message }
-                    'Error'       { Show-ErrorMessage -Message $Message }
+                    $entryType = $Level.Replace('Verbose', 'Information')
+
+                    try
+                    {
+                        # Output to event log
+                        Write-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -EventId 0 -Category 0 -EntryType $entryType -Message $Message -ErrorAction Stop
+                    }
+                    catch
+                    {
+                        Write-Warning "ScriptLogger '$Name' module error during write event log: $_"
+                    }
+                }
+
+                if ($logger.ConsoleOutput -and $PSCmdlet.ShouldProcess('ConsoleOutput', 'Write Log'))
+                {
+                    switch ($Level)
+                    {
+                        'Verbose'     { Show-VerboseMessage -Message $Message }
+                        'Information' { Show-InformationMessage -Message $Message }
+                        'Warning'     { Show-WarningMessage -Message $Message }
+                        'Error'       { Show-ErrorMessage -Message $Message }
+                    }
                 }
             }
         }
+    }
+    else
+    {
+        Write-Warning "ScriptLogger '$Name' not found. No logs written."
     }
 }

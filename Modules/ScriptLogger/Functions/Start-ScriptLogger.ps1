@@ -10,11 +10,11 @@
         With the format parameter, the logfile format can be defined. The format
         definition will be used to call the System.String.Format() method. The
         following values are used as arguments:
-        {0} Timestamp as datetime value.
-        {1} NetBIOS computer name.
-        {2} Current session username.
-        {3} Log entry level.
-        {4} Message.
+        - {0} Timestamp as datetime value.
+        - {1} NetBIOS computer name.
+        - {2} Current session username.
+        - {3} Log entry level.
+        - {4} Message.
 
     .INPUTS
         None.
@@ -25,6 +25,10 @@
     .EXAMPLE
         PS C:\> Start-ScriptLogger
         Initialize the logger with default values.
+
+    .EXAMPLE
+        PS C:\> Start-ScriptLogger -Name 'MyLogger' -Path 'C:\my.log'
+        Start a custom named logger instance.
 
     .EXAMPLE
         PS C:\> Start-ScriptLogger -Path 'C:\test.log' -Format '{3}: {4}' -Level 'Verbose' -SkipEventLog -HideConsoleOutput
@@ -39,13 +43,16 @@
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-
 function Start-ScriptLogger
 {
     [CmdletBinding(SupportsShouldProcess = $true)]
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '')]
     param
     (
+        # The logger name.
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $Name = 'Default',
+
         # The path to the log file.
         [Parameter(Mandatory = $false)]
         [ValidateScript({(Test-Path -Path (Split-Path -Path $_ -Parent))})]
@@ -71,7 +78,7 @@ function Start-ScriptLogger
         [Parameter(Mandatory = $false)]
         [ValidateSet('Unicode', 'UTF7', 'UTF8', 'UTF32', 'ASCII', 'BigEndianUnicode', 'Default', 'OEM')]
         [System.String]
-        $Encoding = 'Default',
+        $Encoding = 'UTF8',
 
         # Do not write the log messages into the log file. By default, all
         # messages are written to the specified or default log file.
@@ -89,7 +96,12 @@ function Start-ScriptLogger
         # shown on the console.
         [Parameter(Mandatory = $false)]
         [Switch]
-        $NoConsoleOutput
+        $NoConsoleOutput,
+
+        # If specified, the created script logger object will be returned.
+        [Parameter(Mandatory = $false)]
+        [Switch]
+        $PassThru
     )
 
     # Create an empty log file, if it does not exist
@@ -103,10 +115,9 @@ function Start-ScriptLogger
 
     if ($PSCmdlet.ShouldProcess('ScriptLogger', 'Start'))
     {
-        Write-Verbose "Enable script logger with log file '$Path'"
-
-        # Define global variable for the logging
-        $Global:ScriptLogger = New-Object -TypeName PSObject -Property @{
+        $Script:Loggers[$Name] = [PSCustomObject] @{
+            PSTypeName    = 'ScriptLogger.Configuration'
+            Name          = $Name
             Enabled       = $true
             Path          = $Path
             Format        = $Format
@@ -116,9 +127,11 @@ function Start-ScriptLogger
             EventLog      = -not $NoEventLog.IsPresent
             ConsoleOutput = -not $NoConsoleOutput.IsPresent
         }
-        $Global:ScriptLogger.PSTypeNames.Insert(0, 'ScriptLogger.Configuration')
 
         # Return logger object
-        return $Global:ScriptLogger
+        if ($PassThru.IsPresent)
+        {
+            Write-Output $Script:Loggers[$Name]
+        }
     }
 }

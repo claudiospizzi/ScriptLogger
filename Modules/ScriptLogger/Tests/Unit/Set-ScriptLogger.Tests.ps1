@@ -13,7 +13,7 @@ Describe 'Set-ScriptLogger' {
         $DefaultPath     = 'TestDrive:\test.log'
         $DefaultFormat   = '{0:yyyy-MM-dd HH:mm:ss}   {1}   {2}   {3}   {4}'
         $DefaultLevel    = 'Information'
-        $DefaultEncoding = 'Default'
+        $DefaultEncoding = 'UTF8'
         $DefaultLogFile  = $true
         $DefaultEventLog = $true
         $DefaultConsole  = $true

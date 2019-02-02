@@ -17,6 +17,10 @@
         PS C:\> Write-InformationLog -Message 'My Information Message'
         Log the information message.
 
+    .EXAMPLE
+        PS C:\> Write-InformationLog -Name 'MyLogger' -Message 'My Information Message'
+        Log the information message in a custom logger.
+
     .NOTES
         Author     : Claudio Spizzi
         License    : MIT License
@@ -30,11 +34,16 @@ function Write-InformationLog
     [CmdletBinding()]
     param
     (
+        # The logger name.
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $Name = 'Default',
+
         # The information message.
         [Parameter(Mandatory = $true)]
         [System.String]
         $Message
     )
 
-    Write-Log -Message $Message -Level 'Information'
+    Write-Log -Name $Name -Message $Message -Level 'Information'
 }

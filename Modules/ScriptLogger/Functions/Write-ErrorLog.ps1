@@ -17,6 +17,10 @@
         PS C:\> Write-ErrorLog -Message 'My Error Message'
         Log the error message.
 
+    .EXAMPLE
+        PS C:\> Write-ErrorLog -Name 'MyLogger' -Message 'My Error Message'
+        Log the error message in a custom logger.
+
     .NOTES
         Author     : Claudio Spizzi
         License    : MIT License
@@ -30,6 +34,11 @@ function Write-ErrorLog
     [CmdletBinding(DefaultParameterSetName = 'Message')]
     param
     (
+        # The logger name.
+        [Parameter(Mandatory = $false)]
+        [System.String]
+        $Name = 'Default',
+
         # The error message.
         [Parameter(Mandatory = $true, ParameterSetName = 'Message')]
         [System.String]
@@ -51,5 +60,5 @@ function Write-ErrorLog
                                                     $ErrorRecord.InvocationInfo.OffsetInLine
     }
 
-    Write-Log -Message $Message -Level 'Error'
+    Write-Log -Name $Name -Message $Message -Level 'Error'
 }

@@ -7,10 +7,13 @@ Import-Module -Name "$modulePath\$moduleName" -Force
 
 Describe 'Get-ScriptLogger' {
 
-    It 'should throw an exception if the script logger was not started before' {
+    It 'should be null if the script logger was not started before' {
 
-        # Act & Assert
-        { Get-ScriptLogger } | Should Throw
+        # Act
+        $scriptLogger = Get-ScriptLogger
+
+        # Assert
+        $scriptLogger | Should -BeNullOrEmpty
     }
 
     It 'should return a valid object after starting' {

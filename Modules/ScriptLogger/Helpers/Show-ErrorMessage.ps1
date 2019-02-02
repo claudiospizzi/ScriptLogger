@@ -1,27 +1,27 @@
 <#
     .SYNOPSIS
-    Shows an error message on the PowerShell host.
+        Shows an error message on the PowerShell host.
 
     .DESCRIPTION
-    Uses the internal .NET method WriteErrorLine() of the host UI class to show
-    the error message on the console.
+        Uses the internal .NET method WriteErrorLine() of the host UI class to
+        show the error message on the console.
 
     .INPUTS
-    None.
+        None.
 
     .OUTPUTS
-    None.
+        None.
 
     .EXAMPLE
-    PS C:\> Show-ErrorMessage -Message 'My Error Message'
-    Show the error message.
+        PS C:\> Show-ErrorMessage -Message 'My Error Message'
+        Show the error message.
 
     .NOTES
-    Author     : Claudio Spizzi
-    License    : MIT License
+        Author     : Claudio Spizzi
+        License    : MIT License
 
     .LINK
-    https://github.com/claudiospizzi/ScriptLogger
+        https://github.com/claudiospizzi/ScriptLogger
 #>
 
 function Show-ErrorMessage
@@ -34,5 +34,6 @@ function Show-ErrorMessage
         $Message
     )
 
+    # Add the prefix ERROR: because WriteErrorLine() does not write it itself.
     $Host.UI.WriteErrorLine("ERROR: $Message")
 }

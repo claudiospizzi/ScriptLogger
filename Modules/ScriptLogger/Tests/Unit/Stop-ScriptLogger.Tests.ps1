@@ -11,10 +11,10 @@ Describe 'Stop-ScriptLogger' {
 
         Start-ScriptLogger -Path 'TestDrive:\test.log'
 
-        $Global:ScriptLogger | Should Not Be $null
+        Get-ScriptLogger | Should -Not -BeNullOrEmpty
 
         Stop-ScriptLogger
 
-        $Global:ScriptLogger | Should Be $null
+        Get-ScriptLogger | Should -BeNullOrEmpty
     }
 }
