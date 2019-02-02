@@ -1,21 +1,21 @@
 
-$ModulePath = Resolve-Path -Path "$PSScriptRoot\..\..\Modules" | ForEach-Object Path
-$ModuleName = Get-ChildItem -Path $ModulePath | Select-Object -First 1 -ExpandProperty BaseName
+$modulePath = Resolve-Path -Path "$PSScriptRoot\..\..\.." | Select-Object -ExpandProperty Path
+$moduleName = Resolve-Path -Path "$PSScriptRoot\..\.." | Get-Item | Select-Object -ExpandProperty BaseName
 
-Remove-Module -Name $ModuleName -Force -ErrorAction SilentlyContinue
-Import-Module -Name "$ModulePath\$ModuleName" -Force
+Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
+Import-Module -Name "$modulePath\$moduleName" -Force
 
 InModuleScope ScriptLogger {
 
-    Describe 'Write-InformationLog' {
+    Describe 'Write-VerboseLog' {
 
         Context 'MockInnerCall' {
 
-            Mock Write-Log -ModuleName ScriptLogger -ParameterFilter { $Level -eq 'Information' }
+            Mock Write-Log -ModuleName ScriptLogger -ParameterFilter { $Level -eq 'Verbose' }
 
             It 'InnerLevel' {
 
-                Write-InformationLog -Message 'My Information'
+                Write-VerboseLog -Message 'My Verbose'
 
                 Assert-MockCalled Write-Log -Times 1
             }
@@ -25,7 +25,7 @@ InModuleScope ScriptLogger {
 
             Mock Get-Date -ModuleName ScriptLogger { [DateTime] '2000-12-31 01:02:03' }
 
-            Mock Show-InformationMessage -ModuleName ScriptLogger -ParameterFilter { $Message -eq 'My Information' }
+            Mock Show-VerboseMessage -ModuleName ScriptLogger -ParameterFilter { $Message -eq 'My Verbose' }
 
             BeforeAll {
 
@@ -36,10 +36,10 @@ InModuleScope ScriptLogger {
 
                 Start-ScriptLogger -Path $Path -NoEventLog -NoConsoleOutput
 
-                Write-InformationLog -Message 'My Information'
+                Write-VerboseLog -Message 'My Verbose'
 
                 $Content = Get-Content -Path $Path
-                $Content | Should Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Information   My Information"
+                $Content | Should Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Verbose       My Verbose"
             }
 
             It 'EventLog' {
@@ -48,7 +48,7 @@ InModuleScope ScriptLogger {
 
                 $Before = Get-Date
 
-                Write-InformationLog -Message 'My Information'
+                Write-VerboseLog -Message 'My Verbose'
 
                 $Event = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType Information -After $Before -Newest 1
 
@@ -56,7 +56,7 @@ InModuleScope ScriptLogger {
                 $Event.EventID        | Should Be 0
                 $Event.CategoryNumber | Should Be 0
                 $Event.EntryType      | Should Be 'Information'
-                $Event.Message        | Should Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'My Information'"
+                $Event.Message        | Should Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'My Verbose'"
                 $Event.Source         | Should Be 'PowerShell'
                 $Event.InstanceId     | Should Be 0
             }
@@ -67,9 +67,9 @@ InModuleScope ScriptLogger {
 
                 $Before = Get-Date
 
-                Write-InformationLog -Message 'My Information'
+                Write-VerboseLog -Message 'My Verbose'
 
-                Assert-MockCalled -CommandName Show-InformationMessage -Times 1 -Exactly
+                Assert-MockCalled -CommandName 'Show-VerboseMessage' -Times 1 -Exactly
             }
 
             AfterEach {

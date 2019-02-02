@@ -1,36 +1,45 @@
 
-$ModulePath = Resolve-Path -Path "$PSScriptRoot\..\..\Modules" | ForEach-Object Path
-$ModuleName = Get-ChildItem -Path $ModulePath | Select-Object -First 1 -ExpandProperty BaseName
+$modulePath = Resolve-Path -Path "$PSScriptRoot\..\..\.." | Select-Object -ExpandProperty Path
+$moduleName = Resolve-Path -Path "$PSScriptRoot\..\.." | Get-Item | Select-Object -ExpandProperty BaseName
 
-Remove-Module -Name $ModuleName -Force -ErrorAction SilentlyContinue
-Import-Module -Name "$ModulePath\$ModuleName" -Force
+Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
+Import-Module -Name "$modulePath\$moduleName" -Force
 
-Describe 'Set-ScriptLogger' {
+Describe 'Start-ScriptLogger' {
 
     BeforeAll {
 
         $DefaultEnabled  = $true
-        $DefaultPath     = 'TestDrive:\test.log'
-        $DefaultFormat   = '{0:yyyy-MM-dd HH:mm:ss}   {1}   {2}   {3}   {4}'
-        $DefaultLevel    = 'Information'
+        $DefaultPath     = Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath 'PowerShell.log'
+        $DefaultFormat   = '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}'
+        $DefaultLevel    = 'Verbose'
         $DefaultEncoding = 'Default'
         $DefaultLogFile  = $true
         $DefaultEventLog = $true
         $DefaultConsole  = $true
     }
 
-    BeforeEach {
+    It 'ParameterNone' {
 
-        Start-ScriptLogger -Path $DefaultPath -Format $DefaultFormat -Level $DefaultLevel
+        $ScriptLogger = Start-ScriptLogger
+
+        $ScriptLogger | Should Not Be $null
+
+        $ScriptLogger.Enabled       | Should Be $DefaultEnabled
+        $ScriptLogger.Path          | Should Be $DefaultPath
+        $ScriptLogger.Format        | Should Be $DefaultFormat
+        $ScriptLogger.Level         | Should Be $DefaultLevel
+        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
+        $ScriptLogger.LogFile       | Should Be $DefaultLogFile
+        $ScriptLogger.EventLog      | Should Be $DefaultEventLog
+        $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
     }
 
     It 'ParameterPath' {
 
-        $ExpectedPath = 'TestDrive:\testnew.log'
+        $ExpectedPath = 'TestDrive:\test.log'
 
-        Set-ScriptLogger -Path $ExpectedPath
-
-        $ScriptLogger = Get-ScriptLogger
+        $ScriptLogger = Start-ScriptLogger -Path $ExpectedPath
 
         $ScriptLogger | Should Not Be $null
 
@@ -48,9 +57,7 @@ Describe 'Set-ScriptLogger' {
 
         $ExpectedFormat = '{4} {3} {2} {1} {0}'
 
-        Set-ScriptLogger -Format $ExpectedFormat
-
-        $ScriptLogger = Get-ScriptLogger
+        $ScriptLogger = Start-ScriptLogger -Format $ExpectedFormat
 
         $ScriptLogger | Should Not Be $null
 
@@ -68,9 +75,7 @@ Describe 'Set-ScriptLogger' {
 
         $ExpectedLevel = 'Error'
 
-        Set-ScriptLogger -Level $ExpectedLevel
-
-        $ScriptLogger = Get-ScriptLogger
+        $ScriptLogger = Start-ScriptLogger -Level $ExpectedLevel
 
         $ScriptLogger | Should Not Be $null
 
@@ -88,9 +93,7 @@ Describe 'Set-ScriptLogger' {
 
         $ExpectedEncoding = 'UTF8'
 
-        Set-ScriptLogger -Encoding $ExpectedEncoding
-
-        $ScriptLogger = Get-ScriptLogger
+        $ScriptLogger = Start-ScriptLogger -Encoding $ExpectedEncoding
 
         $ScriptLogger | Should Not Be $null
 
@@ -106,9 +109,7 @@ Describe 'Set-ScriptLogger' {
 
     It 'ParameterNoLogFile' {
 
-        Set-ScriptLogger -LogFile (-not $DefaultLogFile)
-
-        $ScriptLogger = Get-ScriptLogger
+        $ScriptLogger = Start-ScriptLogger -NoLogFile
 
         $ScriptLogger | Should Not Be $null
 
@@ -117,16 +118,14 @@ Describe 'Set-ScriptLogger' {
         $ScriptLogger.Format        | Should Be $DefaultFormat
         $ScriptLogger.Level         | Should Be $DefaultLevel
         $ScriptLogger.Encoding      | Should Be $DefaultEncoding
-        $ScriptLogger.LogFile       | Should Not Be $DefaultLogFile
+        $ScriptLogger.LogFile       | Should Be $false
         $ScriptLogger.EventLog      | Should Be $DefaultEventLog
         $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
     }
 
     It 'ParameterNoEventLog' {
 
-        Set-ScriptLogger -EventLog (-not $DefaultEventLog)
-
-        $ScriptLogger = Get-ScriptLogger
+        $ScriptLogger = Start-ScriptLogger -NoEventLog
 
         $ScriptLogger | Should Not Be $null
 
@@ -136,15 +135,13 @@ Describe 'Set-ScriptLogger' {
         $ScriptLogger.Level         | Should Be $DefaultLevel
         $ScriptLogger.Encoding      | Should Be $DefaultEncoding
         $ScriptLogger.LogFile       | Should Be $DefaultLogFile
-        $ScriptLogger.EventLog      | Should Not Be $DefaultEventLog
+        $ScriptLogger.EventLog      | Should Be $false
         $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
     }
 
     It 'ParameterNoConsoleOutput' {
 
-        Set-ScriptLogger -ConsoleOutput (-not $DefaultConsole)
-
-        $ScriptLogger = Get-ScriptLogger
+        $ScriptLogger = Start-ScriptLogger -NoConsoleOutput
 
         $ScriptLogger | Should Not Be $null
 
@@ -155,11 +152,12 @@ Describe 'Set-ScriptLogger' {
         $ScriptLogger.Encoding      | Should Be $DefaultEncoding
         $ScriptLogger.LogFile       | Should Be $DefaultLogFile
         $ScriptLogger.EventLog      | Should Be $DefaultEventLog
-        $ScriptLogger.ConsoleOutput | Should Not Be $DefaultConsole
+        $ScriptLogger.ConsoleOutput | Should Be $false
     }
 
     AfterEach {
 
+        Get-ScriptLogger | Remove-Item -Force
         Stop-ScriptLogger
     }
 }
