@@ -43,6 +43,8 @@ function Stop-ScriptLogger
     {
         if ($PSCmdlet.ShouldProcess('ScriptLogger', 'Stop'))
         {
+            Write-Verbose "Stop script logger '$Name'"
+
             $Script:Loggers.Remove($Name)
         }
     }

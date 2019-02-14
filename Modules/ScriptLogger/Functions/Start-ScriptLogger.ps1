@@ -137,6 +137,8 @@ function Start-ScriptLogger
 
     if ($PSCmdlet.ShouldProcess('ScriptLogger', 'Start'))
     {
+        Write-Verbose "Start script logger '$Name'"
+
         $Script:Loggers[$Name] = [PSCustomObject] @{
             PSTypeName    = 'ScriptLogger.Configuration'
             Name          = $Name
