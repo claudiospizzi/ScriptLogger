@@ -5,152 +5,173 @@ $moduleName = Resolve-Path -Path "$PSScriptRoot\..\.." | Get-Item | Select-Objec
 Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
 Import-Module -Name "$modulePath\$moduleName" -Force
 
-InModuleScope ScriptLogger {
+InModuleScope $moduleName {
 
     Describe 'Write-ErrorLog' {
 
-        Context 'MockInnerCall' {
+        Context 'Ensure mocked Write-Log is invoked' {
 
-            Mock Write-Log -ModuleName ScriptLogger -ParameterFilter { $Level -eq 'Error' }
+            $errorRecord = $(try { 0 / 0 } catch { $_ })
 
-            It 'InnerLevel' {
+            Mock Write-Log -ModuleName $moduleName -ParameterFilter { $Level -eq 'Error' } -Verifiable
 
+            It 'should invoke the mock one for a simple message' {
+
+                # Act
                 Write-ErrorLog -Message 'My Error'
 
-                Assert-MockCalled Write-Log -Times 1
+                # Assert
+                Assert-MockCalled -Scope It -CommandName 'Write-Log' -Times 1 -Exactly
+            }
+
+            It 'should invoke the mock one for a simple error record' {
+
+                # Act
+                Write-ErrorLog -ErrorRecord $errorRecord
+
+                # Assert
+                Assert-MockCalled -Scope It -CommandName 'Write-Log' -Times 1 -Exactly
+            }
+            It 'should invoke the mock twice for an array of 2 messages' {
+
+                # Act
+                Write-ErrorLog -Message 'My Error', 'My Error'
+
+                # Assert
+                Assert-MockCalled -Scope It -CommandName 'Write-Log' -Times 2 -Exactly
+            }
+
+            It 'should invoke the mock twice for an array of 2 error records' {
+
+                # Act
+                Write-ErrorLog -Message $errorRecord, $errorRecord
+
+                # Assert
+                Assert-MockCalled -Scope It -CommandName 'Write-Log' -Times 2 -Exactly
+            }
+
+            It 'should invoke the mock three times for a pipeline input of 3 messages' {
+
+                # Act
+                'My Error', 'My Error', 'My Error' | Write-ErrorLog
+
+                # Assert
+                Assert-MockCalled -Scope It -CommandName 'Write-Log' -Times 3 -Exactly
+            }
+
+            It 'should invoke the mock three times for a pipeline input of 3 error records' {
+
+                # Act
+                $errorRecord, $errorRecord, $errorRecord | Write-ErrorLog
+
+                # Assert
+                Assert-MockCalled -Scope It -CommandName 'Write-Log' -Times 3 -Exactly
             }
         }
 
-        Context 'MockInnerCallErrorRecord' {
+        Context 'Ensure valid output' {
 
-            Mock Write-Log -ModuleName ScriptLogger -ParameterFilter { $ErrorRecord.CategoryInfo.Reason -eq 'RuntimeException' }
+            $logPath = 'TestDrive:\test.log'
 
-            It 'InnerLevel' {
+            $errorRecord = $(try { 0 / 0 } catch { $_ })
 
-                Write-ErrorLog -ErrorRecord $(try { 0 / 0 } catch { $_ })
+            Mock Get-Date -ModuleName $moduleName { [DateTime] '2000-12-31 01:02:03' }
 
-                Assert-MockCalled Write-Log -Times 1
-            }
-        }
+            It 'should write a valid message to the log file' {
 
-        Context 'Output' {
+                # Arrange
+                Start-ScriptLogger -Path $logPath -NoEventLog -NoConsoleOutput
 
-            Mock Get-Date -ModuleName ScriptLogger { [DateTime] '2000-12-31 01:02:03' }
-
-            Mock Show-ErrorMessage -ModuleName ScriptLogger -ParameterFilter { $Message -eq 'My Error' }
-
-            BeforeAll {
-
-                $Path = 'TestDrive:\test.log'
-            }
-
-            It 'LogFile' {
-
-                Start-ScriptLogger -Path $Path -NoEventLog -NoConsoleOutput
-
+                # Act
                 Write-ErrorLog -Message 'My Error'
 
-                $Content = Get-Content -Path $Path
-                $Content | Should Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         My Error"
+                # Assert
+                $logFile = Get-Content -Path $logPath
+                $logFile | Should -Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         My Error"
             }
 
-            It 'EventLog' {
+            It 'should write a valid error record to the log file' {
 
-                Start-ScriptLogger -Path $Path -NoLogFile -NoConsoleOutput
+                # Arrange
+                Start-ScriptLogger -Path $logPath -NoEventLog -NoConsoleOutput
 
-                $Before = Get-Date
+                # Act
+                Write-ErrorLog -ErrorRecord $errorRecord
 
-                Write-ErrorLog -Message 'My Error'
-
-                $Event = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType Error -After $Before -Newest 1
-
-                $Event | Should Not Be $null
-                $Event.EventID        | Should Be 0
-                $Event.CategoryNumber | Should Be 0
-                $Event.EntryType      | Should Be 'Error'
-                $Event.Message        | Should Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'My Error'"
-                $Event.Source         | Should Be 'PowerShell'
-                $Event.InstanceId     | Should Be 0
+                # Assert
+                $logFile = Get-Content -Path $logPath
+                $logFile | Should -BeLike "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)"
             }
 
-            It 'ConsoleOutput' {
+            It 'should write a valid message to the event log' {
 
-                Start-ScriptLogger -Path $Path -NoLogFile -NoEventLog
+                # Arrange
+                Start-ScriptLogger -Path $logPath -NoLogFile -NoConsoleOutput
+                $filterTimestamp = Get-Date
 
-                $Before = Get-Date
-
+                # Act
                 Write-ErrorLog -Message 'My Error'
 
-                Assert-MockCalled -CommandName 'Show-ErrorMessage' -Times 1 -Exactly
+                # Assert
+                $eventLog = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType Error -After $filterTimestamp -Newest 1
+                $eventLog                | Should -Not -BeNullOrEmpty
+                $eventLog.EventID        | Should -Be 0
+                $eventLog.CategoryNumber | Should -Be 0
+                $eventLog.EntryType      | Should -Be 'Error'
+                $eventLog.Message        | Should -Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'My Error'"
+                $eventLog.Source         | Should -Be 'PowerShell'
+                $eventLog.InstanceId     | Should -Be 0
+            }
+
+            It 'should write a valid message to the event log' {
+
+                # Arrange
+                Start-ScriptLogger -Path $logPath -NoLogFile -NoConsoleOutput
+                $filterTimestamp = Get-Date
+
+                # Act
+                Write-ErrorLog -ErrorRecord $errorRecord
+
+                # Assert
+                $eventLog = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType Error -After $filterTimestamp -Newest 1
+                $eventLog                | Should -Not -BeNullOrEmpty
+                $eventLog.EventID        | Should -Be 0
+                $eventLog.CategoryNumber | Should -Be 0
+                $eventLog.EntryType      | Should -Be 'Error'
+                $eventLog.Message        | Should -BeLike "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)'"
+                $eventLog.Source         | Should -Be 'PowerShell'
+                $eventLog.InstanceId     | Should -Be 0
+            }
+
+            It 'should write a valid message to the console' {
+
+                # Arrange
+                Mock Show-ErrorMessage -ModuleName $moduleName -ParameterFilter { $Message -eq 'My Error' }
+                Start-ScriptLogger -Path $logPath -NoLogFile -NoEventLog
+
+                # Act
+                Write-ErrorLog -Message 'My Error'
+
+                # Assert
+                Assert-MockCalled -Scope It -CommandName 'Show-ErrorMessage' -Times 1 -Exactly
+            }
+
+            It 'should write a valid message to the console' {
+
+                # Arrange
+                Mock Show-ErrorMessage -ModuleName $moduleName -ParameterFilter { $Message -like 'Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)' }
+                Start-ScriptLogger -Path $logPath -NoLogFile -NoEventLog
+
+                # Act
+                Write-ErrorLog -ErrorRecord $errorRecord
+
+                # Assert
+                Assert-MockCalled -Scope It -CommandName 'Show-ErrorMessage' -Times 1 -Exactly
             }
 
             AfterEach {
 
-                Get-ScriptLogger | Remove-Item -Force
-                Stop-ScriptLogger
-            }
-        }
-
-        Context 'OutputErrorRecord' {
-
-            Mock Get-Date -ModuleName ScriptLogger { [DateTime] '2000-12-31 01:02:03' }
-
-            Mock Show-ErrorMessage -ModuleName ScriptLogger -ParameterFilter { $Message -like 'Attempted to divide by zero.*' }
-
-            BeforeAll {
-
-                $Path = 'TestDrive:\test.log'
-            }
-
-            It 'LogFile' {
-
-                Start-ScriptLogger -Path $Path -NoEventLog -NoConsoleOutput
-
-                Write-ErrorLog -ErrorRecord $(try { 0 / 0 } catch { $_ })
-
-                $Content = Get-Content -Path $Path
-                $Content | Should BeLike "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:109 char:53)"
-            }
-
-            It 'EventLog' {
-
-                Start-ScriptLogger -Path $Path -NoLogFile -NoConsoleOutput
-
-                $Before = Get-Date
-
-                Write-ErrorLog -ErrorRecord $(try { 0 / 0 } catch { $_ })
-
-                $Event = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType Error -After $Before -Newest 1
-
-                $Event | Should Not Be $null
-                $Event.EventID        | Should Be 0
-                $Event.CategoryNumber | Should Be 0
-                $Event.EntryType      | Should Be 'Error'
-                $Event.InstanceId     | Should Be 0
-                $Event.Source         | Should Be 'PowerShell'
-                $Event.Message        | Should BeLike "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:121 char:53)'"
-            }
-
-            It 'ConsoleOutput' {
-
-                Start-ScriptLogger -Path $Path -NoLogFile -NoEventLog
-
-                $Before = Get-Date
-
-                try
-                {
-                    0 / 0
-                }
-                catch
-                {
-                    Write-ErrorLog -ErrorRecord $_
-                }
-
-                Assert-MockCalled -CommandName 'Show-ErrorMessage' -Times 1 -Exactly
-            }
-
-            AfterEach {
-
+                # Cleanup logger
                 Get-ScriptLogger | Remove-Item -Force
                 Stop-ScriptLogger
             }

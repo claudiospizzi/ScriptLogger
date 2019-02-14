@@ -7,14 +7,15 @@ Import-Module -Name "$modulePath\$moduleName" -Force
 
 Describe 'Stop-ScriptLogger' {
 
-    It 'CleanUp' {
+    It 'should clean up the looger' {
 
+        # Arrange
         Start-ScriptLogger -Path 'TestDrive:\test.log'
 
-        Get-ScriptLogger | Should -Not -BeNullOrEmpty
-
+        # Act
         Stop-ScriptLogger
 
+        # Assert
         Get-ScriptLogger | Should -BeNullOrEmpty
     }
 }

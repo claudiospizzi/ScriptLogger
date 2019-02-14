@@ -5,75 +5,97 @@ $moduleName = Resolve-Path -Path "$PSScriptRoot\..\.." | Get-Item | Select-Objec
 Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
 Import-Module -Name "$modulePath\$moduleName" -Force
 
-InModuleScope ScriptLogger {
+InModuleScope $moduleName {
 
     Describe 'Write-InformationLog' {
 
-        Context 'MockInnerCall' {
+        Context 'Ensure mocked Write-Log is invoked' {
 
-            Mock Write-Log -ModuleName ScriptLogger -ParameterFilter { $Level -eq 'Information' }
+            Mock Write-Log -ModuleName $moduleName -ParameterFilter { $Level -eq 'Information' } -Verifiable
 
-            It 'InnerLevel' {
+            It 'should invoke the mock one for a simple message' {
 
+                # Act
                 Write-InformationLog -Message 'My Information'
 
-                Assert-MockCalled Write-Log -Times 1
+                # Assert
+                Assert-MockCalled -Scope It -CommandName 'Write-Log' -Times 1 -Exactly
+            }
+
+            It 'should invoke the mock twice for an array of 2 messages' {
+
+                # Act
+                Write-InformationLog -Message 'My Information', 'My Information'
+
+                # Assert
+                Assert-MockCalled -Scope It -CommandName 'Write-Log' -Times 2 -Exactly
+            }
+
+            It 'should invoke the mock three times for a pipeline input of 3 messages' {
+
+                # Act
+                'My Information', 'My Information', 'My Information' | Write-InformationLog
+
+                # Assert
+                Assert-MockCalled -Scope It -CommandName 'Write-Log' -Times 3 -Exactly
             }
         }
 
-        Context 'Output' {
+        Context 'Ensure valid output' {
 
-            Mock Get-Date -ModuleName ScriptLogger { [DateTime] '2000-12-31 01:02:03' }
+            $logPath = 'TestDrive:\test.log'
 
-            Mock Show-InformationMessage -ModuleName ScriptLogger -ParameterFilter { $Message -eq 'My Information' }
+            Mock Get-Date -ModuleName $moduleName { [DateTime] '2000-12-31 01:02:03' }
 
-            BeforeAll {
+            It 'should write a valid message to the log file' {
 
-                $Path = 'TestDrive:\test.log'
-            }
+                # Arrange
+                Start-ScriptLogger -Path $logPath -NoEventLog -NoConsoleOutput
 
-            It 'LogFile' {
-
-                Start-ScriptLogger -Path $Path -NoEventLog -NoConsoleOutput
-
+                # Act
                 Write-InformationLog -Message 'My Information'
 
-                $Content = Get-Content -Path $Path
-                $Content | Should Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Information   My Information"
+                # Assert
+                $logFile = Get-Content -Path $logPath
+                $logFile | Should -Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Information   My Information"
             }
 
-            It 'EventLog' {
+            It 'should write a valid message to the event log' {
 
-                Start-ScriptLogger -Path $Path -NoLogFile -NoConsoleOutput
+                # Arrange
+                Start-ScriptLogger -Path $logPath -NoLogFile -NoConsoleOutput
+                $filterTimestamp = Get-Date
 
-                $Before = Get-Date
-
+                # Act
                 Write-InformationLog -Message 'My Information'
 
-                $Event = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType Information -After $Before -Newest 1
-
-                $Event | Should Not Be $null
-                $Event.EventID        | Should Be 0
-                $Event.CategoryNumber | Should Be 0
-                $Event.EntryType      | Should Be 'Information'
-                $Event.Message        | Should Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'My Information'"
-                $Event.Source         | Should Be 'PowerShell'
-                $Event.InstanceId     | Should Be 0
+                # Assert
+                $eventLog = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType Information -After $filterTimestamp -Newest 1
+                $eventLog                | Should -Not -BeNullOrEmpty
+                $eventLog.EventID        | Should -Be 0
+                $eventLog.CategoryNumber | Should -Be 0
+                $eventLog.EntryType      | Should -Be 'Information'
+                $eventLog.Message        | Should -Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'My Information'"
+                $eventLog.Source         | Should -Be 'PowerShell'
+                $eventLog.InstanceId     | Should -Be 0
             }
 
-            It 'ConsoleOutput' {
+            It 'should write a valid message to the console' {
 
-                Start-ScriptLogger -Path $Path -NoLogFile -NoEventLog
+                # Arrange
+                Mock Show-InformationMessage -ModuleName $moduleName -ParameterFilter { $Message -eq 'My Information' }
+                Start-ScriptLogger -Path $logPath -NoLogFile -NoEventLog
 
-                $Before = Get-Date
-
+                # Act
                 Write-InformationLog -Message 'My Information'
 
-                Assert-MockCalled -CommandName Show-InformationMessage -Times 1 -Exactly
+                # Assert
+                Assert-MockCalled -Scope It -CommandName 'Show-InformationMessage' -Times 1 -Exactly
             }
 
             AfterEach {
 
+                # Cleanup logger
                 Get-ScriptLogger | Remove-Item -Force
                 Stop-ScriptLogger
             }

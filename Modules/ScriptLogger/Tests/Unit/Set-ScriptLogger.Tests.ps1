@@ -7,155 +7,157 @@ Import-Module -Name "$modulePath\$moduleName" -Force
 
 Describe 'Set-ScriptLogger' {
 
-    BeforeAll {
-
-        $DefaultEnabled  = $true
-        $DefaultPath     = 'TestDrive:\test.log'
-        $DefaultFormat   = '{0:yyyy-MM-dd HH:mm:ss}   {1}   {2}   {3}   {4}'
-        $DefaultLevel    = 'Information'
-        $DefaultEncoding = 'UTF8'
-        $DefaultLogFile  = $true
-        $DefaultEventLog = $true
-        $DefaultConsole  = $true
-    }
+    $defaultEnabled  = $true
+    $defaultPath     = 'TestDrive:\test.log'
+    $defaultFormat   = '{0:yyyy-MM-dd HH:mm:ss}   {1}   {2}   {3}   {4}'
+    $defaultLevel    = 'Information'
+    $defaultEncoding = 'UTF8'
+    $defaultLogFile  = $true
+    $defaultEventLog = $true
+    $defaultConsole  = $true
 
     BeforeEach {
 
-        Start-ScriptLogger -Path $DefaultPath -Format $DefaultFormat -Level $DefaultLevel
+        Start-ScriptLogger -Path $defaultPath -Format $defaultFormat -Level $defaultLevel
     }
 
-    It 'ParameterPath' {
+    It 'should update the logger path' {
 
-        $ExpectedPath = 'TestDrive:\testnew.log'
+        # Arrange
+        $expectedPath = 'TestDrive:\testnew.log'
 
-        Set-ScriptLogger -Path $ExpectedPath
+        # Act
+        Set-ScriptLogger -Path $expectedPath
 
-        $ScriptLogger = Get-ScriptLogger
+        # Assert
+        $scriptLogger = Get-ScriptLogger
 
-        $ScriptLogger | Should Not Be $null
-
-        $ScriptLogger.Enabled       | Should Be $DefaultEnabled
-        $ScriptLogger.Path          | Should Be $ExpectedPath
-        $ScriptLogger.Format        | Should Be $DefaultFormat
-        $ScriptLogger.Level         | Should Be $DefaultLevel
-        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
-        $ScriptLogger.LogFile       | Should Be $DefaultLogFile
-        $ScriptLogger.EventLog      | Should Be $DefaultEventLog
-        $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
+        $scriptLogger               | Should -Not -BeNullOrEmpty
+        $scriptLogger.Enabled       | Should -Be $defaultEnabled
+        $scriptLogger.Path          | Should -Be $expectedPath
+        $scriptLogger.Format        | Should -Be $defaultFormat
+        $scriptLogger.Level         | Should -Be $defaultLevel
+        $scriptLogger.Encoding      | Should -Be $defaultEncoding
+        $scriptLogger.LogFile       | Should -Be $defaultLogFile
+        $scriptLogger.EventLog      | Should -Be $defaultEventLog
+        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
     }
 
-    It 'ParameterFormat' {
+    It 'should update the logger format' {
 
-        $ExpectedFormat = '{4} {3} {2} {1} {0}'
+        # Arrange
+        $expectedFormat = '{4} {3} {2} {1} {0}'
 
-        Set-ScriptLogger -Format $ExpectedFormat
+        # Act
+        Set-ScriptLogger -Format $expectedFormat
 
-        $ScriptLogger = Get-ScriptLogger
-
-        $ScriptLogger | Should Not Be $null
-
-        $ScriptLogger.Enabled       | Should Be $DefaultEnabled
-        $ScriptLogger.Path          | Should Be $DefaultPath
-        $ScriptLogger.Format        | Should Be $ExpectedFormat
-        $ScriptLogger.Level         | Should Be $DefaultLevel
-        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
-        $ScriptLogger.LogFile       | Should Be $DefaultLogFile
-        $ScriptLogger.EventLog      | Should Be $DefaultEventLog
-        $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
+        # Assert
+        $scriptLogger = Get-ScriptLogger
+        $scriptLogger               | Should -Not -BeNullOrEmpty
+        $scriptLogger.Enabled       | Should -Be $defaultEnabled
+        $scriptLogger.Path          | Should -Be $defaultPath
+        $scriptLogger.Format        | Should -Be $expectedFormat
+        $scriptLogger.Level         | Should -Be $defaultLevel
+        $scriptLogger.Encoding      | Should -Be $defaultEncoding
+        $scriptLogger.LogFile       | Should -Be $defaultLogFile
+        $scriptLogger.EventLog      | Should -Be $defaultEventLog
+        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
     }
 
-    It 'ParameterLevel' {
+    It 'should update the logger log level' {
 
-        $ExpectedLevel = 'Error'
+        # Arrange
+        $expectedLevel = 'Error'
 
-        Set-ScriptLogger -Level $ExpectedLevel
+        # Act
+        Set-ScriptLogger -Level $expectedLevel
 
-        $ScriptLogger = Get-ScriptLogger
-
-        $ScriptLogger | Should Not Be $null
-
-        $ScriptLogger.Enabled       | Should Be $DefaultEnabled
-        $ScriptLogger.Path          | Should Be $DefaultPath
-        $ScriptLogger.Format        | Should Be $DefaultFormat
-        $ScriptLogger.Level         | Should Be $ExpectedLevel
-        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
-        $ScriptLogger.LogFile       | Should Be $DefaultLogFile
-        $ScriptLogger.EventLog      | Should Be $DefaultEventLog
-        $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
+        # Assert
+        $scriptLogger = Get-ScriptLogger
+        $scriptLogger               | Should -Not -BeNullOrEmpty
+        $scriptLogger.Enabled       | Should -Be $defaultEnabled
+        $scriptLogger.Path          | Should -Be $defaultPath
+        $scriptLogger.Format        | Should -Be $defaultFormat
+        $scriptLogger.Level         | Should -Be $expectedLevel
+        $scriptLogger.Encoding      | Should -Be $defaultEncoding
+        $scriptLogger.LogFile       | Should -Be $defaultLogFile
+        $scriptLogger.EventLog      | Should -Be $defaultEventLog
+        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
     }
 
-    It 'ParameterEncoding' {
+    It 'should update the logger encoding' {
 
-        $ExpectedEncoding = 'UTF8'
+        # Arrange
+        $expectedEncoding = 'UTF8'
 
-        Set-ScriptLogger -Encoding $ExpectedEncoding
+        # Act
+        Set-ScriptLogger -Encoding $expectedEncoding
 
-        $ScriptLogger = Get-ScriptLogger
-
-        $ScriptLogger | Should Not Be $null
-
-        $ScriptLogger.Enabled       | Should Be $DefaultEnabled
-        $ScriptLogger.Path          | Should Be $DefaultPath
-        $ScriptLogger.Format        | Should Be $DefaultFormat
-        $ScriptLogger.Level         | Should Be $DefaultLevel
-        $ScriptLogger.Encoding      | Should Be $ExpectedEncoding
-        $ScriptLogger.LogFile       | Should Be $DefaultLogFile
-        $ScriptLogger.EventLog      | Should Be $DefaultEventLog
-        $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
+        # Assert
+        $scriptLogger = Get-ScriptLogger
+        $scriptLogger               | Should -Not -BeNullOrEmpty
+        $scriptLogger.Enabled       | Should -Be $defaultEnabled
+        $scriptLogger.Path          | Should -Be $defaultPath
+        $scriptLogger.Format        | Should -Be $defaultFormat
+        $scriptLogger.Level         | Should -Be $defaultLevel
+        $scriptLogger.Encoding      | Should -Be $expectedEncoding
+        $scriptLogger.LogFile       | Should -Be $defaultLogFile
+        $scriptLogger.EventLog      | Should -Be $defaultEventLog
+        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
     }
 
-    It 'ParameterNoLogFile' {
+    It 'should update the logger no log file option' {
 
-        Set-ScriptLogger -LogFile (-not $DefaultLogFile)
+        # Act
+        Set-ScriptLogger -LogFile (-not $defaultLogFile)
 
-        $ScriptLogger = Get-ScriptLogger
-
-        $ScriptLogger | Should Not Be $null
-
-        $ScriptLogger.Enabled       | Should Be $DefaultEnabled
-        $ScriptLogger.Path          | Should Be $DefaultPath
-        $ScriptLogger.Format        | Should Be $DefaultFormat
-        $ScriptLogger.Level         | Should Be $DefaultLevel
-        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
-        $ScriptLogger.LogFile       | Should Not Be $DefaultLogFile
-        $ScriptLogger.EventLog      | Should Be $DefaultEventLog
-        $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
+        # Assert
+        $scriptLogger = Get-ScriptLogger
+        $scriptLogger               | Should -Not -BeNullOrEmpty
+        $scriptLogger.Enabled       | Should -Be $defaultEnabled
+        $scriptLogger.Path          | Should -Be $defaultPath
+        $scriptLogger.Format        | Should -Be $defaultFormat
+        $scriptLogger.Level         | Should -Be $defaultLevel
+        $scriptLogger.Encoding      | Should -Be $defaultEncoding
+        $scriptLogger.LogFile       | Should -Not -Be $defaultLogFile
+        $scriptLogger.EventLog      | Should -Be $defaultEventLog
+        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
     }
 
-    It 'ParameterNoEventLog' {
+    It 'should update the logger no event log option' {
 
-        Set-ScriptLogger -EventLog (-not $DefaultEventLog)
+        # Act
+        Set-ScriptLogger -EventLog (-not $defaultEventLog)
 
-        $ScriptLogger = Get-ScriptLogger
-
-        $ScriptLogger | Should Not Be $null
-
-        $ScriptLogger.Enabled       | Should Be $DefaultEnabled
-        $ScriptLogger.Path          | Should Be $DefaultPath
-        $ScriptLogger.Format        | Should Be $DefaultFormat
-        $ScriptLogger.Level         | Should Be $DefaultLevel
-        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
-        $ScriptLogger.LogFile       | Should Be $DefaultLogFile
-        $ScriptLogger.EventLog      | Should Not Be $DefaultEventLog
-        $ScriptLogger.ConsoleOutput | Should Be $DefaultConsole
+        # Assert
+        $scriptLogger = Get-ScriptLogger
+        $scriptLogger               | Should -Not -BeNullOrEmpty
+        $scriptLogger.Enabled       | Should -Be $defaultEnabled
+        $scriptLogger.Path          | Should -Be $defaultPath
+        $scriptLogger.Format        | Should -Be $defaultFormat
+        $scriptLogger.Level         | Should -Be $defaultLevel
+        $scriptLogger.Encoding      | Should -Be $defaultEncoding
+        $scriptLogger.LogFile       | Should -Be $defaultLogFile
+        $scriptLogger.EventLog      | Should -Not -Be $defaultEventLog
+        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
     }
 
-    It 'ParameterNoConsoleOutput' {
+    It 'should update the logger no console option' {
 
-        Set-ScriptLogger -ConsoleOutput (-not $DefaultConsole)
+        # Act
+        Set-ScriptLogger -ConsoleOutput (-not $defaultConsole)
 
-        $ScriptLogger = Get-ScriptLogger
-
-        $ScriptLogger | Should Not Be $null
-
-        $ScriptLogger.Enabled       | Should Be $DefaultEnabled
-        $ScriptLogger.Path          | Should Be $DefaultPath
-        $ScriptLogger.Format        | Should Be $DefaultFormat
-        $ScriptLogger.Level         | Should Be $DefaultLevel
-        $ScriptLogger.Encoding      | Should Be $DefaultEncoding
-        $ScriptLogger.LogFile       | Should Be $DefaultLogFile
-        $ScriptLogger.EventLog      | Should Be $DefaultEventLog
-        $ScriptLogger.ConsoleOutput | Should Not Be $DefaultConsole
+        # Assert
+        $scriptLogger = Get-ScriptLogger
+        $scriptLogger               | Should -Not -BeNullOrEmpty
+        $scriptLogger.Enabled       | Should -Be $defaultEnabled
+        $scriptLogger.Path          | Should -Be $defaultPath
+        $scriptLogger.Format        | Should -Be $defaultFormat
+        $scriptLogger.Level         | Should -Be $defaultLevel
+        $scriptLogger.Encoding      | Should -Be $defaultEncoding
+        $scriptLogger.LogFile       | Should -Be $defaultLogFile
+        $scriptLogger.EventLog      | Should -Be $defaultEventLog
+        $scriptLogger.ConsoleOutput | Should -Not -Be $defaultConsole
     }
 
     AfterEach {
