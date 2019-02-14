@@ -55,9 +55,8 @@ function Start-ScriptLogger
 
         # The path to the log file.
         [Parameter(Mandatory = $false)]
-        [ValidateScript({(Test-Path -Path (Split-Path -Path $_ -Parent))})]
         [System.String]
-        $Path = (Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath 'PowerShell.log'),
+        $Path,
 
         # This parameter defines, how the log output will be formated.
         [Parameter(Mandatory = $false)]
@@ -104,10 +103,33 @@ function Start-ScriptLogger
         $PassThru
     )
 
+    # If the Path parameter was not specified, add a default value. If possible,
+    # use the last script called this function. Else use the temp path.
+    if (-not $PSBoundParameters.ContainsKey('Path'))
+    {
+        $lastScriptPath = Get-PSCallStack | Select-Object -Skip 1 -First 1 -ExpandProperty 'ScriptName'
+
+        if (-not [System.String]::IsNullOrEmpty($lastScriptPath))
+        {
+            $Path = $lastScriptPath + '.log'
+        }
+        else
+        {
+            $Path = Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath 'PowerShell.log'
+        }
+    }
+
     # Create an empty log file, if it does not exist
     if (-not (Test-Path -Path $Path))
     {
-        New-Item -Path $Path -ItemType File | Out-Null
+        try
+        {
+            New-Item -Path $Path -ItemType File -ErrorAction Stop | Out-Null
+        }
+        catch
+        {
+            throw "ScriptLogger failed to create the log file: $Path"
+        }
     }
 
     # Only work with absolute path, makes error handling easier
