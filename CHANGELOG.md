@@ -6,6 +6,11 @@ The format is mainly based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## 3.0.1 - 2019-02-14
+
+* Changed: Format of the script logger object to show the logger name
+
+
 ## 3.0.0 - 2019-02-14
 
 * Added: Support multiple messages for log functions

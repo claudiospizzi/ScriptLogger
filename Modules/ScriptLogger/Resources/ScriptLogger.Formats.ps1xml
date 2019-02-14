@@ -10,12 +10,15 @@
       <TableControl>
         <TableHeaders>
           <TableColumnHeader>
-            <Width>10</Width>
+            <Width>12</Width>
           </TableColumnHeader>
           <TableColumnHeader>
             <Width>12</Width>
           </TableColumnHeader>
           <TableColumnHeader />
+          <TableColumnHeader>
+            <Width>10</Width>
+          </TableColumnHeader>
           <TableColumnHeader>
             <Width>10</Width>
           </TableColumnHeader>
@@ -36,13 +39,16 @@
           <TableRowEntry>
             <TableColumnItems>
               <TableColumnItem>
-                <PropertyName>Enabled</PropertyName>
+                <PropertyName>Name</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Level</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Path</PropertyName>
+              </TableColumnItem>
+              <TableColumnItem>
+                <PropertyName>Enabled</PropertyName>
               </TableColumnItem>
               <TableColumnItem>
                 <PropertyName>Encoding</PropertyName>
