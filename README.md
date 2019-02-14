@@ -57,6 +57,10 @@ Start-ScriptLogger
 # Second options, specify multiple custom settings for the logger
 Start-ScriptLogger -Path 'C:\Temp\test.log' -Format '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}' -Level Warning -Encoding 'UTF8' -NoEventLog -NoConsoleOutput
 
+# Start a second script logger with a dedicated name. The default script logger
+# is always named 'Default'
+Start-ScriptLogger -Name 'Logger2' -Path 'C:\Temp\test2.log'
+
 # Get the current script logger configuration object
 Get-ScriptLogger
 
@@ -77,6 +81,9 @@ Write-InformationLog -Message 'My Information Message'
 
 # Log a verbose message
 Write-VerboseLog -Message 'My Verbose Message'
+
+# Write a log message into the log 2
+Write-InformationLog -Name 'Logger2' -Message 'My Information Message in Log 2'
 
 # Disable the logger
 Stop-ScriptLogger
