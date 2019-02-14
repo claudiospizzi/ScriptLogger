@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+* Added: Support multiple messages for log functions
 * Changed: Support multiple loggers distinguished by a logger name
 * Changed: Default log file is now next to the executed script
 

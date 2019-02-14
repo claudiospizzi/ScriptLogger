@@ -40,25 +40,38 @@ function Write-ErrorLog
         $Name = 'Default',
 
         # The error message.
-        [Parameter(Mandatory = $true, ParameterSetName = 'Message')]
-        [System.String]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Message')]
+        [System.String[]]
         $Message,
 
         # The error record containing an exception to log.
-        [Parameter(Mandatory = $true, ParameterSetName = 'ErrorRecord')]
-        [System.Management.Automation.ErrorRecord]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'ErrorRecord')]
+        [System.Management.Automation.ErrorRecord[]]
         $ErrorRecord
     )
 
-    # Extract error message and invocation info from error record object
-    if ($PSCmdlet.ParameterSetName -eq 'ErrorRecord')
+    process
     {
-        $Message = '{0} ({1}: {2}:{3} char:{4})' -f $ErrorRecord.Exception.Message,
-                                                    $ErrorRecord.FullyQualifiedErrorId,
-                                                    $ErrorRecord.InvocationInfo.ScriptName,
-                                                    $ErrorRecord.InvocationInfo.ScriptLineNumber,
-                                                    $ErrorRecord.InvocationInfo.OffsetInLine
-    }
+        if ($PSCmdlet.ParameterSetName -eq 'Message')
+        {
+            foreach ($currentMessage in $Message)
+            {
+                Write-Log -Name $Name -Message $currentMessage -Level 'Error'
+            }
+        }
 
-    Write-Log -Name $Name -Message $Message -Level 'Error'
+        if ($PSCmdlet.ParameterSetName -eq 'ErrorRecord')
+        {
+            foreach ($currentErrorRecord in $ErrorRecord)
+            {
+                $currentMessage = '{0} ({1}: {2}:{3} char:{4})' -f $currentErrorRecord.Exception.Message,
+                                                                   $currentErrorRecord.FullyQualifiedErrorId,
+                                                                   $currentErrorRecord.InvocationInfo.ScriptName,
+                                                                   $currentErrorRecord.InvocationInfo.ScriptLineNumber,
+                                                                   $currentErrorRecord.InvocationInfo.OffsetInLine
+
+                Write-Log -Name $Name -Message $currentMessage -Level 'Error'
+            }
+        }
+    }
 }

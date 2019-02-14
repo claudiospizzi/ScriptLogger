@@ -40,10 +40,16 @@ function Write-VerboseLog
         $Name = 'Default',
 
         # The verbose message.
-        [Parameter(Mandatory=$true)]
-        [System.String]
+        [Parameter(Mandatory=$true, Position = 0, ValueFromPipeline = $true)]
+        [System.String[]]
         $Message
     )
 
-    Write-Log -Name $Name -Message $Message -Level 'Verbose'
+    process
+    {
+        foreach ($currentMessage in $Message)
+        {
+            Write-Log -Name $Name -Message $currentMessage -Level 'Verbose'
+        }
+    }
 }
