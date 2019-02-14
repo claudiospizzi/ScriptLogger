@@ -6,7 +6,7 @@ The format is mainly based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## Unreleased
+## 3.0.0 - 2019-02-14
 
 * Added: Support multiple messages for log functions
 * Changed: Support multiple loggers distinguished by a logger name
