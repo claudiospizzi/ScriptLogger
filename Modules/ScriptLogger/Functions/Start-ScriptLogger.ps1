@@ -79,6 +79,12 @@ function Start-ScriptLogger
         [System.String]
         $Encoding = 'UTF8',
 
+        # Allow the auto log rotation. The period is attached to the log file.
+        [Parameter(Mandatory = $false)]
+        [ValidateSet('None', 'Hourly', 'Daily', 'Monthly', 'Yearly')]
+        [System.String]
+        $Rotation = 'None',
+
         # Do not write the log messages into the log file. By default, all
         # messages are written to the specified or default log file.
         [Parameter(Mandatory = $false)]
@@ -119,6 +125,27 @@ function Start-ScriptLogger
         }
     }
 
+    # If log rotation is enable, add the current period to the path
+    switch ($Rotation)
+    {
+        'Hourly'
+        {
+            $Path = $Path.Insert($Path.LastIndexOf('.'), [System.String]::Format('.{0:yyyyMMddHH}', (Get-Date)))
+        }
+        'Daily'
+        {
+            $Path = $Path.Insert($Path.LastIndexOf('.'), [System.String]::Format('.{0:yyyyMMdd}', (Get-Date)))
+        }
+        'Monthly'
+        {
+            $Path = $Path.Insert($Path.LastIndexOf('.'), [System.String]::Format('.{0:yyyyMM}', (Get-Date)))
+        }
+        'Yearly'
+        {
+            $Path = $Path.Insert($Path.LastIndexOf('.'), [System.String]::Format('.{0:yyyy}', (Get-Date)))
+        }
+    }
+
     # Create an empty log file, if it does not exist
     if (-not (Test-Path -Path $Path))
     {
@@ -147,6 +174,7 @@ function Start-ScriptLogger
             Format        = $Format
             Level         = $Level
             Encoding      = $Encoding
+            Rotation      = $Rotation
             LogFile       = -not $NoLogFile.IsPresent
             EventLog      = -not $NoEventLog.IsPresent
             ConsoleOutput = -not $NoConsoleOutput.IsPresent
