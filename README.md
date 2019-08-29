@@ -3,12 +3,10 @@
 [![AppVeyor - master](https://img.shields.io/appveyor/ci/claudiospizzi/ScriptLogger/master.svg)](https://ci.appveyor.com/project/claudiospizzi/ScriptLogger/branch/master)
 [![AppVeyor - dev](https://img.shields.io/appveyor/ci/claudiospizzi/ScriptLogger/dev.svg)](https://ci.appveyor.com/project/claudiospizzi/ScriptLogger/branch/dev)
 
-
 # ScriptLogger PowerShell Module
 
 PowerShell Module to provide logging capabilities for PowerShell controller
 scripts.
-
 
 ## Introduction
 
@@ -16,7 +14,6 @@ With the ScriptLogger module, you are able to log error, warning, informational
 and verbose messages into log files, the Windows event log and the current
 console host. You can start and stop the logger as required. Works great in
 cooperation with the [ScriptConfig] module to improve controller scripts.
-
 
 ## Features
 
@@ -43,7 +40,6 @@ cooperation with the [ScriptConfig] module to improve controller scripts.
 
 * **Write-ErrorLog**  
   Log an error message.
-
 
 ### Example
 
@@ -89,12 +85,10 @@ Write-InformationLog -Name 'Logger2' -Message 'My Information Message in Log 2'
 Stop-ScriptLogger
 ```
 
-
 ## Versions
 
 Please find all versions in the [GitHub Releases] section and the release notes
 in the [CHANGELOG.md] file.
-
 
 ## Installation
 
@@ -112,7 +106,6 @@ manually on your local system:
 1. Download the latest release from GitHub as a ZIP file: [GitHub Releases]
 2. Extract the module and install it: [Installing a PowerShell Module]
 
-
 ## Requirements
 
 The following minimum requirements are necessary to use this module, or in other
@@ -120,7 +113,6 @@ words are used to test this module:
 
 * Windows PowerShell 3.0
 * Windows Server 2008 R2 / Windows 7
-
 
 ## Contribute
 
@@ -130,8 +122,6 @@ Studio Code and ensure that the PowerShell extension is installed.
 
 * [Visual Studio Code] with the [PowerShell Extension]
 * [Pester], [PSScriptAnalyzer] and [psake] PowerShell Modules
-
-
 
 [ScriptConfig]: https://github.com/claudiospizzi/ScriptConfig
 
