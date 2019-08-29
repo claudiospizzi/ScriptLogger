@@ -55,6 +55,7 @@ function Start-ScriptLogger
 
         # The path to the log file.
         [Parameter(Mandatory = $false)]
+        [AllowEmptyString()]
         [System.String]
         $Path,
 
@@ -111,7 +112,7 @@ function Start-ScriptLogger
 
     # If the Path parameter was not specified, add a default value. If possible,
     # use the last script called this function. Else use the temp path.
-    if (-not $PSBoundParameters.ContainsKey('Path'))
+    if (-not $PSBoundParameters.ContainsKey('Path') -or [System.String]::IsNullOrEmpty($Path))
     {
         $lastScriptPath = Get-PSCallStack | Select-Object -Skip 1 -First 1 -ExpandProperty 'ScriptName'
 
