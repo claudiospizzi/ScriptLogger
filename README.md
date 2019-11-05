@@ -1,7 +1,6 @@
 [![PowerShell Gallery - ScriptLogger](https://img.shields.io/badge/PowerShell_Gallery-ScriptLogger-0072C6.svg)](https://www.powershellgallery.com/packages/ScriptLogger)
 [![GitHub - Release](https://img.shields.io/github/release/claudiospizzi/ScriptLogger.svg)](https://github.com/claudiospizzi/ScriptLogger/releases)
 [![AppVeyor - master](https://img.shields.io/appveyor/ci/claudiospizzi/ScriptLogger/master.svg)](https://ci.appveyor.com/project/claudiospizzi/ScriptLogger/branch/master)
-[![AppVeyor - dev](https://img.shields.io/appveyor/ci/claudiospizzi/ScriptLogger/dev.svg)](https://ci.appveyor.com/project/claudiospizzi/ScriptLogger/branch/dev)
 
 # ScriptLogger PowerShell Module
 
