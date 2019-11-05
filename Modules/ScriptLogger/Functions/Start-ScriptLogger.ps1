@@ -147,12 +147,26 @@ function Start-ScriptLogger
         }
     }
 
+    # Create the log file folder, if it does not exist
+    $parent = Split-Path -Path $Path -Parent
+    if (-not (Test-Path -Path $parent))
+    {
+        try
+        {
+            New-Item -Path $parent -ItemType 'Directory' -ErrorAction 'Stop' | Out-Null
+        }
+        catch
+        {
+            throw "ScriptLogger failed to create the log folder: $parent"
+        }
+    }
+
     # Create an empty log file, if it does not exist
     if (-not (Test-Path -Path $Path))
     {
         try
         {
-            New-Item -Path $Path -ItemType File -ErrorAction Stop | Out-Null
+            New-Item -Path $Path -ItemType 'File' -ErrorAction 'Stop' | Out-Null
         }
         catch
         {
