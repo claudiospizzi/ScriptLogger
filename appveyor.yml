@@ -22,9 +22,9 @@ platform: Any CPU
 # Execute psake build task
 build_script:
   - ps: >-
-      Inboke-Build -Task 'Build'
+      Invoke-Build -Task 'Build'
 
 # Execute psake test and analyze task
 test_script:
   - ps: >-
-      Inboke-Build -Task 'Test'
+      Invoke-Build -Task 'Test'
