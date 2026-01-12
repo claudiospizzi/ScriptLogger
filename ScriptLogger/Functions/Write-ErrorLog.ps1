@@ -42,7 +42,12 @@ function Write-ErrorLog
         # The error record containing an exception to log.
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'ErrorRecord')]
         [System.Management.Automation.ErrorRecord[]]
-        $ErrorRecord
+        $ErrorRecord,
+
+        # Include the stack trace in the error log message.
+        [Parameter(Mandatory = $false, ParameterSetName = 'ErrorRecord')]
+        [Switch]
+        $IncludeStackTrace
     )
 
     process
@@ -64,6 +69,12 @@ function Write-ErrorLog
                                                                    $currentErrorRecord.InvocationInfo.ScriptName,
                                                                    $currentErrorRecord.InvocationInfo.ScriptLineNumber,
                                                                    $currentErrorRecord.InvocationInfo.OffsetInLine
+
+                if ($IncludeStackTrace.IsPresent)
+                {
+                    $currentMessage += [System.Environment]::NewLine
+                    $currentMessage += $currentErrorRecord.PSScriptStackTrace
+                }
 
                 Write-Log -Name $Name -Message $currentMessage -Level 'Error'
             }
