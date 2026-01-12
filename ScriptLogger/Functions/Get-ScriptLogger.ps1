@@ -20,14 +20,9 @@
         PS C:\> Get-ScriptLogger -Name 'MyLogger'
         Get the custom script logger.
 
-    .NOTES
-        Author     : Claudio Spizzi
-        License    : MIT License
-
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-
 function Get-ScriptLogger
 {
     [CmdletBinding()]

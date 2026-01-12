@@ -16,14 +16,9 @@
         PS C:\> Show-InformationMessage -Message 'My Information Message'
         Show the information message.
 
-    .NOTES
-        Author     : Claudio Spizzi
-        License    : MIT License
-
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-
 function Show-InformationMessage
 {
     param

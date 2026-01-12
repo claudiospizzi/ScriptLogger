@@ -21,14 +21,9 @@
         PS C:\> Write-VerboseLog -Name 'MyLogger' -Message 'My Verbose Message'
         Log the verbose message in a custom logger.
 
-    .NOTES
-        Author     : Claudio Spizzi
-        License    : MIT License
-
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-
 function Write-VerboseLog
 {
     [CmdletBinding()]

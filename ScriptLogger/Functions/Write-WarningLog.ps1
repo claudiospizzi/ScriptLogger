@@ -21,14 +21,9 @@
         PS C:\> Write-WarningLog -Name 'MyLogger' -Message 'My Warning Message'
         Log the warning message in a custom logger.
 
-    .NOTES
-        Author     : Claudio Spizzi
-        License    : MIT License
-
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-
 function Write-WarningLog
 {
     [CmdletBinding()]

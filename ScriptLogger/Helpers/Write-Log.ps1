@@ -18,14 +18,9 @@
         PS C:\> Write-Log -Name 'Default' -Message 'My Warning Message' -Level Warning
         Log the warning message.
 
-    .NOTES
-        Author     : Claudio Spizzi
-        License    : MIT License
-
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-
 function Write-Log
 {
     [CmdletBinding(SupportsShouldProcess = $true)]

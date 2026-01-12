@@ -16,14 +16,9 @@
         PS C:\> Show-ErrorMessage -Message 'My Error Message'
         Show the error message.
 
-    .NOTES
-        Author     : Claudio Spizzi
-        License    : MIT License
-
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-
 function Show-ErrorMessage
 {
     param

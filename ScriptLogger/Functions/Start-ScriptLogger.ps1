@@ -6,10 +6,10 @@
         Start the script logger in the current PowerShell session. By starting
         the logger, a global log configuration for the current PowerShell
         session will be set. This configuration is customizable with the
-        available paramters.
-        With the format parameter, the logfile format can be defined. The format
-        definition will be used to call the System.String.Format() method. The
-        following values are used as arguments:
+        available parameters.
+        With the format parameter, the log file format can be defined. The
+        format definition will be used to call the System.String.Format()
+        method. The following values are used as arguments:
         - {0} Timestamp as datetime value.
         - {1} NetBIOS computer name.
         - {2} Current session username.
@@ -33,12 +33,8 @@
     .EXAMPLE
         PS C:\> Start-ScriptLogger -Path 'C:\test.log' -Format '{3}: {4}' -Level 'Verbose' -SkipEventLog -HideConsoleOutput
         Log all message with verbose level or higher to the log file but skip
-        the event log and the consule output. In addition, use a custom format
+        the event log and the console output. In addition, use a custom format
         for the log file content.
-
-    .NOTES
-        Author     : Claudio Spizzi
-        License    : MIT License
 
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
@@ -59,7 +55,7 @@ function Start-ScriptLogger
         [System.String]
         $Path,
 
-        # This parameter defines, how the log output will be formated.
+        # This parameter defines, how the log output will be formatted.
         [Parameter(Mandatory = $false)]
         [ValidateScript({$_ -f (Get-Date), $Env:ComputerName, $Env:Username, 'Verbose', 'Message'})]
         [System.String]

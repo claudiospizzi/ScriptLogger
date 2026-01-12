@@ -21,14 +21,9 @@
         PS C:\> Write-InformationLog -Name 'MyLogger' -Message 'My Information Message'
         Log the information message in a custom logger.
 
-    .NOTES
-        Author     : Claudio Spizzi
-        License    : MIT License
-
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-
 function Write-InformationLog
 {
     [CmdletBinding()]

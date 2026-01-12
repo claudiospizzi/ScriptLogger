@@ -16,14 +16,9 @@
         PS C:\> Show-VerboseMessage -Message 'My Verbose Message'
         Show the verbose message.
 
-    .NOTES
-        Author     : Claudio Spizzi
-        License    : MIT License
-
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-
 function Show-VerboseMessage
 {
     param

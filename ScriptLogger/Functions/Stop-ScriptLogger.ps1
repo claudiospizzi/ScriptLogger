@@ -20,14 +20,9 @@
         PS C:\> Stop-ScriptLogger -Name 'MyLogger'
         Stop the custom logger.
 
-    .NOTES
-        Author     : Claudio Spizzi
-        License    : MIT License
-
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-
 function Stop-ScriptLogger
 {
     [CmdletBinding(SupportsShouldProcess = $true)]

@@ -16,14 +16,9 @@
         PS C:\> Show-WarningMessage -Message 'My Warning Message'
         Show the warning message.
 
-    .NOTES
-        Author     : Claudio Spizzi
-        License    : MIT License
-
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-
 function Show-WarningMessage
 {
     param

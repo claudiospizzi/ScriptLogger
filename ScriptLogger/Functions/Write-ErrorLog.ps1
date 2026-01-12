@@ -4,7 +4,7 @@
 
     .DESCRIPTION
         Log an error message to the log file, the event log and show it on the
-        current console. It can also use an error record conataining an
+        current console. It can also use an error record containing an
         exception as input. The exception will be converted into a log message.
 
     .INPUTS
@@ -21,14 +21,9 @@
         PS C:\> Write-ErrorLog -Name 'MyLogger' -Message 'My Error Message'
         Log the error message in a custom logger.
 
-    .NOTES
-        Author     : Claudio Spizzi
-        License    : MIT License
-
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-
 function Write-ErrorLog
 {
     [CmdletBinding(DefaultParameterSetName = 'Message')]
