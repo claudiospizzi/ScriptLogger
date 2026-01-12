@@ -24,7 +24,7 @@
     Description = 'PowerShell Module to provide logging capabilities for PowerShell controller scripts.'
 
     # Minimum version of the Windows PowerShell engine required by this module
-    PowerShellVersion  = '3.0'
+    PowerShellVersion = '5.1'
 
     # Name of the Windows PowerShell host required by this module
     # PowerShellHostName = ''
@@ -45,23 +45,23 @@
     # RequiredModules = @()
 
     # Assemblies that must be loaded prior to importing this module
-    # RequiredAssemblies = @()
+    RequiredAssemblies = @()
 
     # Script files (.ps1) that are run in the caller's environment prior to importing this module.
     # ScriptsToProcess = @()
 
     # Type files (.ps1xml) to be loaded when importing this module
     TypesToProcess = @(
-        'Resources\ScriptLogger.Types.ps1xml'
+        'ScriptLogger.Xml.Types.ps1xml'
     )
 
     # Format files (.ps1xml) to be loaded when importing this module
     FormatsToProcess = @(
-        'Resources\ScriptLogger.Formats.ps1xml'
+        'ScriptLogger.Xml.Formats.ps1xml'
     )
 
     # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-    # NestedModules = @()
+    NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport  = @(
@@ -76,13 +76,13 @@
     )
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-    # CmdletsToExport = @()
+    CmdletsToExport = @()
 
     # Variables to export from this module
-    # VariablesToExport = @()
+    VariablesToExport = @()
 
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-    # AliasesToExport = @()
+    AliasesToExport = @()
 
     # DSC resources to export from this module
     # DscResourcesToExport = @()

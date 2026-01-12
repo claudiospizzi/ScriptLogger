@@ -1,0 +1,40 @@
+name: Bug Report
+description: Create a bug report to help us improve.
+title: "[Bug]: "
+labels:
+  - bug
+assignees:
+  - claudiospizzi
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report. To help us understand the issue, please fill-in as much of the following information as you can.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen? And how can we reproduce the error?
+    validations:
+      required: true
+  - type: textarea
+    id: errorlog
+    attributes:
+      label: Errors / Logs
+      description: Append all details about the occurred error and/or log entries.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Specify the used version(s).
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Specify the Operating System, PLatform, Browser, etc.
+    validations:
+      required: false

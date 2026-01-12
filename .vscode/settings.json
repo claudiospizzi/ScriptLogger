@@ -3,18 +3,38 @@
     "[markdown]": {
         "files.trimTrailingWhitespace": false
     },
+    "[powershell]": {
+        "files.encoding": "utf8bom"
+    },
 
     "files.exclude": {
         "**/.git": true,
-        "out": true
+        "**/.vs": true,
+        "**/obj": true,
+        "**/bin": true,
+        "**/out": true,
+        "**/packages": true,
+        "**/*.user": true
     },
 
     "search.exclude": {
-        "out": true
+        "**/.git": true,
+        "**/.vs": true,
+        "**/obj": true,
+        "**/bin": true,
+        "**/out": true,
+        "**/packages": true,
+        "**/*.user": true
     },
 
     "powershell.debugging.createTemporaryIntegratedConsole": true,
-
+    "powershell.codeFormatting.addWhitespaceAroundPipe": true,
+    "powershell.codeFormatting.autoCorrectAliases": false,
+    "powershell.codeFormatting.avoidSemicolonsAsLineTerminators": true,
+    "powershell.codeFormatting.trimWhitespaceAroundPipe": false,
+    "powershell.codeFormatting.useConstantStrings": false,
+    "powershell.codeFormatting.whitespaceBetweenParameters": true,
+    "powershell.codeFormatting.whitespaceInsideBrace": true,
     "powershell.codeFormatting.alignPropertyValuePairs": true,
     "powershell.codeFormatting.ignoreOneLineBlock": true,
     "powershell.codeFormatting.newLineAfterCloseBrace": true,
@@ -24,8 +44,9 @@
     "powershell.codeFormatting.useCorrectCasing": true,
     "powershell.codeFormatting.whitespaceAfterSeparator": true,
     "powershell.codeFormatting.whitespaceAroundOperator": true,
-    "powershell.codeFormatting.WhitespaceAroundPipe": true,
     "powershell.codeFormatting.whitespaceBeforeOpenBrace": true,
     "powershell.codeFormatting.whitespaceBeforeOpenParen": true,
-    "powershell.codeFormatting.WhitespaceInsideBrace": true
+
+    "cSpell.words": [
+    ]
 }

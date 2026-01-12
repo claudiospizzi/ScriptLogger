@@ -1,11 +1,11 @@
-[![PowerShell Gallery - ScriptLogger](https://img.shields.io/badge/PowerShell_Gallery-ScriptLogger-0072C6.svg)](https://www.powershellgallery.com/packages/ScriptLogger)
-[![GitHub - Release](https://img.shields.io/github/release/claudiospizzi/ScriptLogger.svg)](https://github.com/claudiospizzi/ScriptLogger/releases)
-[![AppVeyor - master](https://img.shields.io/appveyor/ci/claudiospizzi/ScriptLogger/master.svg)](https://ci.appveyor.com/project/claudiospizzi/ScriptLogger/branch/master)
+[![GitHub Release](https://img.shields.io/github/v/release/claudiospizzi/ScriptLogger?label=Release&logo=GitHub&sort=semver)](https://github.com/claudiospizzi/ScriptLogger/releases)
+[![GitHub CI Build](https://img.shields.io/github/actions/workflow/status/claudiospizzi/ScriptLogger/pwsh-ci.yml?label=CI%20Build&logo=GitHub)](https://github.com/claudiospizzi/ScriptLogger/actions/workflows/pwsh-ci.yml)
+[![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/ScriptLogger?label=PowerShell%20Gallery&logo=PowerShell)](https://www.powershellgallery.com/packages/ScriptLogger)
+[![Gallery Downloads](https://img.shields.io/powershellgallery/dt/ScriptLogger?label=Downloads&logo=PowerShell)](https://www.powershellgallery.com/packages/ScriptLogger)
 
 # ScriptLogger PowerShell Module
 
-PowerShell Module to provide logging capabilities for PowerShell controller
-scripts.
+PowerShell Module to provide logging capabilities for PowerShell controller scripts.
 
 ## Introduction
 
