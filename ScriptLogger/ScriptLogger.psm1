@@ -7,80 +7,30 @@
         module context.
 #>
 
-#region Namepsace Loader
 
-#endregion Namepsace Loader
+## Module Core
 
-#region Module Loader
+# Module behavior
+Set-StrictMode -Version 'Latest'
+$Script:ErrorActionPreference = 'Stop'
 
-# Get and dot source all classes (internal)
-Split-Path -Path $PSCommandPath |
-    Get-ChildItem -Filter 'Classes' -Directory |
-        Get-ChildItem -Include '*.ps1' -File -Recurse |
-            ForEach-Object { . $_.FullName }
-
-# Get and dot source all helper functions (internal)
-Split-Path -Path $PSCommandPath |
-    Get-ChildItem -Filter 'Helpers' -Directory |
-        Get-ChildItem -Include '*.ps1' -File -Recurse |
-            ForEach-Object { . $_.FullName }
-
-# Get and dot source all external functions (public)
-Split-Path -Path $PSCommandPath |
-    Get-ChildItem -Filter 'Functions' -Directory |
-        Get-ChildItem -Include '*.ps1' -File -Recurse |
-            ForEach-Object { . $_.FullName }
-
-#endregion Module Loader
-
-#region Module Configuration
-
-#endregion Module Configuration
+# Module metadata
+$Script:PSModulePath = [System.IO.Path]::GetDirectoryName($PSCommandPath)
+$Script:PSModuleName = [System.IO.Path]::GetFileName($PSCommandPath).Split('.')[0]
 
 
-
-
-<#
-    .SYNOPSIS
-        Root module file.
-
-    .DESCRIPTION
-        The root module file loads all classes, helpers and functions into the
-        module context.
-#>
-
-#region Namepsace Loader
-
-#endregion Namepsace Loader
-
-#region Module Loader
-
-# Get and dot source all classes (internal)
-Split-Path -Path $PSCommandPath |
-    Get-ChildItem -Filter 'Classes' -Directory |
-        Get-ChildItem -Include '*.ps1' -File -Recurse |
-            ForEach-Object { . $_.FullName }
+## Module Loader
 
 # Get and dot source all helper functions (internal)
-Split-Path -Path $PSCommandPath |
-    Get-ChildItem -Filter 'Helpers' -Directory |
-        Get-ChildItem -Include '*.ps1' -File -Recurse |
-            ForEach-Object { . $_.FullName }
+Get-ChildItem -Path "$Script:PSModulePath\Helpers" -Filter '*.ps1' -File -Recurse |
+    ForEach-Object { . $_.FullName }
 
 # Get and dot source all external functions (public)
-Split-Path -Path $PSCommandPath |
-    Get-ChildItem -Filter 'Functions' -Directory |
-        Get-ChildItem -Include '*.ps1' -File -Recurse |
-            ForEach-Object { . $_.FullName }
+Get-ChildItem -Path "$Script:PSModulePath\Functions" -Filter '*.ps1' -File -Recurse |
+    ForEach-Object { . $_.FullName }
 
-#endregion Module Loader
 
-#region Module Configuration
-
-# Module path
-New-Variable -Name 'ModulePath' -Value $PSScriptRoot
+## Module Context
 
 # Module wide array hosting all script loggers
 $Script:Loggers = @{}
-
-#endregion Module Configuration
