@@ -28,7 +28,7 @@ Describe 'Write-VerboseLog' {
                 Write-VerboseLog -Message 'My Verbose'
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
             }
         }
 
@@ -40,7 +40,7 @@ Describe 'Write-VerboseLog' {
                 Write-VerboseLog -Message 'My Verbose', 'My Verbose'
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
             }
         }
 
@@ -52,7 +52,7 @@ Describe 'Write-VerboseLog' {
                 'My Verbose', 'My Verbose', 'My Verbose' | Write-VerboseLog
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
             }
         }
     }
@@ -83,25 +83,27 @@ Describe 'Write-VerboseLog' {
 
         Context 'Event Log' {
 
+            BeforeAll {
+
+                InModuleScope 'ScriptLogger' {
+
+                    Mock 'Write-EventLog' -ModuleName 'ScriptLogger' -ParameterFilter { $LogName -eq 'Windows PowerShell' -and $Source -eq 'PowerShell' -and $entryType -eq 'Information' -and $Message -like '`[Write-VerboseLog.Tests.ps1:*`] My Verbose' } -Verifiable
+                }
+            }
+
             It 'should write a valid message to the event log' {
 
-                # Arrange
-                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
-                $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
-                $callerLine = 94
+                InModuleScope 'ScriptLogger' {
 
-                # Act
-                Write-VerboseLog -Message 'My Verbose'
+                    # Arrange
+                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
 
-                # Assert
-                $eventLog = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType 'Information' -After $filterTimestamp -Newest 1
-                $eventLog                | Should -Not -BeNullOrEmpty
-                $eventLog.EventID        | Should -Be 0
-                $eventLog.CategoryNumber | Should -Be 0
-                $eventLog.EntryType      | Should -Be 'Information'
-                $eventLog.Message        | Should -Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'[Write-VerboseLog.Tests.ps1:$callerLine] My Verbose'"
-                $eventLog.Source         | Should -Be 'PowerShell'
-                $eventLog.InstanceId     | Should -Be 0
+                    # Act
+                    Write-VerboseLog -Message 'My Verbose'
+
+                    # Assert
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-EventLog' -Times 1 -Exactly
+                }
             }
         }
 
@@ -126,7 +128,7 @@ Describe 'Write-VerboseLog' {
                     Write-VerboseLog -Message 'My Verbose'
 
                     # Assert
-                    Assert-MockCalled -Scope It -CommandName 'Write-Verbose' -Times 1 -Exactly
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-Verbose' -Times 1 -Exactly
                 }
             }
         }

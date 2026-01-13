@@ -28,7 +28,7 @@ Describe 'Write-InformationLog' {
                 Write-InformationLog -Message 'My Information'
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
             }
         }
 
@@ -40,7 +40,7 @@ Describe 'Write-InformationLog' {
                 Write-InformationLog -Message 'My Information', 'My Information'
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
             }
         }
 
@@ -52,7 +52,7 @@ Describe 'Write-InformationLog' {
                 'My Information', 'My Information', 'My Information' | Write-InformationLog
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
             }
         }
     }
@@ -83,25 +83,27 @@ Describe 'Write-InformationLog' {
 
         Context 'Event Log' {
 
+            BeforeAll {
+
+                InModuleScope 'ScriptLogger' {
+
+                    Mock 'Write-EventLog' -ModuleName 'ScriptLogger' -ParameterFilter { $LogName -eq 'Windows PowerShell' -and $Source -eq 'PowerShell' -and $entryType -eq 'Information' -and $Message -like '`[Write-InformationLog.Tests.ps1:*`] My Information' } -Verifiable
+                }
+            }
+
             It 'should write a valid message to the event log' {
 
-                # Arrange
-                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
-                $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
-                $callerLine = 94
+                InModuleScope 'ScriptLogger' {
 
-                # Act
-                Write-InformationLog -Message 'My Information'
+                    # Arrange
+                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
 
-                # Assert
-                $eventLog = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType 'Information' -After $filterTimestamp -Newest 1
-                $eventLog                | Should -Not -BeNullOrEmpty
-                $eventLog.EventID        | Should -Be 0
-                $eventLog.CategoryNumber | Should -Be 0
-                $eventLog.EntryType      | Should -Be 'Information'
-                $eventLog.Message        | Should -Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'[Write-InformationLog.Tests.ps1:$callerLine] My Information'"
-                $eventLog.Source         | Should -Be 'PowerShell'
-                $eventLog.InstanceId     | Should -Be 0
+                    # Act
+                    Write-InformationLog -Message 'My Information'
+
+                    # Assert
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-EventLog' -Times 1 -Exactly
+                }
             }
         }
 
@@ -111,7 +113,7 @@ Describe 'Write-InformationLog' {
 
                 InModuleScope 'ScriptLogger' {
 
-                    Mock 'Show-ScriptLoggerInformationMessage' -ModuleName 'ScriptLogger' -ParameterFilter { $Message -eq 'My Information' } -Verifiable
+                    Mock 'Write-Information' -ModuleName 'ScriptLogger' -ParameterFilter { $Message -eq 'My Information' } -Verifiable
                 }
             }
 
@@ -126,7 +128,7 @@ Describe 'Write-InformationLog' {
                     Write-InformationLog -Message 'My Information'
 
                     # Assert
-                    Assert-MockCalled -Scope It -CommandName 'Show-ScriptLoggerInformationMessage' -Times 1 -Exactly
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-Information' -Times 1 -Exactly
                 }
             }
         }

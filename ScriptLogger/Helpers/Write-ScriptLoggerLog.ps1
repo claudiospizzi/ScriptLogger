@@ -109,10 +109,10 @@ function Write-ScriptLoggerLog
                 {
                     switch ($Level)
                     {
-                        'Verbose'     { Show-ScriptLoggerVerboseMessage -Message $Message }
-                        'Information' { Show-ScriptLoggerInformationMessage -Message $Message }
-                        'Warning'     { Show-ScriptLoggerWarningMessage -Message $Message }
-                        'Error'       { Show-ScriptLoggerErrorMessage -Message $Message }
+                        'Verbose'     { Microsoft.PowerShell.Utility\Write-Verbose -Message $Message -Verbose:$true }
+                        'Information' { Microsoft.PowerShell.Utility\Write-Information -MessageData $Message -InformationAction 'Continue' }
+                        'Warning'     { Microsoft.PowerShell.Utility\Write-Warning -Message $Message -WarningAction 'Continue' }
+                        'Error'       { Microsoft.PowerShell.Utility\Write-Error -Message $Message -ErrorAction 'Continue' }
                     }
                 }
             }

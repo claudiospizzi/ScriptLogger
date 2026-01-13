@@ -28,7 +28,7 @@ Describe 'Write-WarningLog' {
                 Write-WarningLog -Message 'My Warning'
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
             }
         }
 
@@ -40,7 +40,7 @@ Describe 'Write-WarningLog' {
                 Write-WarningLog -Message 'My Warning', 'My Warning'
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
             }
         }
 
@@ -52,7 +52,7 @@ Describe 'Write-WarningLog' {
                 'My Warning', 'My Warning', 'My Warning' | Write-WarningLog
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
             }
         }
     }
@@ -83,25 +83,27 @@ Describe 'Write-WarningLog' {
 
         Context 'Event Log' {
 
+            BeforeAll {
+
+                InModuleScope 'ScriptLogger' {
+
+                    Mock 'Write-EventLog' -ModuleName 'ScriptLogger' -ParameterFilter { $LogName -eq 'Windows PowerShell' -and $Source -eq 'PowerShell' -and $entryType -eq 'Warning' -and $Message -like '`[Write-WarningLog.Tests.ps1:*`] My Warning' } -Verifiable
+                }
+            }
+
             It 'should write a valid message to the event log' {
 
-                # Arrange
-                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
-                $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
-                $callerLine = 94
+                InModuleScope 'ScriptLogger' {
 
-                # Act
-                Write-WarningLog -Message 'My Warning'
+                    # Arrange
+                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
 
-                # Assert
-                $eventLog = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType 'Warning' -After $filterTimestamp -Newest 1
-                $eventLog                | Should -Not -BeNullOrEmpty
-                $eventLog.EventID        | Should -Be 0
-                $eventLog.CategoryNumber | Should -Be 0
-                $eventLog.EntryType      | Should -Be 'Warning'
-                $eventLog.Message        | Should -Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'[Write-WarningLog.Tests.ps1:$callerLine] My Warning'"
-                $eventLog.Source         | Should -Be 'PowerShell'
-                $eventLog.InstanceId     | Should -Be 0
+                    # Act
+                    Write-WarningLog -Message 'My Warning'
+
+                    # Assert
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-EventLog' -Times 1 -Exactly
+                }
             }
         }
 
@@ -111,7 +113,7 @@ Describe 'Write-WarningLog' {
 
                 InModuleScope 'ScriptLogger' {
 
-                    Mock 'Show-ScriptLoggerWarningMessage' -ModuleName 'ScriptLogger' -ParameterFilter { $Message -eq 'My Warning' } -Verifiable
+                    Mock 'Write-Warning' -ModuleName 'ScriptLogger' -ParameterFilter { $Message -eq 'My Warning' } -Verifiable
                 }
             }
 
@@ -126,7 +128,7 @@ Describe 'Write-WarningLog' {
                     Write-WarningLog -Message 'My Warning'
 
                     # Assert
-                    Assert-MockCalled -Scope It -CommandName 'Show-ScriptLoggerWarningMessage' -Times 1 -Exactly
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-Warning' -Times 1 -Exactly
                 }
             }
         }

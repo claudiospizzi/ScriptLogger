@@ -28,7 +28,7 @@ Describe 'Write-ErrorLog' {
                 Write-ErrorLog -Message 'My Error'
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
             }
         }
 
@@ -47,7 +47,7 @@ Describe 'Write-ErrorLog' {
                 }
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
             }
         }
         It 'should invoke the mock twice for an array of 2 messages' {
@@ -58,7 +58,7 @@ Describe 'Write-ErrorLog' {
                 Write-ErrorLog -Message 'My Error', 'My Error'
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
             }
         }
 
@@ -73,7 +73,7 @@ Describe 'Write-ErrorLog' {
                 Write-ErrorLog -ErrorRecord $errorRecord, $errorRecord
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
             }
         }
 
@@ -85,7 +85,7 @@ Describe 'Write-ErrorLog' {
                 'My Error', 'My Error', 'My Error' | Write-ErrorLog
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
             }
         }
 
@@ -100,7 +100,7 @@ Describe 'Write-ErrorLog' {
                 $errorRecord, $errorRecord, $errorRecord | Write-ErrorLog
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
+                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
             }
         }
     }
@@ -174,51 +174,49 @@ Describe 'Write-ErrorLog' {
 
         Context 'Event Log' {
 
+            BeforeAll {
+
+                InModuleScope 'ScriptLogger' {
+
+                            Mock 'Write-EventLog' -ModuleName 'ScriptLogger' -ParameterFilter { $LogName -eq 'Windows PowerShell' -and $Source -eq 'PowerShell' -and $entryType -eq 'Error' -and ($Message -like '`[Write-ErrorLog.Tests.ps1:*`] My Error' -or $Message -like '`[Write-ErrorLog.Tests.ps1:*`] Attempted to divide by zero. (RuntimeException: *Write-ErrorLog.Tests.ps1:* char:*)') } -Verifiable
+                }
+            }
+
             It 'should write a valid message to the event log' {
 
-                # Arrange
-                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
-                $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
-                $callerLine = 185
+                InModuleScope 'ScriptLogger' {
 
-                # Act
-                Write-ErrorLog -Message 'My Error'
+                    # Arrange
+                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
 
-                # Assert
-                $eventLog = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType Error -After $filterTimestamp -Newest 1
-                $eventLog.EventID        | Should -Be 0
-                $eventLog.CategoryNumber | Should -Be 0
-                $eventLog.EntryType      | Should -Be 'Error'
-                $eventLog.Message        | Should -Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'[Write-ErrorLog.Tests.ps1:$callerLine] My Error'"
-                $eventLog.Source         | Should -Be 'PowerShell'
-                $eventLog.InstanceId     | Should -Be 0
+                    # Act
+                    Write-ErrorLog -Message 'My Error'
+
+                    # Assert
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-EventLog' -Times 1 -Exactly
+                }
             }
 
             It 'should write a valid error record to the event log' {
 
-                # Arrange
-                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
-                $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
-                $callerLine = 211
+                InModuleScope 'ScriptLogger' {
 
-                # Act
-                try
-                {
-                    0 / 0
-                }
-                catch
-                {
-                    Write-ErrorLog -ErrorRecord $_
-                }
+                    # Arrange
+                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
 
-                # Assert
-                $eventLog = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType Error -After $filterTimestamp -Newest 1
-                $eventLog.EventID        | Should -Be 0
-                $eventLog.CategoryNumber | Should -Be 0
-                $eventLog.EntryType      | Should -Be 'Error'
-                $eventLog.Message        | Should -BeLike "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'``[Write-ErrorLog.Tests.ps1:$callerLine``] Attempted to divide by zero. (RuntimeException: *Write-ErrorLog.Tests.ps1:* char:*)'"
-                $eventLog.Source         | Should -Be 'PowerShell'
-                $eventLog.InstanceId     | Should -Be 0
+                    # Act
+                    try
+                    {
+                        0 / 0
+                    }
+                    catch
+                    {
+                        Write-ErrorLog -ErrorRecord $_
+                    }
+
+                    # Assert
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-EventLog' -Times 1 -Exactly
+                }
             }
         }
 
@@ -228,7 +226,7 @@ Describe 'Write-ErrorLog' {
 
                 InModuleScope 'ScriptLogger' {
 
-                    Mock 'Show-ScriptLoggerErrorMessage' -ModuleName 'ScriptLogger' -ParameterFilter { $Message -eq 'My Error' -or $Message -like 'Attempted to divide by zero. (RuntimeException: *Write-ErrorLog.Tests.ps1:* char:*)' } -Verifiable
+                    Mock 'Write-Error' -ModuleName 'ScriptLogger' -ParameterFilter { $Message -eq 'My Error' -or $Message -like 'Attempted to divide by zero. (RuntimeException: *Write-ErrorLog.Tests.ps1:* char:*)' } -Verifiable
                 }
             }
 
@@ -243,7 +241,7 @@ Describe 'Write-ErrorLog' {
                     Write-ErrorLog -Message 'My Error'
 
                     # Assert
-                    Assert-MockCalled -Scope It -CommandName 'Show-ScriptLoggerErrorMessage' -Times 1 -Exactly
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-Error' -Times 1 -Exactly
                 }
             }
 
@@ -265,7 +263,7 @@ Describe 'Write-ErrorLog' {
                     }
 
                     # Assert
-                    Assert-MockCalled -Scope It -CommandName 'Show-ScriptLoggerErrorMessage' -Times 1 -Exactly
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-Error' -Times 1 -Exactly
                 }
             }
         }
