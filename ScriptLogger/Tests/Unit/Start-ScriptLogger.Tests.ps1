@@ -18,7 +18,7 @@ Describe 'Start-ScriptLogger' {
         Mock Get-Date { return [DateTime]::new(2010, 12, 06, 18, 20, 22) } -ModuleName $moduleName
 
         $defaultEnabled  = $true
-        $defaultPath     = "$PSScriptRoot\Start-ScriptLogger.Tests.ps1.log"
+        $defaultPath     = Join-Path -Path $PSScriptRoot -ChildPath 'Start-ScriptLogger.Tests.ps1.log'
         $defaultFormat   = '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   [{5}] {4}'
         $defaultLevel    = 'Verbose'
         $defaultEncoding = 'UTF8'
@@ -134,7 +134,7 @@ Describe 'Start-ScriptLogger' {
 
         # Arrange
         $expectedRotation = 'Hourly'
-        $expectedPath     = "$PSScriptRoot\Start-ScriptLogger.Tests.ps1.2010120618.log"
+        $expectedPath     = Join-Path -Path $PSScriptRoot -ChildPath 'Start-ScriptLogger.Tests.ps1.2010120618.log'
 
         # Act
         $scriptLogger = Start-ScriptLogger -Rotation $expectedRotation -PassThru
@@ -157,7 +157,7 @@ Describe 'Start-ScriptLogger' {
 
         # Arrange
         $expectedRotation = 'Daily'
-        $expectedPath     = "$PSScriptRoot\Start-ScriptLogger.Tests.ps1.20101206.log"
+        $expectedPath     = Join-Path -Path $PSScriptRoot -ChildPath 'Start-ScriptLogger.Tests.ps1.20101206.log'
 
         # Act
         $scriptLogger = Start-ScriptLogger -Rotation $expectedRotation -PassThru
@@ -179,7 +179,7 @@ Describe 'Start-ScriptLogger' {
 
         # Arrange
         $expectedRotation = 'Monthly'
-        $expectedPath     = "$PSScriptRoot\Start-ScriptLogger.Tests.ps1.201012.log"
+        $expectedPath     = Join-Path -Path $PSScriptRoot -ChildPath 'Start-ScriptLogger.Tests.ps1.201012.log'
 
         # Act
         $scriptLogger = Start-ScriptLogger -Rotation $expectedRotation -PassThru
@@ -201,7 +201,7 @@ Describe 'Start-ScriptLogger' {
 
         # Arrange
         $expectedRotation = 'Yearly'
-        $expectedPath     = "$PSScriptRoot\Start-ScriptLogger.Tests.ps1.2010.log"
+        $expectedPath     = Join-Path -Path $PSScriptRoot -ChildPath 'Start-ScriptLogger.Tests.ps1.2010.log'
 
         # Act
         $scriptLogger = Start-ScriptLogger -Rotation $expectedRotation -PassThru
