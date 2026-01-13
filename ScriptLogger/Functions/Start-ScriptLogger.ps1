@@ -14,7 +14,8 @@
         - {1} NetBIOS computer name.
         - {2} Current session username.
         - {3} Log entry level.
-        - {4} Message.
+        - {4} Log message (or error description).
+        - {5} Context information (script name and line number).
 
     .INPUTS
         None.
@@ -57,9 +58,9 @@ function Start-ScriptLogger
 
         # This parameter defines, how the log output will be formatted.
         [Parameter(Mandatory = $false)]
-        [ValidateScript({$_ -f (Get-Date), $Env:ComputerName, $Env:Username, 'Verbose', 'Message'})]
+        [ValidateScript({ $_ -f (Get-Date), $Env:ComputerName, $Env:Username, 'Verbose', 'Message', 'Context' })]
         [System.String]
-        $Format = '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}',
+        $Format = '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   [{5}] {4}',
 
         # The event log level. All log messages equal to or higher to the level
         # will be logged. This is the level order: Verbose, Information, Warning
@@ -175,7 +176,7 @@ function Start-ScriptLogger
 
     if ($PSCmdlet.ShouldProcess('ScriptLogger', 'Start'))
     {
-        Write-Verbose "Start script logger '$Name'"
+        Microsoft.PowerShell.Utility\Write-Verbose "Start script logger '$Name'"
 
         $Script:Loggers[$Name] = [PSCustomObject] @{
             PSTypeName    = 'ScriptLogger.Configuration'

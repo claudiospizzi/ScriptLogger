@@ -36,11 +36,15 @@ Describe 'Write-ErrorLog' {
 
             InModuleScope $moduleName {
 
-                # Arrange
-                $errorRecord = $(try { 0 / 0 } catch { $_ })
-
                 # Act
-                Write-ErrorLog -ErrorRecord $errorRecord
+                try
+                {
+                    0/0
+                }
+                catch
+                {
+                    Write-ErrorLog -ErrorRecord $_
+                }
 
                 # Assert
                 Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
@@ -114,41 +118,56 @@ Describe 'Write-ErrorLog' {
 
                 # Arrange
                 Start-ScriptLogger -Path 'TestDrive:\test.log' -NoEventLog -NoConsoleOutput
+                $callerLine = 124
 
                 # Act
                 Write-ErrorLog -Message 'My Error'
 
                 # Assert
                 $logFile = Get-Content -Path 'TestDrive:\test.log'
-                $logFile | Should -Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         My Error"
+                $logFile | Should -Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         [Write-ErrorLog.Tests.ps1:$callerLine] My Error"
             }
 
             It 'should write a valid error record to the log file' {
 
                 # Arrange
                 Start-ScriptLogger -Path 'TestDrive:\test.log' -NoEventLog -NoConsoleOutput
+                $callerLine = 144
 
                 # Act
-                $errorRecord = $(try { 0 / 0 } catch { $_ })
-                Write-ErrorLog -ErrorRecord $errorRecord
+                try
+                {
+                    0 / 0
+                }
+                catch
+                {
+                    Write-ErrorLog -ErrorRecord $_
+                }
 
                 # Assert
                 $logFile = Get-Content -Path 'TestDrive:\test.log'
-                $logFile | Should -BeLike "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)"
+                $logFile | Should -BeLike "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         ``[Write-ErrorLog.Tests.ps1:$callerLine``] Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)"
             }
 
             It 'should write a valid message with stack trace to the log' {
 
                 # Arrange
                 Start-ScriptLogger -Path 'TestDrive:\test.log' -NoEventLog -NoConsoleOutput
+                $callerLine = 165
 
                 # Act
-                $errorRecord = $(try { 0 / 0 } catch { $_ })
-                Write-ErrorLog -ErrorRecord $errorRecord -IncludeStackTrace
+                try
+                {
+                    0 / 0
+                }
+                catch
+                {
+                    Write-ErrorLog -ErrorRecord $_ -IncludeStackTrace
+                }
 
                 # Assert
                 $logFile = Get-Content -Path 'TestDrive:\test.log'
-                $logFile[0] | Should -BeLike "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)"
+                $logFile[0] | Should -BeLike "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         ``[Write-ErrorLog.Tests.ps1:$callerLine``] Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)"
                 $logFile[1] | Should -BeLike "at <ScriptBlock>, *\ScriptLogger\Tests\Unit\Write-ErrorLog.Tests.ps1:*"
             }
         }
@@ -160,6 +179,7 @@ Describe 'Write-ErrorLog' {
                 # Arrange
                 Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoConsoleOutput
                 $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
+                $callerLine = 185
 
                 # Act
                 Write-ErrorLog -Message 'My Error'
@@ -169,7 +189,7 @@ Describe 'Write-ErrorLog' {
                 $eventLog.EventID        | Should -Be 0
                 $eventLog.CategoryNumber | Should -Be 0
                 $eventLog.EntryType      | Should -Be 'Error'
-                $eventLog.Message        | Should -Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'My Error'"
+                $eventLog.Message        | Should -Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'[Write-ErrorLog.Tests.ps1:$callerLine] My Error'"
                 $eventLog.Source         | Should -Be 'PowerShell'
                 $eventLog.InstanceId     | Should -Be 0
             }
@@ -179,17 +199,24 @@ Describe 'Write-ErrorLog' {
                 # Arrange
                 Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoConsoleOutput
                 $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
+                $callerLine = 211
 
                 # Act
-                $errorRecord = $(try { 0 / 0 } catch { $_ })
-                Write-ErrorLog -ErrorRecord $errorRecord
+                try
+                {
+                    0 / 0
+                }
+                catch
+                {
+                    Write-ErrorLog -ErrorRecord $_
+                }
 
                 # Assert
                 $eventLog = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType Error -After $filterTimestamp -Newest 1
                 $eventLog.EventID        | Should -Be 0
                 $eventLog.CategoryNumber | Should -Be 0
                 $eventLog.EntryType      | Should -Be 'Error'
-                $eventLog.Message        | Should -BeLike "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)'"
+                $eventLog.Message        | Should -BeLike "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'``[Write-ErrorLog.Tests.ps1:$callerLine``] Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)'"
                 $eventLog.Source         | Should -Be 'PowerShell'
                 $eventLog.InstanceId     | Should -Be 0
             }
@@ -228,8 +255,14 @@ Describe 'Write-ErrorLog' {
                     Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoEventLog
 
                     # Act
-                    $errorRecord = $(try { 0 / 0 } catch { $_ })
-                    Write-ErrorLog -ErrorRecord $errorRecord
+                    try
+                    {
+                        0 / 0
+                    }
+                    catch
+                    {
+                        Write-ErrorLog -ErrorRecord $_
+                    }
 
                     # Assert
                     Assert-MockCalled -Scope It -CommandName 'Show-ScriptLoggerErrorMessage' -Times 1 -Exactly

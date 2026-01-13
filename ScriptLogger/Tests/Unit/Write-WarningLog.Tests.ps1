@@ -70,13 +70,14 @@ Describe 'Write-WarningLog' {
 
                 # Arrange
                 Start-ScriptLogger -Path 'TestDrive:\test.log' -NoEventLog -NoConsoleOutput
+                $callerLine = 76
 
                 # Act
                 Write-WarningLog -Message 'My Warning'
 
                 # Assert
                 $logFile = Get-Content -Path 'TestDrive:\test.log'
-                $logFile | Should -Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Warning       My Warning"
+                $logFile | Should -Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Warning       [Write-WarningLog.Tests.ps1:$callerLine] My Warning"
             }
         }
 
@@ -87,6 +88,7 @@ Describe 'Write-WarningLog' {
                 # Arrange
                 Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoConsoleOutput
                 $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
+                $callerLine = 94
 
                 # Act
                 Write-WarningLog -Message 'My Warning'
@@ -97,7 +99,7 @@ Describe 'Write-WarningLog' {
                 $eventLog.EventID        | Should -Be 0
                 $eventLog.CategoryNumber | Should -Be 0
                 $eventLog.EntryType      | Should -Be 'Warning'
-                $eventLog.Message        | Should -Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'My Warning'"
+                $eventLog.Message        | Should -Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'[Write-WarningLog.Tests.ps1:$callerLine] My Warning'"
                 $eventLog.Source         | Should -Be 'PowerShell'
                 $eventLog.InstanceId     | Should -Be 0
             }

@@ -19,7 +19,7 @@ Describe 'Start-ScriptLogger' {
 
         $defaultEnabled  = $true
         $defaultPath     = "$PSScriptRoot\Start-ScriptLogger.Tests.ps1.log"
-        $defaultFormat   = '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}'
+        $defaultFormat   = '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   [{5}] {4}'
         $defaultLevel    = 'Verbose'
         $defaultEncoding = 'UTF8'
         $defaultRotation = 'None'

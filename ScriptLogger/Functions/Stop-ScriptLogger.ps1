@@ -38,7 +38,7 @@ function Stop-ScriptLogger
     {
         if ($PSCmdlet.ShouldProcess('ScriptLogger', 'Stop'))
         {
-            Write-Verbose "Stop script logger '$Name'"
+            Microsoft.PowerShell.Utility\Write-Verbose "Stop script logger '$Name'"
 
             $Script:Loggers.Remove($Name)
         }

@@ -70,13 +70,14 @@ Describe 'Write-InformationLog' {
 
                 # Arrange
                 Start-ScriptLogger -Path 'TestDrive:\test.log' -NoEventLog -NoConsoleOutput
+                $callerLine = 76
 
                 # Act
                 Write-InformationLog -Message 'My Information'
 
                 # Assert
                 $logFile = Get-Content -Path 'TestDrive:\test.log'
-                $logFile | Should -Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Information   My Information"
+                $logFile | Should -Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Information   [Write-InformationLog.Tests.ps1:$callerLine] My Information"
             }
         }
 
@@ -87,6 +88,7 @@ Describe 'Write-InformationLog' {
                 # Arrange
                 Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoConsoleOutput
                 $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
+                $callerLine = 94
 
                 # Act
                 Write-InformationLog -Message 'My Information'
@@ -97,7 +99,7 @@ Describe 'Write-InformationLog' {
                 $eventLog.EventID        | Should -Be 0
                 $eventLog.CategoryNumber | Should -Be 0
                 $eventLog.EntryType      | Should -Be 'Information'
-                $eventLog.Message        | Should -Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'My Information'"
+                $eventLog.Message        | Should -Be "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'[Write-InformationLog.Tests.ps1:$callerLine] My Information'"
                 $eventLog.Source         | Should -Be 'PowerShell'
                 $eventLog.InstanceId     | Should -Be 0
             }

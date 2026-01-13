@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Unreleased
 
 * Added: Option to include the script stack trace in the error log message (Write-ErrorLog)
+* Added: Add caller context information (script name and line number) to the log messages (Start-ScriptLogger)
 
 ## 3.3.0 - 2019-11-05
 
