@@ -13,13 +13,13 @@
         None.
 
     .EXAMPLE
-        PS C:\> Show-VerboseMessage -Message 'My Verbose Message'
+        PS C:\> Show-ScriptLoggerVerboseMessage -Message 'My Verbose Message'
         Show the verbose message.
 
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-function Show-VerboseMessage
+function Show-ScriptLoggerVerboseMessage
 {
     param
     (

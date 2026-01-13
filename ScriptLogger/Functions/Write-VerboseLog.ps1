@@ -44,7 +44,7 @@ function Write-VerboseLog
     {
         foreach ($currentMessage in $Message)
         {
-            Write-Log -Name $Name -Message $currentMessage -Level 'Verbose'
+            Write-ScriptLoggerLog -Name $Name -Message $currentMessage -Level 'Verbose'
         }
     }
 }

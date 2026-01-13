@@ -13,13 +13,13 @@
         None.
 
     .EXAMPLE
-        PS C:\> Show-WarningMessage -Message 'My Warning Message'
+        PS C:\> Show-ScriptLoggerWarningMessage -Message 'My Warning Message'
         Show the warning message.
 
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-function Show-WarningMessage
+function Show-ScriptLoggerWarningMessage
 {
     param
     (

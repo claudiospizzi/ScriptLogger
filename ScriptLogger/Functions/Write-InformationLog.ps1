@@ -44,7 +44,7 @@ function Write-InformationLog
     {
         foreach ($currentMessage in $Message)
         {
-            Write-Log -Name $Name -Message $currentMessage -Level 'Information'
+            Write-ScriptLoggerLog -Name $Name -Message $currentMessage -Level 'Information'
         }
     }
 }

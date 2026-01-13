@@ -1,23 +1,32 @@
+[CmdletBinding()]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Pester BeforeAll block')]
+param ()
 
-$modulePath = Resolve-Path -Path "$PSScriptRoot\..\..\.." | Select-Object -ExpandProperty Path
-$moduleName = Resolve-Path -Path "$PSScriptRoot\..\.." | Get-Item | Select-Object -ExpandProperty BaseName
+BeforeAll {
 
-Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
-Import-Module -Name "$modulePath\$moduleName" -Force
+    $modulePath = Resolve-Path -Path "$PSScriptRoot\..\..\.." | Select-Object -ExpandProperty Path
+    $moduleName = Resolve-Path -Path "$PSScriptRoot\..\.." | Get-Item | Select-Object -ExpandProperty BaseName
+
+    Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
+    Import-Module -Name "$modulePath\$moduleName" -Force
+}
 
 Describe 'Start-ScriptLogger' {
 
-    Mock Get-Date { return [DateTime]::new(2010, 12, 06, 18, 20, 22) } -ModuleName $moduleName
+    BeforeAll {
 
-    $defaultEnabled  = $true
-    $defaultPath     = "$PSScriptRoot\Start-ScriptLogger.Tests.ps1.log"
-    $defaultFormat   = '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}'
-    $defaultLevel    = 'Verbose'
-    $defaultEncoding = 'UTF8'
-    $defaultRotation = 'None'
-    $defaultLogFile  = $true
-    $defaultEventLog = $true
-    $defaultConsole  = $true
+        Mock Get-Date { return [DateTime]::new(2010, 12, 06, 18, 20, 22) } -ModuleName $moduleName
+
+        $defaultEnabled  = $true
+        $defaultPath     = "$PSScriptRoot\Start-ScriptLogger.Tests.ps1.log"
+        $defaultFormat   = '{0:yyyy-MM-dd}   {0:HH:mm:ss}   {1}   {2}   {3,-11}   {4}'
+        $defaultLevel    = 'Verbose'
+        $defaultEncoding = 'UTF8'
+        $defaultRotation = 'None'
+        $defaultLogFile  = $true
+        $defaultEventLog = $true
+        $defaultConsole  = $true
+    }
 
     It 'should return default values without any specification' {
 

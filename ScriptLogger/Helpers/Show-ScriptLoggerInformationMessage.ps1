@@ -13,13 +13,13 @@
         None.
 
     .EXAMPLE
-        PS C:\> Show-InformationMessage -Message 'My Information Message'
+        PS C:\> Show-ScriptLoggerInformationMessage -Message 'My Information Message'
         Show the information message.
 
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-function Show-InformationMessage
+function Show-ScriptLoggerInformationMessage
 {
     param
     (

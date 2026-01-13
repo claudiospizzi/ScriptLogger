@@ -56,7 +56,7 @@ function Write-ErrorLog
         {
             foreach ($currentMessage in $Message)
             {
-                Write-Log -Name $Name -Message $currentMessage -Level 'Error'
+                Write-ScriptLoggerLog -Name $Name -Message $currentMessage -Level 'Error'
             }
         }
 
@@ -73,10 +73,10 @@ function Write-ErrorLog
                 if ($IncludeStackTrace.IsPresent)
                 {
                     $currentMessage += [System.Environment]::NewLine
-                    $currentMessage += $currentErrorRecord.PSScriptStackTrace
+                    $currentMessage += $currentErrorRecord.ScriptStackTrace
                 }
 
-                Write-Log -Name $Name -Message $currentMessage -Level 'Error'
+                Write-ScriptLoggerLog -Name $Name -Message $currentMessage -Level 'Error'
             }
         }
     }

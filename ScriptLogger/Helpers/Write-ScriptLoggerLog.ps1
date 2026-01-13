@@ -15,13 +15,13 @@
         None.
 
     .EXAMPLE
-        PS C:\> Write-Log -Name 'Default' -Message 'My Warning Message' -Level Warning
+        PS C:\> Write-ScriptLoggerLog -Name 'Default' -Message 'My Warning Message' -Level Warning
         Log the warning message.
 
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-function Write-Log
+function Write-ScriptLoggerLog
 {
     [CmdletBinding(SupportsShouldProcess = $true)]
     param
@@ -93,10 +93,10 @@ function Write-Log
                 {
                     switch ($Level)
                     {
-                        'Verbose'     { Show-VerboseMessage -Message $Message }
-                        'Information' { Show-InformationMessage -Message $Message }
-                        'Warning'     { Show-WarningMessage -Message $Message }
-                        'Error'       { Show-ErrorMessage -Message $Message }
+                        'Verbose'     { Show-ScriptLoggerVerboseMessage -Message $Message }
+                        'Information' { Show-ScriptLoggerInformationMessage -Message $Message }
+                        'Warning'     { Show-ScriptLoggerWarningMessage -Message $Message }
+                        'Error'       { Show-ScriptLoggerErrorMessage -Message $Message }
                     }
                 }
             }

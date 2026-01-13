@@ -44,7 +44,7 @@ function Write-WarningLog
     {
         foreach ($currentMessage in $Message)
         {
-            Write-Log -Name $Name -Message $currentMessage -Level 'Warning'
+            Write-ScriptLoggerLog -Name $Name -Message $currentMessage -Level 'Warning'
         }
     }
 }

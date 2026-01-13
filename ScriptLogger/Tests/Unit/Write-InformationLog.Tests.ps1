@@ -1,76 +1,98 @@
 
-$modulePath = Resolve-Path -Path "$PSScriptRoot\..\..\.." | Select-Object -ExpandProperty Path
-$moduleName = Resolve-Path -Path "$PSScriptRoot\..\.." | Get-Item | Select-Object -ExpandProperty BaseName
+BeforeAll {
 
-Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
-Import-Module -Name "$modulePath\$moduleName" -Force
+    $modulePath = Resolve-Path -Path "$PSScriptRoot\..\..\.." | Select-Object -ExpandProperty Path
+    $moduleName = Resolve-Path -Path "$PSScriptRoot\..\.." | Get-Item | Select-Object -ExpandProperty BaseName
 
-InModuleScope $moduleName {
+    Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
+    Import-Module -Name "$modulePath\$moduleName" -Force
+}
 
-    Describe 'Write-InformationLog' {
+Describe 'Write-InformationLog' {
 
-        Context 'Ensure mocked Write-Log is invoked' {
+    Context 'Ensure mocked Write-ScriptLoggerLog is invoked' {
 
-            Mock Write-Log -ModuleName $moduleName -ParameterFilter { $Level -eq 'Information' } -Verifiable
+        BeforeAll {
 
-            It 'should invoke the mock one for a simple message' {
+            InModuleScope 'ScriptLogger' {
+
+                Mock Write-ScriptLoggerLog -ModuleName 'ScriptLogger' -ParameterFilter { $Level -eq 'Information' } -Verifiable
+            }
+        }
+
+        It 'should invoke the mock one for a simple message' {
+
+            InModuleScope $moduleName {
 
                 # Act
                 Write-InformationLog -Message 'My Information'
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-Log' -Times 1 -Exactly
+                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
             }
+        }
 
-            It 'should invoke the mock twice for an array of 2 messages' {
+        It 'should invoke the mock twice for an array of 2 messages' {
+
+            InModuleScope $moduleName {
 
                 # Act
                 Write-InformationLog -Message 'My Information', 'My Information'
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-Log' -Times 2 -Exactly
+                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
             }
+        }
 
-            It 'should invoke the mock three times for a pipeline input of 3 messages' {
+        It 'should invoke the mock three times for a pipeline input of 3 messages' {
+
+            InModuleScope $moduleName {
 
                 # Act
                 'My Information', 'My Information', 'My Information' | Write-InformationLog
 
                 # Assert
-                Assert-MockCalled -Scope It -CommandName 'Write-Log' -Times 3 -Exactly
+                Assert-MockCalled -Scope It -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
             }
         }
+    }
 
-        Context 'Ensure valid output' {
+    Context 'Ensure valid output' {
 
-            $logPath = 'TestDrive:\test.log'
+        BeforeAll {
 
-            Mock Get-Date -ModuleName $moduleName { [DateTime] '2000-12-31 01:02:03' }
+            Mock 'Get-Date' -ModuleName $moduleName { [DateTime] '2000-12-31 01:02:03' }
+        }
+
+        Context 'Log File' {
 
             It 'should write a valid message to the log file' {
 
                 # Arrange
-                Start-ScriptLogger -Path $logPath -NoEventLog -NoConsoleOutput
+                Start-ScriptLogger -Path 'TestDrive:\test.log' -NoEventLog -NoConsoleOutput
 
                 # Act
                 Write-InformationLog -Message 'My Information'
 
                 # Assert
-                $logFile = Get-Content -Path $logPath
+                $logFile = Get-Content -Path 'TestDrive:\test.log'
                 $logFile | Should -Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Information   My Information"
             }
+        }
+
+        Context 'Event Log' {
 
             It 'should write a valid message to the event log' {
 
                 # Arrange
-                Start-ScriptLogger -Path $logPath -NoLogFile -NoConsoleOutput
-                $filterTimestamp = Get-Date
+                Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoConsoleOutput
+                $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
 
                 # Act
                 Write-InformationLog -Message 'My Information'
 
                 # Assert
-                $eventLog = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType Information -After $filterTimestamp -Newest 1
+                $eventLog = Get-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -InstanceId 0 -EntryType 'Information' -After $filterTimestamp -Newest 1
                 $eventLog                | Should -Not -BeNullOrEmpty
                 $eventLog.EventID        | Should -Be 0
                 $eventLog.CategoryNumber | Should -Be 0
@@ -79,26 +101,38 @@ InModuleScope $moduleName {
                 $eventLog.Source         | Should -Be 'PowerShell'
                 $eventLog.InstanceId     | Should -Be 0
             }
+        }
+
+        Context 'Console Output' {
+
+            BeforeAll {
+
+                InModuleScope 'ScriptLogger' {
+
+                    Mock 'Show-ScriptLoggerInformationMessage' -ModuleName 'ScriptLogger' -ParameterFilter { $Message -eq 'My Information' } -Verifiable
+                }
+            }
 
             It 'should write a valid message to the console' {
 
-                # Arrange
-                Mock Show-InformationMessage -ModuleName $moduleName -ParameterFilter { $Message -eq 'My Information' }
-                Start-ScriptLogger -Path $logPath -NoLogFile -NoEventLog
+                InModuleScope 'ScriptLogger' {
 
-                # Act
-                Write-InformationLog -Message 'My Information'
+                    # Arrange
+                    Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoEventLog
 
-                # Assert
-                Assert-MockCalled -Scope It -CommandName 'Show-InformationMessage' -Times 1 -Exactly
+                    # Act
+                    Write-InformationLog -Message 'My Information'
+
+                    # Assert
+                    Assert-MockCalled -Scope It -CommandName 'Show-ScriptLoggerInformationMessage' -Times 1 -Exactly
+                }
             }
+        }
 
-            AfterEach {
+        AfterEach {
 
-                # Cleanup logger
-                Get-ScriptLogger | Remove-Item -Force
-                Stop-ScriptLogger
-            }
+            Remove-Item -Path 'TestDrive:\test.log' -ErrorAction 'SilentlyContinue'
+            Stop-ScriptLogger
         }
     }
 }

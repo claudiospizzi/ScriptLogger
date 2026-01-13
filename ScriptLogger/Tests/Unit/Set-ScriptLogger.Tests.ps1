@@ -1,20 +1,29 @@
+[CmdletBinding()]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Pester BeforeAll block')]
+param ()
 
-$modulePath = Resolve-Path -Path "$PSScriptRoot\..\..\.." | Select-Object -ExpandProperty Path
-$moduleName = Resolve-Path -Path "$PSScriptRoot\..\.." | Get-Item | Select-Object -ExpandProperty BaseName
+BeforeAll {
 
-Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
-Import-Module -Name "$modulePath\$moduleName" -Force
+    $modulePath = Resolve-Path -Path "$PSScriptRoot\..\..\.." | Select-Object -ExpandProperty Path
+    $moduleName = Resolve-Path -Path "$PSScriptRoot\..\.." | Get-Item | Select-Object -ExpandProperty BaseName
+
+    Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
+    Import-Module -Name "$modulePath\$moduleName" -Force
+}
 
 Describe 'Set-ScriptLogger' {
 
-    $defaultEnabled  = $true
-    $defaultPath     = 'TestDrive:\test.log'
-    $defaultFormat   = '{0:yyyy-MM-dd HH:mm:ss}   {1}   {2}   {3}   {4}'
-    $defaultLevel    = 'Information'
-    $defaultEncoding = 'UTF8'
-    $defaultLogFile  = $true
-    $defaultEventLog = $true
-    $defaultConsole  = $true
+    BeforeAll {
+
+        $defaultEnabled  = $true
+        $defaultPath     = 'TestDrive:\test.log'
+        $defaultFormat   = '{0:yyyy-MM-dd HH:mm:ss}   {1}   {2}   {3}   {4}'
+        $defaultLevel    = 'Information'
+        $defaultEncoding = 'UTF8'
+        $defaultLogFile  = $true
+        $defaultEventLog = $true
+        $defaultConsole  = $true
+    }
 
     BeforeEach {
 

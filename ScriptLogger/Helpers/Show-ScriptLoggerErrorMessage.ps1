@@ -13,13 +13,13 @@
         None.
 
     .EXAMPLE
-        PS C:\> Show-ErrorMessage -Message 'My Error Message'
+        PS C:\> Show-ScriptLoggerErrorMessage -Message 'My Error Message'
         Show the error message.
 
     .LINK
         https://github.com/claudiospizzi/ScriptLogger
 #>
-function Show-ErrorMessage
+function Show-ScriptLoggerErrorMessage
 {
     param
     (
