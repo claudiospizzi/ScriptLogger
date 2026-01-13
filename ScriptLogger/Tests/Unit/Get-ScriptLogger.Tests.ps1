@@ -22,7 +22,7 @@ Describe 'Get-ScriptLogger' {
     It 'should return a valid object after starting' {
 
         # Act
-        Start-ScriptLogger -Path 'TestDrive:\log.txt'
+        Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'log.txt')
         $scriptLogger = Get-ScriptLogger
 
         # Assert

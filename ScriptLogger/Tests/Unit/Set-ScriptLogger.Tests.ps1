@@ -16,7 +16,7 @@ Describe 'Set-ScriptLogger' {
     BeforeAll {
 
         $defaultEnabled  = $true
-        $defaultPath     = 'TestDrive:\test.log'
+        $defaultPath     = Join-Path -Path 'TestDrive:' -ChildPath 'test.log'
         $defaultFormat   = '{0:yyyy-MM-dd HH:mm:ss}   {1}   {2}   {3}   {4}'
         $defaultLevel    = 'Information'
         $defaultEncoding = 'UTF8'
@@ -33,7 +33,7 @@ Describe 'Set-ScriptLogger' {
     It 'should update the logger path' {
 
         # Arrange
-        $expectedPath = 'TestDrive:\testnew.log'
+        $expectedPath = Join-Path -Path 'TestDrive:' -ChildPath 'test.log'
 
         # Act
         Set-ScriptLogger -Path $expectedPath

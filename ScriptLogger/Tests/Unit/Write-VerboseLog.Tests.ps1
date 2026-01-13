@@ -69,14 +69,14 @@ Describe 'Write-VerboseLog' {
             It 'should write a valid message to the log file' {
 
                 # Arrange
-                Start-ScriptLogger -Path 'TestDrive:\test.log' -NoEventLog -NoConsoleOutput
+                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
                 $callerLine = 76
 
                 # Act
                 Write-VerboseLog -Message 'My Verbose'
 
                 # Assert
-                $logFile = Get-Content -Path 'TestDrive:\test.log'
+                $logFile = Get-Content -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log')
                 $logFile | Should -Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Verbose       [Write-VerboseLog.Tests.ps1:$callerLine] My Verbose"
             }
         }
@@ -86,7 +86,7 @@ Describe 'Write-VerboseLog' {
             It 'should write a valid message to the event log' {
 
                 # Arrange
-                Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoConsoleOutput
+                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
                 $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
                 $callerLine = 94
 
@@ -111,7 +111,7 @@ Describe 'Write-VerboseLog' {
 
                 InModuleScope 'ScriptLogger' {
 
-                    Mock 'Show-ScriptLoggerVerboseMessage' -ModuleName 'ScriptLogger' -ParameterFilter { $Message -eq 'My Verbose' } -Verifiable
+                    Mock 'Write-Verbose' -ModuleName 'ScriptLogger' -ParameterFilter { $Message -eq 'My Verbose' } -Verifiable
                 }
             }
 
@@ -120,20 +120,20 @@ Describe 'Write-VerboseLog' {
                 InModuleScope 'ScriptLogger' {
 
                     # Arrange
-                    Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoEventLog
+                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoEventLog
 
                     # Act
                     Write-VerboseLog -Message 'My Verbose'
 
                     # Assert
-                    Assert-MockCalled -Scope It -CommandName 'Show-ScriptLoggerVerboseMessage' -Times 1 -Exactly
+                    Assert-MockCalled -Scope It -CommandName 'Write-Verbose' -Times 1 -Exactly
                 }
             }
         }
 
         AfterEach {
 
-            Remove-Item -Path 'TestDrive:\test.log' -ErrorAction 'SilentlyContinue'
+            Remove-Item -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -ErrorAction 'SilentlyContinue'
             Stop-ScriptLogger
         }
     }

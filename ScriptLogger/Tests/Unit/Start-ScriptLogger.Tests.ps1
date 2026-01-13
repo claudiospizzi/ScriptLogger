@@ -49,7 +49,7 @@ Describe 'Start-ScriptLogger' {
     It 'should return a valid value for the parameter path' {
 
         # Arrange
-        $expectedPath = 'TestDrive:\test.log'
+        $expectedPath = Join-Path -Path 'TestDrive:' -ChildPath 'test.log'
 
         # Act
         $scriptLogger = Start-ScriptLogger -Path $expectedPath -PassThru

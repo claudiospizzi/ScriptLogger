@@ -117,21 +117,21 @@ Describe 'Write-ErrorLog' {
             It 'should write a valid message to the log file' {
 
                 # Arrange
-                Start-ScriptLogger -Path 'TestDrive:\test.log' -NoEventLog -NoConsoleOutput
+                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
                 $callerLine = 124
 
                 # Act
                 Write-ErrorLog -Message 'My Error'
 
                 # Assert
-                $logFile = Get-Content -Path 'TestDrive:\test.log'
+                $logFile = Get-Content -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log')
                 $logFile | Should -Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         [Write-ErrorLog.Tests.ps1:$callerLine] My Error"
             }
 
             It 'should write a valid error record to the log file' {
 
                 # Arrange
-                Start-ScriptLogger -Path 'TestDrive:\test.log' -NoEventLog -NoConsoleOutput
+                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
                 $callerLine = 144
 
                 # Act
@@ -145,14 +145,14 @@ Describe 'Write-ErrorLog' {
                 }
 
                 # Assert
-                $logFile = Get-Content -Path 'TestDrive:\test.log'
+                $logFile = Get-Content -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log')
                 $logFile | Should -BeLike "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         ``[Write-ErrorLog.Tests.ps1:$callerLine``] Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)"
             }
 
             It 'should write a valid message with stack trace to the log' {
 
                 # Arrange
-                Start-ScriptLogger -Path 'TestDrive:\test.log' -NoEventLog -NoConsoleOutput
+                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
                 $callerLine = 165
 
                 # Act
@@ -166,7 +166,7 @@ Describe 'Write-ErrorLog' {
                 }
 
                 # Assert
-                $logFile = Get-Content -Path 'TestDrive:\test.log'
+                $logFile = Get-Content -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log')
                 $logFile[0] | Should -BeLike "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         ``[Write-ErrorLog.Tests.ps1:$callerLine``] Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)"
                 $logFile[1] | Should -BeLike "at <ScriptBlock>, *\ScriptLogger\Tests\Unit\Write-ErrorLog.Tests.ps1:*"
             }
@@ -177,7 +177,7 @@ Describe 'Write-ErrorLog' {
             It 'should write a valid message to the event log' {
 
                 # Arrange
-                Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoConsoleOutput
+                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
                 $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
                 $callerLine = 185
 
@@ -197,7 +197,7 @@ Describe 'Write-ErrorLog' {
             It 'should write a valid error record to the event log' {
 
                 # Arrange
-                Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoConsoleOutput
+                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
                 $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
                 $callerLine = 211
 
@@ -237,7 +237,7 @@ Describe 'Write-ErrorLog' {
                 InModuleScope $moduleName {
 
                     # Arrange
-                    Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoEventLog
+                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoEventLog
 
                     # Act
                     Write-ErrorLog -Message 'My Error'
@@ -252,7 +252,7 @@ Describe 'Write-ErrorLog' {
                 InModuleScope $moduleName {
 
                     # Arrange
-                    Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoEventLog
+                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoEventLog
 
                     # Act
                     try
@@ -272,7 +272,7 @@ Describe 'Write-ErrorLog' {
 
         AfterEach {
 
-            Remove-Item -Path 'TestDrive:\test.log' -ErrorAction 'SilentlyContinue'
+            Remove-Item -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -ErrorAction 'SilentlyContinue'
             Stop-ScriptLogger
         }
     }

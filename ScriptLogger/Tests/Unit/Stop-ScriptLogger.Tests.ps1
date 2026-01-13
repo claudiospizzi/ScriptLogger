@@ -10,10 +10,10 @@ BeforeAll {
 
 Describe 'Stop-ScriptLogger' {
 
-    It 'should clean up the looger' {
+    It 'should clean up the logger' {
 
         # Arrange
-        Start-ScriptLogger -Path 'TestDrive:\test.log'
+        Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log')
 
         # Act
         Stop-ScriptLogger

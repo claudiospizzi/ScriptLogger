@@ -69,14 +69,14 @@ Describe 'Write-InformationLog' {
             It 'should write a valid message to the log file' {
 
                 # Arrange
-                Start-ScriptLogger -Path 'TestDrive:\test.log' -NoEventLog -NoConsoleOutput
+                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
                 $callerLine = 76
 
                 # Act
                 Write-InformationLog -Message 'My Information'
 
                 # Assert
-                $logFile = Get-Content -Path 'TestDrive:\test.log'
+                $logFile = Get-Content -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log')
                 $logFile | Should -Be "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Information   [Write-InformationLog.Tests.ps1:$callerLine] My Information"
             }
         }
@@ -86,7 +86,7 @@ Describe 'Write-InformationLog' {
             It 'should write a valid message to the event log' {
 
                 # Arrange
-                Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoConsoleOutput
+                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoConsoleOutput
                 $filterTimestamp = [System.DateTime]::Now.AddSeconds(-1)
                 $callerLine = 94
 
@@ -120,7 +120,7 @@ Describe 'Write-InformationLog' {
                 InModuleScope 'ScriptLogger' {
 
                     # Arrange
-                    Start-ScriptLogger -Path 'TestDrive:\test.log' -NoLogFile -NoEventLog
+                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoEventLog
 
                     # Act
                     Write-InformationLog -Message 'My Information'
@@ -133,7 +133,7 @@ Describe 'Write-InformationLog' {
 
         AfterEach {
 
-            Remove-Item -Path 'TestDrive:\test.log' -ErrorAction 'SilentlyContinue'
+            Remove-Item -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -ErrorAction 'SilentlyContinue'
             Stop-ScriptLogger
         }
     }

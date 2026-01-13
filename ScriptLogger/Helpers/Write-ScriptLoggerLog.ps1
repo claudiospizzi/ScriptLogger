@@ -60,17 +60,33 @@ function Write-ScriptLoggerLog
             # Check the logging level: The requested level needs to be equals or higher than the configured level
             if ($levelMap[$Level] -ge $levelMap[$logger.Level])
             {
+                # Use the call stack to get the caller info. Skip the first two
+                # entries (this function and the Write-* wrapper function).
+                $callerContext = Get-PSCallStack | Select-Object -First 1 -Skip 2
+                if (-not [System.String]::IsNullOrEmpty($callerContext.ScriptName))
+                {
+                    $callerInfo = [System.IO.Path]::GetFileName($callerContext.ScriptName)
+                    if ($callerContext.ScriptLineNumber -gt 0)
+                    {
+                        $callerInfo += ':' + $callerContext.ScriptLineNumber
+                    }
+                }
+                else
+                {
+                    $callerInfo = [System.String] $callerContext.Command
+                }
+
                 if ($logger.LogFile -and $PSCmdlet.ShouldProcess('LogFile', 'Write Log'))
                 {
                     try
                     {
                         # Output to log file
-                        $line = $logger.Format -f (Get-Date), $env:ComputerName, $Env:Username, $Level, $Message
+                        $line = $logger.Format -f (Get-Date), $env:ComputerName, $Env:Username, $Level, $Message, $callerInfo
                         $line | Out-File -FilePath $logger.Path -Encoding $logger.Encoding -Append -ErrorAction Stop
                     }
                     catch
                     {
-                        Write-Warning "ScriptLogger '$Name' module error during write log file: $_"
+                        Microsoft.PowerShell.Utility\Write-Warning "ScriptLogger '$Name' module error during write log file: $_"
                     }
                 }
 
@@ -81,11 +97,11 @@ function Write-ScriptLoggerLog
                     try
                     {
                         # Output to event log
-                        Write-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -EventId 0 -Category 0 -EntryType $entryType -Message $Message -ErrorAction Stop
+                        Write-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -EventId 0 -Category 0 -EntryType $entryType -Message "[$callerInfo] $Message" -ErrorAction Stop
                     }
                     catch
                     {
-                        Write-Warning "ScriptLogger '$Name' module error during write event log: $_"
+                        Microsoft.PowerShell.Utility\Write-Warning "ScriptLogger '$Name' module error during write event log: $_"
                     }
                 }
 
@@ -104,6 +120,6 @@ function Write-ScriptLoggerLog
     }
     else
     {
-        Write-Warning "ScriptLogger '$Name' not found. No logs written."
+        Microsoft.PowerShell.Utility\Write-Warning "ScriptLogger '$Name' not found. No logs written."
     }
 }
