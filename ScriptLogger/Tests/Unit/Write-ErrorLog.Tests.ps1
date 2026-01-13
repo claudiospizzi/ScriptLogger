@@ -146,7 +146,7 @@ Describe 'Write-ErrorLog' {
 
                 # Assert
                 $logFile = Get-Content -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log')
-                $logFile | Should -BeLike "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         ``[Write-ErrorLog.Tests.ps1:$callerLine``] Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)"
+                $logFile | Should -BeLike "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         ``[Write-ErrorLog.Tests.ps1:$callerLine``] Attempted to divide by zero. (RuntimeException: *Write-ErrorLog.Tests.ps1:* char:*)"
             }
 
             It 'should write a valid message with stack trace to the log' {
@@ -167,8 +167,8 @@ Describe 'Write-ErrorLog' {
 
                 # Assert
                 $logFile = Get-Content -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log')
-                $logFile[0] | Should -BeLike "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         ``[Write-ErrorLog.Tests.ps1:$callerLine``] Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)"
-                $logFile[1] | Should -BeLike "at <ScriptBlock>, *\ScriptLogger\Tests\Unit\Write-ErrorLog.Tests.ps1:*"
+                $logFile[0] | Should -BeLike "2000-12-31   01:02:03   $Env:ComputerName   $Env:Username   Error         ``[Write-ErrorLog.Tests.ps1:$callerLine``] Attempted to divide by zero. (RuntimeException: *Write-ErrorLog.Tests.ps1:* char:*)"
+                $logFile[1] | Should -BeLike "at <ScriptBlock>, *ScriptLogger*Tests*Unit*Write-ErrorLog.Tests.ps1:*"
             }
         }
 
@@ -216,7 +216,7 @@ Describe 'Write-ErrorLog' {
                 $eventLog.EventID        | Should -Be 0
                 $eventLog.CategoryNumber | Should -Be 0
                 $eventLog.EntryType      | Should -Be 'Error'
-                $eventLog.Message        | Should -BeLike "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'``[Write-ErrorLog.Tests.ps1:$callerLine``] Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)'"
+                $eventLog.Message        | Should -BeLike "The description for Event ID '0' in Source 'PowerShell' cannot be found.  The local computer may not have the necessary registry information or message DLL files to display the message, or you may not have permission to access them.  The following information is part of the event:'``[Write-ErrorLog.Tests.ps1:$callerLine``] Attempted to divide by zero. (RuntimeException: *Write-ErrorLog.Tests.ps1:* char:*)'"
                 $eventLog.Source         | Should -Be 'PowerShell'
                 $eventLog.InstanceId     | Should -Be 0
             }
@@ -228,7 +228,7 @@ Describe 'Write-ErrorLog' {
 
                 InModuleScope 'ScriptLogger' {
 
-                    Mock 'Show-ScriptLoggerErrorMessage' -ModuleName 'ScriptLogger' -ParameterFilter { $Message -eq 'My Error' -or $Message -like 'Attempted to divide by zero. (RuntimeException: *\Unit\Write-ErrorLog.Tests.ps1:* char:*)' } -Verifiable
+                    Mock 'Show-ScriptLoggerErrorMessage' -ModuleName 'ScriptLogger' -ParameterFilter { $Message -eq 'My Error' -or $Message -like 'Attempted to divide by zero. (RuntimeException: *Write-ErrorLog.Tests.ps1:* char:*)' } -Verifiable
                 }
             }
 
