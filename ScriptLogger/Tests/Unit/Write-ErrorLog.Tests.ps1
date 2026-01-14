@@ -6,9 +6,6 @@ BeforeAll {
 
     Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
     Import-Module -Name "$modulePath\$moduleName" -Force
-
-    # Create the dummy function for Linux systems
-    function Write-EventLog {}
 }
 
 Describe 'Write-ErrorLog' {
@@ -121,7 +118,7 @@ Describe 'Write-ErrorLog' {
 
                 # Arrange
                 Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
-                $callerLine = 127
+                $callerLine = 124
 
                 # Act
                 Write-ErrorLog -Message 'My Error'
@@ -135,7 +132,7 @@ Describe 'Write-ErrorLog' {
 
                 # Arrange
                 Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
-                $callerLine = 147
+                $callerLine = 144
 
                 # Act
                 try
@@ -156,7 +153,7 @@ Describe 'Write-ErrorLog' {
 
                 # Arrange
                 Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
-                $callerLine = 168
+                $callerLine = 165
 
                 # Act
                 try
@@ -178,6 +175,8 @@ Describe 'Write-ErrorLog' {
         Context 'Event Log' {
 
             BeforeAll {
+
+                function Write-EventLog {}
 
                 InModuleScope 'ScriptLogger' {
 
