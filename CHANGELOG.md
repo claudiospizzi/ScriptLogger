@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+* Added: Feature to override the default streams like Write-Verbose to log messages (Start-ScriptLogger)
 * Added: Option to include the script stack trace in the error log message (Write-ErrorLog)
 * Added: Add caller context information (script name and line number) to the log messages (Start-ScriptLogger)
 

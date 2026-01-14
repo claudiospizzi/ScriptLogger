@@ -38,7 +38,17 @@ function Stop-ScriptLogger
     {
         if ($PSCmdlet.ShouldProcess('ScriptLogger', 'Stop'))
         {
-            Microsoft.PowerShell.Utility\Write-Verbose "Stop script logger '$Name'"
+            Microsoft.PowerShell.Utility\Write-Debug "Stop script logger '$Name'"
+
+            # Cleanup the aliases for the default logger, if set.
+            if ($Script:Loggers[$Name].StreamOverride)
+            {
+                $aliases = 'Write-Verbose', 'Write-Information', 'Write-Warning', 'Write-Error'
+
+                Get-Alias -Scope 'Global' |
+                    Where-Object { $_.Name -in $aliases -and $_.ModuleName -eq $Script:PSModuleName } |
+                        Remove-Alias -ErrorAction 'SilentlyContinue'
+            }
 
             $Script:Loggers.Remove($Name)
         }

@@ -35,7 +35,7 @@ function Write-VerboseLog
         $Name = 'Default',
 
         # The verbose message.
-        [Parameter(Mandatory=$true, Position = 0, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [System.String[]]
         $Message
     )

@@ -101,6 +101,13 @@ function Start-ScriptLogger
         [Switch]
         $NoConsoleOutput,
 
+        # Option to override the built-in PowerShell stream functions like
+        # Write-Verbose, Write-Warning, etc. and log their messages with the
+        # script logger.
+        [Parameter(Mandatory = $false)]
+        [Switch]
+        $OverrideStreamFunctions,
+
         # If specified, the created script logger object will be returned.
         [Parameter(Mandatory = $false)]
         [Switch]
@@ -176,20 +183,43 @@ function Start-ScriptLogger
 
     if ($PSCmdlet.ShouldProcess('ScriptLogger', 'Start'))
     {
-        Microsoft.PowerShell.Utility\Write-Verbose "Start script logger '$Name'"
+        Microsoft.PowerShell.Utility\Write-Debug "Start script logger '$Name'"
 
         $Script:Loggers[$Name] = [PSCustomObject] @{
-            PSTypeName    = 'ScriptLogger.Configuration'
-            Name          = $Name
-            Enabled       = $true
-            Path          = $Path
-            Format        = $Format
-            Level         = $Level
-            Encoding      = $Encoding
-            Rotation      = $Rotation
-            LogFile       = -not $NoLogFile.IsPresent
-            EventLog      = -not $NoEventLog.IsPresent
-            ConsoleOutput = -not $NoConsoleOutput.IsPresent
+            PSTypeName     = 'ScriptLogger.Configuration'
+            Name           = $Name
+            Enabled        = $true
+            Path           = $Path
+            Format         = $Format
+            Level          = $Level
+            Encoding       = $Encoding
+            Rotation       = $Rotation
+            LogFile        = -not $NoLogFile.IsPresent
+            EventLog       = -not $NoEventLog.IsPresent
+            ConsoleOutput  = -not $NoConsoleOutput.IsPresent
+            StreamOverride = $Name -eq 'Default' -and $OverrideStreamFunctions.IsPresent
+        }
+
+        # Override the built-in PowerShell stream functions
+        if ($OverrideStreamFunctions.IsPresent)
+        {
+            if ($Name -eq 'Default')
+            {
+                $aliases = @{
+                    'Write-Verbose'     = 'Write-VerboseLog'
+                    'Write-Information' = 'Write-InformationLog'
+                    'Write-Warning'     = 'Write-WarningLog'
+                    'Write-Error'       = 'Write-ErrorLog'
+                }
+                foreach ($aliasName in $aliases.Keys)
+                {
+                    New-Alias -Name $aliasName -Value $aliases[$aliasName] -Scope 'Global' -Force
+                }
+            }
+            else
+            {
+                Microsoft.PowerShell.Utility\Write-Warning "ScriptLogger '$Name' can't activate the stream function override. Please use the default logger."
+            }
         }
 
         # Return logger object

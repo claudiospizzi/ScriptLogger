@@ -39,7 +39,12 @@ function Write-ErrorLog
         [System.String[]]
         $Message,
 
-        # The error record containing an exception to log.
+        # The exception to log.
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Exception')]
+        [System.Exception[]]
+        $Exception,
+
+        # The error record to log.
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'ErrorRecord')]
         [System.Management.Automation.ErrorRecord[]]
         $ErrorRecord,
@@ -47,7 +52,13 @@ function Write-ErrorLog
         # Include the stack trace in the error log message.
         [Parameter(Mandatory = $false, ParameterSetName = 'ErrorRecord')]
         [Switch]
-        $IncludeStackTrace
+        $IncludeStackTrace,
+
+        # Remaining arguments to ignore any additional input if mocking the
+        # Write-Error stream command.
+        [Parameter(ValueFromRemainingArguments = $true)]
+        [System.String[]]
+        $RemainingArguments
     )
 
     process
@@ -56,6 +67,16 @@ function Write-ErrorLog
         {
             foreach ($currentMessage in $Message)
             {
+                Write-ScriptLoggerLog -Name $Name -Message $currentMessage -Level 'Error'
+            }
+        }
+
+        if ($PSCmdlet.ParameterSetName -eq 'Exception')
+        {
+            foreach ($currentException in $Exception)
+            {
+                $currentMessage = '{0} ({1})' -f $currentException.Message, $currentException.GetType().FullName
+
                 Write-ScriptLoggerLog -Name $Name -Message $currentMessage -Level 'Error'
             }
         }

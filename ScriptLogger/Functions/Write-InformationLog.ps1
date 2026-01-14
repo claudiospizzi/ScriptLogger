@@ -34,10 +34,18 @@ function Write-InformationLog
         [System.String]
         $Name = 'Default',
 
-        # The information message.
+        # The information message. The message object is a string for
+        # compatibility with the Write-Information cmdlet.
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
+        [Alias('MessageData')]
         [System.String[]]
-        $Message
+        $Message,
+
+        # Remaining arguments to ignore any additional input if mocking the
+        # Write-Information stream command.
+        [Parameter(ValueFromRemainingArguments = $true)]
+        [System.String[]]
+        $RemainingArguments
     )
 
     process
