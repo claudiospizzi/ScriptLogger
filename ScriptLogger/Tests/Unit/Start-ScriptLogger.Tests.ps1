@@ -331,7 +331,7 @@ Describe 'Start-ScriptLogger' {
 
     AfterEach {
 
-        Get-ScriptLogger | Remove-Item -Force
+        Get-ScriptLogger | Remove-Item -Force -ErrorAction 'SilentlyContinue'
         Stop-ScriptLogger
     }
 }
