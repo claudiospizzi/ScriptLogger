@@ -9,9 +9,62 @@ PowerShell Module to provide logging capabilities for PowerShell controller scri
 
 ## Introduction
 
-With the ScriptLogger module, you are able to log error, warning, informational and verbose messages into log files, the Windows event log and the current console host. You can start and stop the logger as required. Works great in cooperation with the [ScriptConfig] module to improve controller scripts.
+With the ScriptLogger module, you are able to log error, warning, informational and verbose messages into log files, the platform system and event log and the current console host. You can start and stop the logger as required. This module works great in cooperation with the [ScriptConfig] module to improve controller scripts.
+
+## Quick Start
+
+This example demonstrates using ScriptLogger with the [ScriptConfig] module to create a robust controller script with file-based configuration and logging.
+
+**Setup:**
+
+* Script file: `run.ps1`
+* Configuration file: `run.ps1.config` (auto-detected, any supported format)
+* Log file: `run.ps1.log` (auto-created)
+
+For this example, create a simple INI config file with: `MyNumber=42`. For more details on the behavior see the comment sections in the script below. The `Start-ScriptLogger` and `Get-ScriptConfig` can be parameterized further as needed.
+
+```powershell
+#requires -Module ScriptConfig, ScriptLogger
+
+<#
+    .SYNOPSIS
+        Example PowerShell controller script using ScriptConfig and ScriptLogger.
+
+    .DESCRIPTION
+        This script demonstrates loading configuration from a file and logging
+        operations. It uses ScriptConfig to load settings and ScriptLogger to
+        log messages and errors.
+#>
+
+try
+{
+    # Start the script logger by overriding the Write-* functions and log only
+    # to the log file and console (no event and system log entries).
+    Start-ScriptLogger -NoEventLog -OverrideStream $ExecutionContext.SessionState
+
+    # Load the script configuration from the auto-detect config file with the
+    # auto-detected config format (INI, JSON, XML).
+    $config = Get-ScriptConfig
+
+    # Perform your operations using the configuration and log messages...
+    Write-Verbose 'Try an impossible operation...'
+    $config.MyNumber / 0
+}
+catch
+{
+    # In case of any error, log the error record with stack trace.
+    Write-ErrorLog -ErrorRecord $_ -IncludeStackTrace
+}
+finally
+{
+    # Clean-up the logger at the end.
+    Stop-ScriptLogger
+}
+```
 
 ## Features
+
+The following commands allow you to control the logging functionality in your PowerShell scripts:
 
 * **Start-ScriptLogger**  
   Start the script logger in the active PowerShell session.
@@ -26,16 +79,16 @@ With the ScriptLogger module, you are able to log error, warning, informational 
   Get the active script logger object.
 
 * **Write-VerboseLog**  
-  Log a verbose message.
+  Log a verbose message. If the logger is started with the `-OverrideStream` option, the built-in `Write-Verbose` function will be overridden with this command to log verbose messages.
 
 * **Write-InformationLog**  
-  Log an information message.
+  Log an information message. If the logger is started with the `-OverrideStream` option, the built-in `Write-Information` function will be overridden with this command to log information messages.
 
 * **Write-WarningLog**  
-  Log a warning message.
+  Log a warning message. If the logger is started with the `-OverrideStream` option, the built-in `Write-Warning` function will be overridden with this command to log warning messages.
 
 * **Write-ErrorLog**  
-  Log an error message.
+  Log an error message. If the logger is started with the `-OverrideStream` option, the built-in `Write-Error` function will be overridden with this command to log error messages.
 
 ### Example
 
