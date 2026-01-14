@@ -6,6 +6,9 @@ BeforeAll {
 
     Remove-Module -Name $moduleName -Force -ErrorAction SilentlyContinue
     Import-Module -Name "$modulePath\$moduleName" -Force
+
+    # Create the dummy function for Linux systems
+    function Write-EventLog {}
 }
 
 Describe 'Write-ErrorLog' {
@@ -118,7 +121,7 @@ Describe 'Write-ErrorLog' {
 
                 # Arrange
                 Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
-                $callerLine = 124
+                $callerLine = 127
 
                 # Act
                 Write-ErrorLog -Message 'My Error'
@@ -132,7 +135,7 @@ Describe 'Write-ErrorLog' {
 
                 # Arrange
                 Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
-                $callerLine = 144
+                $callerLine = 147
 
                 # Act
                 try
@@ -153,7 +156,7 @@ Describe 'Write-ErrorLog' {
 
                 # Arrange
                 Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
-                $callerLine = 165
+                $callerLine = 168
 
                 # Act
                 try
@@ -178,7 +181,7 @@ Describe 'Write-ErrorLog' {
 
                 InModuleScope 'ScriptLogger' {
 
-                            Mock 'Write-EventLog' -ModuleName 'ScriptLogger' -ParameterFilter { $LogName -eq 'Windows PowerShell' -and $Source -eq 'PowerShell' -and $entryType -eq 'Error' -and ($Message -like '`[Write-ErrorLog.Tests.ps1:*`] My Error' -or $Message -like '`[Write-ErrorLog.Tests.ps1:*`] Attempted to divide by zero. (RuntimeException: *Write-ErrorLog.Tests.ps1:* char:*)') } -Verifiable
+                    Mock 'Write-EventLog' -ModuleName 'ScriptLogger' -ParameterFilter { $LogName -eq 'Windows PowerShell' -and $Source -eq 'PowerShell' -and $entryType -eq 'Error' -and ($Message -like '`[Write-ErrorLog.Tests.ps1:*`] My Error' -or $Message -like '`[Write-ErrorLog.Tests.ps1:*`] Attempted to divide by zero. (RuntimeException: *Write-ErrorLog.Tests.ps1:* char:*)') } -Verifiable
                 }
             }
 
