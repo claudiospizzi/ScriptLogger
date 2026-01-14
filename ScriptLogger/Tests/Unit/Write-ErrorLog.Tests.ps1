@@ -176,11 +176,9 @@ Describe 'Write-ErrorLog' {
 
             BeforeAll {
 
-                function Write-EventLog {}
-
                 InModuleScope 'ScriptLogger' {
 
-                    Mock 'Write-EventLog' -ModuleName 'ScriptLogger' -ParameterFilter { $LogName -eq 'Windows PowerShell' -and $Source -eq 'PowerShell' -and $entryType -eq 'Error' -and ($Message -like '`[Write-ErrorLog.Tests.ps1:*`] My Error' -or $Message -like '`[Write-ErrorLog.Tests.ps1:*`] Attempted to divide by zero. (RuntimeException: *Write-ErrorLog.Tests.ps1:* char:*)') } -Verifiable
+                    Mock 'Write-ScriptLoggerPlatformLog' -ModuleName 'ScriptLogger' -ParameterFilter { $Level -eq 'Error' -and ($Message -like '`[Write-ErrorLog.Tests.ps1:*`] My Error' -or $Message -like '`[Write-ErrorLog.Tests.ps1:*`] Attempted to divide by zero. (RuntimeException: *Write-ErrorLog.Tests.ps1:* char:*)') } -Verifiable
                 }
             }
 
@@ -195,7 +193,7 @@ Describe 'Write-ErrorLog' {
                     Write-ErrorLog -Message 'My Error'
 
                     # Assert
-                    Assert-MockCalled -Scope 'It' -CommandName 'Write-EventLog' -Times 1 -Exactly
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerPlatformLog' -Times 1 -Exactly
                 }
             }
 
@@ -217,7 +215,7 @@ Describe 'Write-ErrorLog' {
                     }
 
                     # Assert
-                    Assert-MockCalled -Scope 'It' -CommandName 'Write-EventLog' -Times 1 -Exactly
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerPlatformLog' -Times 1 -Exactly
                 }
             }
         }

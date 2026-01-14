@@ -27,6 +27,7 @@
 function Write-InformationLog
 {
     [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'The parameter -RemainingArguments is require to mock the Write-Information stream command.')]
     param
     (
         # The logger name.

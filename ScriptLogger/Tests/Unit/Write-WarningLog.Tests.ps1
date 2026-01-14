@@ -87,7 +87,7 @@ Describe 'Write-WarningLog' {
 
                 InModuleScope 'ScriptLogger' {
 
-                    Mock 'Write-EventLog' -ModuleName 'ScriptLogger' -ParameterFilter { $LogName -eq 'Windows PowerShell' -and $Source -eq 'PowerShell' -and $entryType -eq 'Warning' -and $Message -like '`[Write-WarningLog.Tests.ps1:*`] My Warning' } -Verifiable
+                    Mock 'Write-ScriptLoggerPlatformLog' -ModuleName 'ScriptLogger' -ParameterFilter { $Level -eq 'Warning' -and $Message -like '`[Write-WarningLog.Tests.ps1:*`] My Warning' } -Verifiable
                 }
             }
 
@@ -102,7 +102,7 @@ Describe 'Write-WarningLog' {
                     Write-WarningLog -Message 'My Warning'
 
                     # Assert
-                    Assert-MockCalled -Scope 'It' -CommandName 'Write-EventLog' -Times 1 -Exactly
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerPlatformLog' -Times 1 -Exactly
                 }
             }
         }

@@ -92,12 +92,11 @@ function Write-ScriptLoggerLog
 
                 if ($logger.EventLog -and $PSCmdlet.ShouldProcess('EventLog', 'Write Log'))
                 {
-                    $entryType = $Level.Replace('Verbose', 'Information')
 
                     try
                     {
-                        # Output to event log
-                        Write-EventLog -LogName 'Windows PowerShell' -Source 'PowerShell' -EventId 0 -Category 0 -EntryType $entryType -Message "[$callerInfo] $Message" -ErrorAction Stop
+                        # Write to platform specific log.
+                        Write-ScriptLoggerPlatformLog -Level $Level -Message "[$callerInfo] $Message" -ErrorAction 'Stop'
                     }
                     catch
                     {

@@ -27,6 +27,7 @@
 function Write-ErrorLog
 {
     [CmdletBinding(DefaultParameterSetName = 'Message')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'The parameter -RemainingArguments is require to mock the Write-Error stream command.')]
     param
     (
         # The logger name.

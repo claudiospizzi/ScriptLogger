@@ -87,7 +87,7 @@ Describe 'Write-VerboseLog' {
 
                 InModuleScope 'ScriptLogger' {
 
-                    Mock 'Write-EventLog' -ModuleName 'ScriptLogger' -ParameterFilter { $LogName -eq 'Windows PowerShell' -and $Source -eq 'PowerShell' -and $entryType -eq 'Information' -and $Message -like '`[Write-VerboseLog.Tests.ps1:*`] My Verbose' } -Verifiable
+                    Mock 'Write-ScriptLoggerPlatformLog' -ModuleName 'ScriptLogger' -ParameterFilter { $Level -eq 'Verbose' -and $Message -like '`[Write-VerboseLog.Tests.ps1:*`] My Verbose' } -Verifiable
                 }
             }
 
@@ -102,7 +102,7 @@ Describe 'Write-VerboseLog' {
                     Write-VerboseLog -Message 'My Verbose'
 
                     # Assert
-                    Assert-MockCalled -Scope 'It' -CommandName 'Write-EventLog' -Times 1 -Exactly
+                    Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerPlatformLog' -Times 1 -Exactly
                 }
             }
         }
