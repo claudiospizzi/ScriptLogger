@@ -41,13 +41,21 @@ function Stop-ScriptLogger
             Microsoft.PowerShell.Utility\Write-Debug "Stop script logger '$Name'"
 
             # Cleanup the aliases for the default logger, if set.
-            if ($Script:Loggers[$Name].StreamOverride)
+            if ($Script:Loggers[$Name].OverrideStream)
             {
-                $aliases = 'Write-Verbose', 'Write-Information', 'Write-Warning', 'Write-Error'
+                $aliasNames = 'Write-Verbose', 'Write-Information', 'Write-Warning', 'Write-Error'
 
-                Get-Alias -Scope 'Global' |
-                    Where-Object { $_.Name -in $aliases -and $_.ModuleName -eq $Script:PSModuleName } |
-                        Remove-Alias -ErrorAction 'SilentlyContinue'
+                foreach ($aliasName in $aliasNames)
+                {
+                    $removeAliasCommand = [System.Management.Automation.ScriptBlock]::Create("Get-Alias -Scope 'Global' | Where-Object { `$_.Name -eq '$aliasName' } | Remove-Alias -ErrorAction 'SilentlyContinue'")
+                    $Script:Loggers[$Name].SessionState.InvokeCommand.InvokeScript($Script:Loggers[$Name].SessionState, $removeAliasCommand, $null)
+                }
+            }
+
+            # Log stop message
+            if (-not $Script:Loggers[$Name].SkipStartStop)
+            {
+                Write-ScriptLoggerLog -Name $Name -Level 'Verbose' -Message 'PowerShell log stopped'
             }
 
             $Script:Loggers.Remove($Name)

@@ -28,249 +28,305 @@ Describe 'Start-ScriptLogger' {
         $defaultConsole  = $true
     }
 
-    It 'should return default values without any specification' {
+    Context 'Parameter Tests' {
 
-        # Act
-        $scriptLogger = Start-ScriptLogger -PassThru
+        It 'should return default values without any specification' {
 
-        # Assert
-        $scriptLogger               | Should -Not -BeNullOrEmpty
-        $scriptLogger.Enabled       | Should -Be $defaultEnabled
-        $scriptLogger.Path          | Should -Be $defaultPath
-        $scriptLogger.Format        | Should -Be $defaultFormat
-        $scriptLogger.Level         | Should -Be $defaultLevel
-        $scriptLogger.Encoding      | Should -Be $defaultEncoding
-        $scriptLogger.Rotation      | Should -Be $defaultRotation
-        $scriptLogger.LogFile       | Should -Be $defaultLogFile
-        $scriptLogger.EventLog      | Should -Be $defaultEventLog
-        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
+            # Act
+            $scriptLogger = Start-ScriptLogger -SkipStartStopMessage -PassThru
+
+            # Assert
+            $scriptLogger               | Should -Not -BeNullOrEmpty
+            $scriptLogger.Enabled       | Should -Be $defaultEnabled
+            $scriptLogger.Path          | Should -Be $defaultPath
+            $scriptLogger.Format        | Should -Be $defaultFormat
+            $scriptLogger.Level         | Should -Be $defaultLevel
+            $scriptLogger.Encoding      | Should -Be $defaultEncoding
+            $scriptLogger.Rotation      | Should -Be $defaultRotation
+            $scriptLogger.LogFile       | Should -Be $defaultLogFile
+            $scriptLogger.EventLog      | Should -Be $defaultEventLog
+            $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
+        }
+
+        It 'should return a valid value for the parameter path' {
+
+            # Arrange
+            $expectedPath = Join-Path -Path 'TestDrive:' -ChildPath 'test.log'
+
+            # Act
+            $scriptLogger = Start-ScriptLogger -SkipStartStopMessage -Path $expectedPath -PassThru
+
+            # Assert
+            $scriptLogger               | Should -Not -BeNullOrEmpty
+            $scriptLogger.Enabled       | Should -Be $defaultEnabled
+            $scriptLogger.Path          | Should -Be $expectedPath
+            $scriptLogger.Format        | Should -Be $defaultFormat
+            $scriptLogger.Level         | Should -Be $defaultLevel
+            $scriptLogger.Encoding      | Should -Be $defaultEncoding
+            $scriptLogger.Rotation      | Should -Be $defaultRotation
+            $scriptLogger.LogFile       | Should -Be $defaultLogFile
+            $scriptLogger.EventLog      | Should -Be $defaultEventLog
+            $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
+        }
+
+        It 'should return a valid value for the parameter format' {
+
+            # Arrange
+            $expectedFormat = '{4} {3} {2} {1} {0}'
+
+            # Act
+            $scriptLogger = Start-ScriptLogger -SkipStartStopMessage -Format $expectedFormat -PassThru
+
+            # Assert
+            $scriptLogger               | Should -Not -BeNullOrEmpty
+            $scriptLogger.Enabled       | Should -Be $defaultEnabled
+            $scriptLogger.Path          | Should -Be $defaultPath
+            $scriptLogger.Format        | Should -Be $expectedFormat
+            $scriptLogger.Level         | Should -Be $defaultLevel
+            $scriptLogger.Encoding      | Should -Be $defaultEncoding
+            $scriptLogger.Rotation      | Should -Be $defaultRotation
+            $scriptLogger.LogFile       | Should -Be $defaultLogFile
+            $scriptLogger.EventLog      | Should -Be $defaultEventLog
+            $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
+        }
+
+        It 'should return a valid value for the parameter log level' {
+
+            # Arrange
+            $expectedLevel = 'Error'
+
+            # Act
+            $scriptLogger = Start-ScriptLogger -SkipStartStopMessage -Level $expectedLevel -PassThru
+
+            # Assert
+            $scriptLogger               | Should -Not -BeNullOrEmpty
+            $scriptLogger.Enabled       | Should -Be $defaultEnabled
+            $scriptLogger.Path          | Should -Be $defaultPath
+            $scriptLogger.Format        | Should -Be $defaultFormat
+            $scriptLogger.Level         | Should -Be $expectedLevel
+            $scriptLogger.Encoding      | Should -Be $defaultEncoding
+            $scriptLogger.Rotation      | Should -Be $defaultRotation
+            $scriptLogger.LogFile       | Should -Be $defaultLogFile
+            $scriptLogger.EventLog      | Should -Be $defaultEventLog
+            $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
+        }
+
+        It 'should return a valid value for the parameter encoding' {
+
+            # Arrange
+            $expectedEncoding = 'UTF8'
+
+            # Act
+            $scriptLogger = Start-ScriptLogger -SkipStartStopMessage -Encoding $expectedEncoding -PassThru
+
+            # Assert
+            $scriptLogger               | Should -Not -BeNullOrEmpty
+            $scriptLogger.Enabled       | Should -Be $defaultEnabled
+            $scriptLogger.Path          | Should -Be $defaultPath
+            $scriptLogger.Format        | Should -Be $defaultFormat
+            $scriptLogger.Level         | Should -Be $defaultLevel
+            $scriptLogger.Encoding      | Should -Be $expectedEncoding
+            $scriptLogger.Rotation      | Should -Be $defaultRotation
+            $scriptLogger.LogFile       | Should -Be $defaultLogFile
+            $scriptLogger.EventLog      | Should -Be $defaultEventLog
+            $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
+        }
+
+        It 'should return a valid value for the parameter rotation hourly' {
+
+            # Arrange
+            $expectedRotation = 'Hourly'
+            $expectedPath     = Join-Path -Path $PSScriptRoot -ChildPath 'Start-ScriptLogger.Tests.ps1.2010120618.log'
+
+            # Act
+            $scriptLogger = Start-ScriptLogger -SkipStartStopMessage -Rotation $expectedRotation -PassThru
+
+            # Assert
+            $scriptLogger               | Should -Not -BeNullOrEmpty
+            $scriptLogger.Enabled       | Should -Be $defaultEnabled
+            $scriptLogger.Path          | Should -Be $expectedPath
+            $scriptLogger.Format        | Should -Be $defaultFormat
+            $scriptLogger.Level         | Should -Be $defaultLevel
+            $scriptLogger.Encoding      | Should -Be $defaultEncoding
+            $scriptLogger.Rotation      | Should -Be $expectedRotation
+            $scriptLogger.LogFile       | Should -Be $defaultLogFile
+            $scriptLogger.EventLog      | Should -Be $defaultEventLog
+            $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
+        }
+
+        It 'should return a valid value for the parameter rotation daily' {
+
+            # Arrange
+            $expectedRotation = 'Daily'
+            $expectedPath     = Join-Path -Path $PSScriptRoot -ChildPath 'Start-ScriptLogger.Tests.ps1.20101206.log'
+
+            # Act
+            $scriptLogger = Start-ScriptLogger -SkipStartStopMessage -Rotation $expectedRotation -PassThru
+
+            # Assert
+            $scriptLogger               | Should -Not -BeNullOrEmpty
+            $scriptLogger.Enabled       | Should -Be $defaultEnabled
+            $scriptLogger.Path          | Should -Be $expectedPath
+            $scriptLogger.Format        | Should -Be $defaultFormat
+            $scriptLogger.Level         | Should -Be $defaultLevel
+            $scriptLogger.Encoding      | Should -Be $defaultEncoding
+            $scriptLogger.Rotation      | Should -Be $expectedRotation
+            $scriptLogger.LogFile       | Should -Be $defaultLogFile
+            $scriptLogger.EventLog      | Should -Be $defaultEventLog
+            $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
+        }
+
+        It 'should return a valid value for the parameter rotation monthly' {
+
+            # Arrange
+            $expectedRotation = 'Monthly'
+            $expectedPath     = Join-Path -Path $PSScriptRoot -ChildPath 'Start-ScriptLogger.Tests.ps1.201012.log'
+
+            # Act
+            $scriptLogger = Start-ScriptLogger -SkipStartStopMessage -Rotation $expectedRotation -PassThru
+
+            # Assert
+            $scriptLogger               | Should -Not -BeNullOrEmpty
+            $scriptLogger.Enabled       | Should -Be $defaultEnabled
+            $scriptLogger.Path          | Should -Be $expectedPath
+            $scriptLogger.Format        | Should -Be $defaultFormat
+            $scriptLogger.Level         | Should -Be $defaultLevel
+            $scriptLogger.Encoding      | Should -Be $defaultEncoding
+            $scriptLogger.Rotation      | Should -Be $expectedRotation
+            $scriptLogger.LogFile       | Should -Be $defaultLogFile
+            $scriptLogger.EventLog      | Should -Be $defaultEventLog
+            $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
+        }
+
+        It 'should return a valid value for the parameter rotation yearly' {
+
+            # Arrange
+            $expectedRotation = 'Yearly'
+            $expectedPath     = Join-Path -Path $PSScriptRoot -ChildPath 'Start-ScriptLogger.Tests.ps1.2010.log'
+
+            # Act
+            $scriptLogger = Start-ScriptLogger -SkipStartStopMessage -Rotation $expectedRotation -PassThru
+
+            # Assert
+            $scriptLogger               | Should -Not -BeNullOrEmpty
+            $scriptLogger.Enabled       | Should -Be $defaultEnabled
+            $scriptLogger.Path          | Should -Be $expectedPath
+            $scriptLogger.Format        | Should -Be $defaultFormat
+            $scriptLogger.Level         | Should -Be $defaultLevel
+            $scriptLogger.Encoding      | Should -Be $defaultEncoding
+            $scriptLogger.Rotation      | Should -Be $expectedRotation
+            $scriptLogger.LogFile       | Should -Be $defaultLogFile
+            $scriptLogger.EventLog      | Should -Be $defaultEventLog
+            $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
+        }
+
+        It 'should return a valid value for the parameter no log file' {
+
+            # Act
+            $scriptLogger = Start-ScriptLogger -SkipStartStopMessage -NoLogFile -PassThru
+
+            # Assert
+            $scriptLogger               | Should -Not -BeNullOrEmpty
+            $scriptLogger.Enabled       | Should -Be $defaultEnabled
+            $scriptLogger.Path          | Should -Be $defaultPath
+            $scriptLogger.Format        | Should -Be $defaultFormat
+            $scriptLogger.Level         | Should -Be $defaultLevel
+            $scriptLogger.Encoding      | Should -Be $defaultEncoding
+            $scriptLogger.Rotation      | Should -Be $defaultRotation
+            $scriptLogger.LogFile       | Should -Be $false
+            $scriptLogger.EventLog      | Should -Be $defaultEventLog
+            $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
+        }
+
+        It 'should return a valid value for the parameter no event log' {
+
+            # Act
+            $scriptLogger = Start-ScriptLogger -SkipStartStopMessage -NoEventLog -PassThru
+
+            # Assert
+            $scriptLogger               | Should -Not -BeNullOrEmpty
+            $scriptLogger.Enabled       | Should -Be $defaultEnabled
+            $scriptLogger.Path          | Should -Be $defaultPath
+            $scriptLogger.Format        | Should -Be $defaultFormat
+            $scriptLogger.Level         | Should -Be $defaultLevel
+            $scriptLogger.Encoding      | Should -Be $defaultEncoding
+            $scriptLogger.Rotation      | Should -Be $defaultRotation
+            $scriptLogger.LogFile       | Should -Be $defaultLogFile
+            $scriptLogger.EventLog      | Should -Be $false
+            $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
+        }
+
+        It 'should return a valid value for the parameter no console output' {
+
+            # Act
+            $scriptLogger = Start-ScriptLogger -SkipStartStopMessage -NoConsoleOutput -PassThru
+
+            # Assert
+            $scriptLogger               | Should -Not -BeNullOrEmpty
+            $scriptLogger.Enabled       | Should -Be $defaultEnabled
+            $scriptLogger.Path          | Should -Be $defaultPath
+            $scriptLogger.Format        | Should -Be $defaultFormat
+            $scriptLogger.Level         | Should -Be $defaultLevel
+            $scriptLogger.Encoding      | Should -Be $defaultEncoding
+            $scriptLogger.Rotation      | Should -Be $defaultRotation
+            $scriptLogger.LogFile       | Should -Be $defaultLogFile
+            $scriptLogger.EventLog      | Should -Be $defaultEventLog
+            $scriptLogger.ConsoleOutput | Should -Be $false
+        }
     }
 
-    It 'should return a valid value for the parameter path' {
+    Context 'Stream Override Tests' {
 
-        # Arrange
-        $expectedPath = Join-Path -Path 'TestDrive:' -ChildPath 'test.log'
+        It 'should create an override alias for <AliasName> when using StreamOverride' -ForEach @(
+            @{ AliasName = 'Write-Verbose' }
+            @{ AliasName = 'Write-Information' }
+            @{ AliasName = 'Write-Warning' }
+            @{ AliasName = 'Write-Error' }
+        ) {
 
-        # Act
-        $scriptLogger = Start-ScriptLogger -Path $expectedPath -PassThru
+            # Act
+            Start-ScriptLogger -SkipStartStopMessage -OverrideStream $ExecutionContext.SessionState -NoLogFile -NoEventLog
 
-        # Assert
-        $scriptLogger               | Should -Not -BeNullOrEmpty
-        $scriptLogger.Enabled       | Should -Be $defaultEnabled
-        $scriptLogger.Path          | Should -Be $expectedPath
-        $scriptLogger.Format        | Should -Be $defaultFormat
-        $scriptLogger.Level         | Should -Be $defaultLevel
-        $scriptLogger.Encoding      | Should -Be $defaultEncoding
-        $scriptLogger.Rotation      | Should -Be $defaultRotation
-        $scriptLogger.LogFile       | Should -Be $defaultLogFile
-        $scriptLogger.EventLog      | Should -Be $defaultEventLog
-        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
+            # Assert
+            $localAliases = Get-Alias -Scope 'Local'
+            $localAliases.Name | Should -Contain $AliasName
+        }
     }
 
-    It 'should return a valid value for the parameter format' {
+    Context 'Built-In Log Message Test' {
 
-        # Arrange
-        $expectedFormat = '{4} {3} {2} {1} {0}'
+        BeforeAll {
 
-        # Act
-        $scriptLogger = Start-ScriptLogger -Format $expectedFormat -PassThru
+            InModuleScope $moduleName {
 
-        # Assert
-        $scriptLogger               | Should -Not -BeNullOrEmpty
-        $scriptLogger.Enabled       | Should -Be $defaultEnabled
-        $scriptLogger.Path          | Should -Be $defaultPath
-        $scriptLogger.Format        | Should -Be $expectedFormat
-        $scriptLogger.Level         | Should -Be $defaultLevel
-        $scriptLogger.Encoding      | Should -Be $defaultEncoding
-        $scriptLogger.Rotation      | Should -Be $defaultRotation
-        $scriptLogger.LogFile       | Should -Be $defaultLogFile
-        $scriptLogger.EventLog      | Should -Be $defaultEventLog
-        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
-    }
+                Mock 'Write-ScriptLoggerLog' -Verifiable
+            }
+        }
 
-    It 'should return a valid value for the parameter log level' {
+        It 'should log the start messages automatically' {
 
-        # Arrange
-        $expectedLevel = 'Error'
+            InModuleScope $moduleName {
 
-        # Act
-        $scriptLogger = Start-ScriptLogger -Level $expectedLevel -PassThru
+                # Act
+                Start-ScriptLogger -NoLogFile -NoEventLog
 
-        # Assert
-        $scriptLogger               | Should -Not -BeNullOrEmpty
-        $scriptLogger.Enabled       | Should -Be $defaultEnabled
-        $scriptLogger.Path          | Should -Be $defaultPath
-        $scriptLogger.Format        | Should -Be $defaultFormat
-        $scriptLogger.Level         | Should -Be $expectedLevel
-        $scriptLogger.Encoding      | Should -Be $defaultEncoding
-        $scriptLogger.Rotation      | Should -Be $defaultRotation
-        $scriptLogger.LogFile       | Should -Be $defaultLogFile
-        $scriptLogger.EventLog      | Should -Be $defaultEventLog
-        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
-    }
+                # Assert
+                Assert-MockCalled 'Write-ScriptLoggerLog' -ParameterFilter { $Level -eq 'Verbose' -and $Message -eq 'PowerShell log started' } -Times 1
+            }
+        }
 
-    It 'should return a valid value for the parameter encoding' {
+        It 'should log the start messages automatically' {
 
-        # Arrange
-        $expectedEncoding = 'UTF8'
+            InModuleScope $moduleName {
 
-        # Act
-        $scriptLogger = Start-ScriptLogger -Encoding $expectedEncoding -PassThru
+                # Act
+                Start-ScriptLogger -NoLogFile -NoEventLog
+                Stop-ScriptLogger
 
-        # Assert
-        $scriptLogger               | Should -Not -BeNullOrEmpty
-        $scriptLogger.Enabled       | Should -Be $defaultEnabled
-        $scriptLogger.Path          | Should -Be $defaultPath
-        $scriptLogger.Format        | Should -Be $defaultFormat
-        $scriptLogger.Level         | Should -Be $defaultLevel
-        $scriptLogger.Encoding      | Should -Be $expectedEncoding
-        $scriptLogger.Rotation      | Should -Be $defaultRotation
-        $scriptLogger.LogFile       | Should -Be $defaultLogFile
-        $scriptLogger.EventLog      | Should -Be $defaultEventLog
-        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
-    }
-
-    It 'should return a valid value for the parameter rotation hourly' {
-
-        # Arrange
-        $expectedRotation = 'Hourly'
-        $expectedPath     = Join-Path -Path $PSScriptRoot -ChildPath 'Start-ScriptLogger.Tests.ps1.2010120618.log'
-
-        # Act
-        $scriptLogger = Start-ScriptLogger -Rotation $expectedRotation -PassThru
-
-        # Assert
-        $scriptLogger               | Should -Not -BeNullOrEmpty
-        $scriptLogger.Enabled       | Should -Be $defaultEnabled
-        $scriptLogger.Path          | Should -Be $expectedPath
-        $scriptLogger.Format        | Should -Be $defaultFormat
-        $scriptLogger.Level         | Should -Be $defaultLevel
-        $scriptLogger.Encoding      | Should -Be $defaultEncoding
-        $scriptLogger.Rotation      | Should -Be $expectedRotation
-        $scriptLogger.LogFile       | Should -Be $defaultLogFile
-        $scriptLogger.EventLog      | Should -Be $defaultEventLog
-        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
-    }
-
-
-    It 'should return a valid value for the parameter rotation daily' {
-
-        # Arrange
-        $expectedRotation = 'Daily'
-        $expectedPath     = Join-Path -Path $PSScriptRoot -ChildPath 'Start-ScriptLogger.Tests.ps1.20101206.log'
-
-        # Act
-        $scriptLogger = Start-ScriptLogger -Rotation $expectedRotation -PassThru
-
-        # Assert
-        $scriptLogger               | Should -Not -BeNullOrEmpty
-        $scriptLogger.Enabled       | Should -Be $defaultEnabled
-        $scriptLogger.Path          | Should -Be $expectedPath
-        $scriptLogger.Format        | Should -Be $defaultFormat
-        $scriptLogger.Level         | Should -Be $defaultLevel
-        $scriptLogger.Encoding      | Should -Be $defaultEncoding
-        $scriptLogger.Rotation      | Should -Be $expectedRotation
-        $scriptLogger.LogFile       | Should -Be $defaultLogFile
-        $scriptLogger.EventLog      | Should -Be $defaultEventLog
-        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
-    }
-
-    It 'should return a valid value for the parameter rotation monthly' {
-
-        # Arrange
-        $expectedRotation = 'Monthly'
-        $expectedPath     = Join-Path -Path $PSScriptRoot -ChildPath 'Start-ScriptLogger.Tests.ps1.201012.log'
-
-        # Act
-        $scriptLogger = Start-ScriptLogger -Rotation $expectedRotation -PassThru
-
-        # Assert
-        $scriptLogger               | Should -Not -BeNullOrEmpty
-        $scriptLogger.Enabled       | Should -Be $defaultEnabled
-        $scriptLogger.Path          | Should -Be $expectedPath
-        $scriptLogger.Format        | Should -Be $defaultFormat
-        $scriptLogger.Level         | Should -Be $defaultLevel
-        $scriptLogger.Encoding      | Should -Be $defaultEncoding
-        $scriptLogger.Rotation      | Should -Be $expectedRotation
-        $scriptLogger.LogFile       | Should -Be $defaultLogFile
-        $scriptLogger.EventLog      | Should -Be $defaultEventLog
-        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
-    }
-
-    It 'should return a valid value for the parameter rotation yearly' {
-
-        # Arrange
-        $expectedRotation = 'Yearly'
-        $expectedPath     = Join-Path -Path $PSScriptRoot -ChildPath 'Start-ScriptLogger.Tests.ps1.2010.log'
-
-        # Act
-        $scriptLogger = Start-ScriptLogger -Rotation $expectedRotation -PassThru
-
-        # Assert
-        $scriptLogger               | Should -Not -BeNullOrEmpty
-        $scriptLogger.Enabled       | Should -Be $defaultEnabled
-        $scriptLogger.Path          | Should -Be $expectedPath
-        $scriptLogger.Format        | Should -Be $defaultFormat
-        $scriptLogger.Level         | Should -Be $defaultLevel
-        $scriptLogger.Encoding      | Should -Be $defaultEncoding
-        $scriptLogger.Rotation      | Should -Be $expectedRotation
-        $scriptLogger.LogFile       | Should -Be $defaultLogFile
-        $scriptLogger.EventLog      | Should -Be $defaultEventLog
-        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
-    }
-
-    It 'should return a valid value for the parameter no log file' {
-
-        # Act
-        $scriptLogger = Start-ScriptLogger -NoLogFile -PassThru
-
-        # Assert
-        $scriptLogger               | Should -Not -BeNullOrEmpty
-        $scriptLogger.Enabled       | Should -Be $defaultEnabled
-        $scriptLogger.Path          | Should -Be $defaultPath
-        $scriptLogger.Format        | Should -Be $defaultFormat
-        $scriptLogger.Level         | Should -Be $defaultLevel
-        $scriptLogger.Encoding      | Should -Be $defaultEncoding
-        $scriptLogger.Rotation      | Should -Be $defaultRotation
-        $scriptLogger.LogFile       | Should -Be $false
-        $scriptLogger.EventLog      | Should -Be $defaultEventLog
-        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
-    }
-
-    It 'should return a valid value for the parameter no event log' {
-
-        # Act
-        $scriptLogger = Start-ScriptLogger -NoEventLog -PassThru
-
-        # Assert
-        $scriptLogger               | Should -Not -BeNullOrEmpty
-        $scriptLogger.Enabled       | Should -Be $defaultEnabled
-        $scriptLogger.Path          | Should -Be $defaultPath
-        $scriptLogger.Format        | Should -Be $defaultFormat
-        $scriptLogger.Level         | Should -Be $defaultLevel
-        $scriptLogger.Encoding      | Should -Be $defaultEncoding
-        $scriptLogger.Rotation      | Should -Be $defaultRotation
-        $scriptLogger.LogFile       | Should -Be $defaultLogFile
-        $scriptLogger.EventLog      | Should -Be $false
-        $scriptLogger.ConsoleOutput | Should -Be $defaultConsole
-    }
-
-    It 'should return a valid value for the parameter no console output' {
-
-        # Act
-        $scriptLogger = Start-ScriptLogger -NoConsoleOutput -PassThru
-
-        # Assert
-        $scriptLogger               | Should -Not -BeNullOrEmpty
-        $scriptLogger.Enabled       | Should -Be $defaultEnabled
-        $scriptLogger.Path          | Should -Be $defaultPath
-        $scriptLogger.Format        | Should -Be $defaultFormat
-        $scriptLogger.Level         | Should -Be $defaultLevel
-        $scriptLogger.Encoding      | Should -Be $defaultEncoding
-        $scriptLogger.Rotation      | Should -Be $defaultRotation
-        $scriptLogger.LogFile       | Should -Be $defaultLogFile
-        $scriptLogger.EventLog      | Should -Be $defaultEventLog
-        $scriptLogger.ConsoleOutput | Should -Be $false
+                # Assert
+                Assert-MockCalled 'Write-ScriptLoggerLog' -ParameterFilter { $Level -eq 'Verbose' -and $Message -eq 'PowerShell log stopped' } -Times 1
+            }
+        }
     }
 
     AfterEach {

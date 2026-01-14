@@ -101,12 +101,17 @@ function Start-ScriptLogger
         [Switch]
         $NoConsoleOutput,
 
+        # Skip the automatically logged start and stop messages.
+        [Parameter(Mandatory = $false)]
+        [Switch]
+        $SkipStartStopMessage,
+
         # Option to override the built-in PowerShell stream functions like
         # Write-Verbose, Write-Warning, etc. and log their messages with the
         # script logger.
         [Parameter(Mandatory = $false)]
-        [Switch]
-        $OverrideStreamFunctions,
+        [System.Management.Automation.SessionState]
+        $OverrideStream,
 
         # If specified, the created script logger object will be returned.
         [Parameter(Mandatory = $false)]
@@ -165,21 +170,12 @@ function Start-ScriptLogger
         }
     }
 
-    # Create an empty log file, if it does not exist
-    if (-not (Test-Path -Path $Path))
-    {
-        try
-        {
-            New-Item -Path $Path -ItemType 'File' -ErrorAction 'Stop' | Out-Null
-        }
-        catch
-        {
-            throw "ScriptLogger failed to create the log file: $Path"
-        }
-    }
-
-    # Only work with absolute path, makes error handling easier
-    $Path = (Resolve-Path -Path $Path).Path
+    # Resolve the path to an absolute path, but don't use Resolve-Path to the
+    # file itself to avoid creating an empty file if the file logging is
+    # currently disabled. The file path is prepared if the file logging is
+    # enabled later.
+    $resolvedParent = Resolve-Path -Path $parent
+    $Path = Join-Path -Path $resolvedParent.ProviderPath -ChildPath (Split-Path -Path $Path -Leaf)
 
     if ($PSCmdlet.ShouldProcess('ScriptLogger', 'Start'))
     {
@@ -197,11 +193,32 @@ function Start-ScriptLogger
             LogFile        = -not $NoLogFile.IsPresent
             EventLog       = -not $NoEventLog.IsPresent
             ConsoleOutput  = -not $NoConsoleOutput.IsPresent
-            StreamOverride = $Name -eq 'Default' -and $OverrideStreamFunctions.IsPresent
+            SkipStartStop  = $SkipStartStopMessage.IsPresent
+            OverrideStream = $Name -eq 'Default' -and $PSBoundParameters.ContainsKey('OverrideStream')
+            SessionState   = $OverrideStream
+        }
+
+        # Create an empty log file, if it does not exist
+        if ($Script:Loggers[$Name].LogFile -and -not (Test-Path -Path $Path))
+        {
+            try
+            {
+                New-Item -Path $Path -ItemType 'File' -ErrorAction 'Stop' | Out-Null
+            }
+            catch
+            {
+                throw "ScriptLogger failed to create the log file: $Path"
+            }
+        }
+
+        # Log start message
+        if (-not $Script:Loggers[$Name].SkipStartStop)
+        {
+            Write-ScriptLoggerLog -Name $Name -Level 'Verbose' -Message 'PowerShell log started'
         }
 
         # Override the built-in PowerShell stream functions
-        if ($OverrideStreamFunctions.IsPresent)
+        if ($Script:Loggers[$Name].OverrideStream)
         {
             if ($Name -eq 'Default')
             {
@@ -213,7 +230,8 @@ function Start-ScriptLogger
                 }
                 foreach ($aliasName in $aliases.Keys)
                 {
-                    New-Alias -Name $aliasName -Value $aliases[$aliasName] -Scope 'Global' -Force
+                    $createAliasCommand = [System.Management.Automation.ScriptBlock]::Create("New-Alias -Name '$aliasName' -Value '$($aliases[$aliasName])' -Force")
+                    $Script:Loggers[$Name].SessionState.InvokeCommand.InvokeScript($Script:Loggers[$Name].SessionState, $createAliasCommand, $null)
                 }
             }
             else

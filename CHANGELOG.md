@@ -8,9 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Unreleased
 
 * Added: Feature to override the default streams like Write-Verbose to use the build-in functions to log messages (Start-ScriptLogger)
-* Added: Support for platform specific event logs including Linux logs using the logger command (Write-ScriptLoggerPlatformLog)
-* Added: Option to include the script stack trace in the error log message (Write-ErrorLog)
-* Added: Add caller context information (script name and line number) to the log messages (Start-ScriptLogger)
+* Added: Support for platform specific system log on Linux using the logger command (Write-ScriptLoggerPlatformLog)
+* Added: Option to include the PowerShell script stack trace in the error log message (Write-ErrorLog)
+* Added: Add the caller context information with script or function name and the line number to the log messages (Start-ScriptLogger)
 
 ## 3.3.0 - 2019-11-05
 

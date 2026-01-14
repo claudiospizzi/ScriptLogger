@@ -69,7 +69,7 @@ Describe 'Write-InformationLog' {
             It 'should write a valid message to the log file' {
 
                 # Arrange
-                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
+                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput -SkipStartStopMessage
                 $callerLine = 76
 
                 # Act
@@ -122,7 +122,7 @@ Describe 'Write-InformationLog' {
                 InModuleScope 'ScriptLogger' {
 
                     # Arrange
-                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoEventLog
+                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoEventLog -SkipStartStopMessage
 
                     # Act
                     Write-InformationLog -Message 'My Information'

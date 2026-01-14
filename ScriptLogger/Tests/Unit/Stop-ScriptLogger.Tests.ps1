@@ -13,7 +13,7 @@ Describe 'Stop-ScriptLogger' {
     It 'should clean up the logger' {
 
         # Arrange
-        Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log')
+        Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -SkipStartStopMessage
 
         # Act
         Stop-ScriptLogger

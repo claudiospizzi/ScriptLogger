@@ -117,7 +117,7 @@ Describe 'Write-ErrorLog' {
             It 'should write a valid message to the log file' {
 
                 # Arrange
-                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
+                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput -SkipStartStopMessage
                 $callerLine = 124
 
                 # Act
@@ -131,7 +131,7 @@ Describe 'Write-ErrorLog' {
             It 'should write a valid error record to the log file' {
 
                 # Arrange
-                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
+                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput -SkipStartStopMessage
                 $callerLine = 144
 
                 # Act
@@ -152,7 +152,7 @@ Describe 'Write-ErrorLog' {
             It 'should write a valid message with stack trace to the log' {
 
                 # Arrange
-                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput
+                Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoEventLog -NoConsoleOutput -SkipStartStopMessage
                 $callerLine = 165
 
                 # Act
@@ -235,7 +235,7 @@ Describe 'Write-ErrorLog' {
                 InModuleScope $moduleName {
 
                     # Arrange
-                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoEventLog
+                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoEventLog -SkipStartStopMessage
 
                     # Act
                     Write-ErrorLog -Message 'My Error'
@@ -250,7 +250,7 @@ Describe 'Write-ErrorLog' {
                 InModuleScope $moduleName {
 
                     # Arrange
-                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoEventLog
+                    Start-ScriptLogger -Path (Join-Path -Path 'TestDrive:' -ChildPath 'test.log') -NoLogFile -NoEventLog -SkipStartStopMessage
 
                     # Act
                     try
