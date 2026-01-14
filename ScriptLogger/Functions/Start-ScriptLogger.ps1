@@ -175,7 +175,7 @@ function Start-ScriptLogger
     # currently disabled. The file path is prepared if the file logging is
     # enabled later.
     $resolvedParent = Resolve-Path -Path $parent
-    $Path = Join-Path -Path $resolvedParent.ProviderPath -ChildPath (Split-Path -Path $Path -Leaf)
+    $Path = Join-Path -Path $resolvedParent.Path -ChildPath (Split-Path -Path $Path -Leaf)
 
     if ($PSCmdlet.ShouldProcess('ScriptLogger', 'Start'))
     {
