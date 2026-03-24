@@ -3,7 +3,7 @@
     RootModule = 'ScriptLogger.psm1'
 
     # Version number of this module.
-    ModuleVersion = '3.4.0'
+    ModuleVersion = '3.4.1'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()

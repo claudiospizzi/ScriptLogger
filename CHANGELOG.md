@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is mainly based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## 3.4.1 - 2026-03-24
 
 * Fixed: Remove the stream aliases for build-in PowerShell stream functions on Windows PowerShell 5.1 (Stop-ScriptLogger)
 
