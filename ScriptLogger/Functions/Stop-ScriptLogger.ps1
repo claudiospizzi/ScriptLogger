@@ -47,7 +47,17 @@ function Stop-ScriptLogger
 
                 foreach ($aliasName in $aliasNames)
                 {
+                    # For PowerShell 6 and higher, the alias can be removed with
+                    # the Remove-Alias cmdlet. But for Windows PowerShell 5 and
+                    # lower, the alias must be removed by using the Remove-Item
+                    # and Alias: provider because the Remove-Alias cmdlet is not
+                    # available.
                     $removeAliasCommand = [System.Management.Automation.ScriptBlock]::Create("Get-Alias -Scope 'Global' | Where-Object { `$_.Name -eq '$aliasName' } | Remove-Alias -ErrorAction 'SilentlyContinue'")
+                    if ($PSVersionTable.PSVersion.Major -le 5)
+                    {
+                        $removeAliasCommand = [System.Management.Automation.ScriptBlock]::Create("Get-Alias -Scope 'Global' | Where-Object { `$_.Name -eq '$aliasName' } | ForEach-Object { Remove-Item -Path 'Alias:$aliasName' -ErrorAction 'SilentlyContinue' }")
+                    }
+
                     $Script:Loggers[$Name].SessionState.InvokeCommand.InvokeScript($Script:Loggers[$Name].SessionState, $removeAliasCommand, $null)
                 }
             }
