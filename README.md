@@ -160,10 +160,9 @@ Alternatively, download the latest release from GitHub and install the module ma
 
 ## Requirements
 
-The following minimum requirements are recommended to use this module. It used to work on older versions too, but they are not officially supported and tested anymore.
+The following minimum requirements are recommended to use this module. It used to work on older versions and other platforms too, but they are not officially supported or tested.
 
-* Windows PowerShell 5.1 / PowerShell 7 or higher
-* Windows Server 2016 / Windows 11
+* Windows 11 / PowerShell 7
 
 ## Contribute
 
