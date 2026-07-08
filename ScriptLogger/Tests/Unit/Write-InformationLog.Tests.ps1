@@ -28,7 +28,7 @@ Describe 'Write-InformationLog' {
                 Write-InformationLog -Message 'My Information'
 
                 # Assert
-                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
+                Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
             }
         }
 
@@ -40,7 +40,7 @@ Describe 'Write-InformationLog' {
                 Write-InformationLog -Message 'My Information', 'My Information'
 
                 # Assert
-                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
+                Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
             }
         }
 
@@ -52,7 +52,7 @@ Describe 'Write-InformationLog' {
                 'My Information', 'My Information', 'My Information' | Write-InformationLog
 
                 # Assert
-                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
+                Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
             }
         }
     }
@@ -102,7 +102,7 @@ Describe 'Write-InformationLog' {
                     Write-InformationLog -Message 'My Information'
 
                     # Assert
-                    Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerPlatformLog' -Times 1 -Exactly
+                    Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerPlatformLog' -Times 1 -Exactly
                 }
             }
         }
@@ -128,7 +128,7 @@ Describe 'Write-InformationLog' {
                     Write-InformationLog -Message 'My Information'
 
                     # Assert
-                    Assert-MockCalled -Scope 'It' -CommandName 'Write-Information' -Times 1 -Exactly
+                    Should-Invoke -Scope 'It' -CommandName 'Write-Information' -Times 1 -Exactly
                 }
             }
         }

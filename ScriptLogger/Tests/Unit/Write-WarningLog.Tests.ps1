@@ -28,7 +28,7 @@ Describe 'Write-WarningLog' {
                 Write-WarningLog -Message 'My Warning'
 
                 # Assert
-                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
+                Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
             }
         }
 
@@ -40,7 +40,7 @@ Describe 'Write-WarningLog' {
                 Write-WarningLog -Message 'My Warning', 'My Warning'
 
                 # Assert
-                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
+                Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
             }
         }
 
@@ -52,7 +52,7 @@ Describe 'Write-WarningLog' {
                 'My Warning', 'My Warning', 'My Warning' | Write-WarningLog
 
                 # Assert
-                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
+                Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
             }
         }
     }
@@ -102,7 +102,7 @@ Describe 'Write-WarningLog' {
                     Write-WarningLog -Message 'My Warning'
 
                     # Assert
-                    Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerPlatformLog' -Times 1 -Exactly
+                    Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerPlatformLog' -Times 1 -Exactly
                 }
             }
         }
@@ -128,7 +128,7 @@ Describe 'Write-WarningLog' {
                     Write-WarningLog -Message 'My Warning'
 
                     # Assert
-                    Assert-MockCalled -Scope 'It' -CommandName 'Write-Warning' -Times 1 -Exactly
+                    Should-Invoke -Scope 'It' -CommandName 'Write-Warning' -Times 1 -Exactly
                 }
             }
         }

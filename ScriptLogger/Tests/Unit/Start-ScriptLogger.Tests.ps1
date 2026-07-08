@@ -311,7 +311,7 @@ Describe 'Start-ScriptLogger' {
                 Start-ScriptLogger -NoLogFile -NoEventLog
 
                 # Assert
-                Assert-MockCalled 'Write-ScriptLoggerLog' -ParameterFilter { $Level -eq 'Verbose' -and $Message -eq 'PowerShell log started' } -Times 1
+                Should-Invoke -CommandName 'Write-ScriptLoggerLog' -ParameterFilter { $Level -eq 'Verbose' -and $Message -eq 'PowerShell log started' } -Times 1
             }
         }
 
@@ -324,7 +324,7 @@ Describe 'Start-ScriptLogger' {
                 Stop-ScriptLogger
 
                 # Assert
-                Assert-MockCalled 'Write-ScriptLoggerLog' -ParameterFilter { $Level -eq 'Verbose' -and $Message -eq 'PowerShell log stopped' } -Times 1
+                Should-Invoke -CommandName 'Write-ScriptLoggerLog' -ParameterFilter { $Level -eq 'Verbose' -and $Message -eq 'PowerShell log stopped' } -Times 1
             }
         }
     }

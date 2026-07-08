@@ -28,7 +28,7 @@ Describe 'Write-ErrorLog' {
                 Write-ErrorLog -Message 'My Error'
 
                 # Assert
-                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
+                Should-Invoke -CommandName 'Write-ScriptLoggerLog' -Scope 'It' -Times 1 -Exactly
             }
         }
 
@@ -47,7 +47,7 @@ Describe 'Write-ErrorLog' {
                 }
 
                 # Assert
-                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
+                Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 1 -Exactly
             }
         }
         It 'should invoke the mock twice for an array of 2 messages' {
@@ -58,7 +58,7 @@ Describe 'Write-ErrorLog' {
                 Write-ErrorLog -Message 'My Error', 'My Error'
 
                 # Assert
-                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
+                Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
             }
         }
 
@@ -73,7 +73,7 @@ Describe 'Write-ErrorLog' {
                 Write-ErrorLog -ErrorRecord $errorRecord, $errorRecord
 
                 # Assert
-                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
+                Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 2 -Exactly
             }
         }
 
@@ -85,7 +85,7 @@ Describe 'Write-ErrorLog' {
                 'My Error', 'My Error', 'My Error' | Write-ErrorLog
 
                 # Assert
-                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
+                Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
             }
         }
 
@@ -100,7 +100,7 @@ Describe 'Write-ErrorLog' {
                 $errorRecord, $errorRecord, $errorRecord | Write-ErrorLog
 
                 # Assert
-                Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
+                Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerLog' -Times 3 -Exactly
             }
         }
     }
@@ -193,7 +193,7 @@ Describe 'Write-ErrorLog' {
                     Write-ErrorLog -Message 'My Error'
 
                     # Assert
-                    Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerPlatformLog' -Times 1 -Exactly
+                    Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerPlatformLog' -Times 1 -Exactly
                 }
             }
 
@@ -215,7 +215,7 @@ Describe 'Write-ErrorLog' {
                     }
 
                     # Assert
-                    Assert-MockCalled -Scope 'It' -CommandName 'Write-ScriptLoggerPlatformLog' -Times 1 -Exactly
+                    Should-Invoke -Scope 'It' -CommandName 'Write-ScriptLoggerPlatformLog' -Times 1 -Exactly
                 }
             }
         }
@@ -241,7 +241,7 @@ Describe 'Write-ErrorLog' {
                     Write-ErrorLog -Message 'My Error'
 
                     # Assert
-                    Assert-MockCalled -Scope 'It' -CommandName 'Write-Error' -Times 1 -Exactly
+                    Should-Invoke -Scope 'It' -CommandName 'Write-Error' -Times 1 -Exactly
                 }
             }
 
@@ -263,7 +263,7 @@ Describe 'Write-ErrorLog' {
                     }
 
                     # Assert
-                    Assert-MockCalled -Scope 'It' -CommandName 'Write-Error' -Times 1 -Exactly
+                    Should-Invoke -Scope 'It' -CommandName 'Write-Error' -Times 1 -Exactly
                 }
             }
         }
